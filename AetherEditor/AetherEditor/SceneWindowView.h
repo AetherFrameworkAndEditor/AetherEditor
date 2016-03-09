@@ -6,7 +6,7 @@
 #include <GameScene.h>
 #include <ViewCamera.h>
 #include <ShaderBase.h>
-#include "Pivot.h"
+#include "PrimitiveObject.h"
 class SceneWindowView :
 	public aetherClass::GameScene
 {
@@ -20,7 +20,7 @@ public:
 	bool Updater()override;
 
 private:
-	std::shared_ptr<Pivot> m_pivot;
+	std::unique_ptr<PrimitiveObject> m_primitiveObject;
 	std::unique_ptr<aetherClass::ShaderBase> m_colorShader;
 	aetherClass::ViewCamera m_viewCamera;
 };

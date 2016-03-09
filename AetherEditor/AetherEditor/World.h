@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <Vector3.h>
-#include "AetherObjectInfo.h"
+#include "WorldAllObjectInfo.h"
 struct World{
 	std::vector<ObjectInfo> _objectInfo;
 	std::vector<aetherClass::Material> _material;

@@ -89,12 +89,14 @@
     <ClCompile Include="MainLoopScene.cpp" />
     <ClCompile Include="ObjectWindow.cpp" />
     <ClCompile Include="Pivot.cpp" />
+    <ClCompile Include="PrimitiveObject.cpp" />
     <ClCompile Include="PropertyWindowView.cpp" />
     <ClCompile Include="SceneWindowView.cpp" />
     <ClCompile Include="WorldReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AetherObjectInfo.h" />
+    <ClInclude Include="PrimitiveObject.h" />
+    <ClInclude Include="WorldAllObjectInfo.h" />
     <ClInclude Include="GameWindowView.h" />
     <ClInclude Include="MainLoopScene.h" />
     <ClInclude Include="ObjectWindow.h" />

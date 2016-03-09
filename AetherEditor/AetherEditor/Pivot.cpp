@@ -4,7 +4,7 @@
 // Pivot‚É‚µ‚©g‚í‚È‚¢’è”
 namespace{
 	const int kMaxCount = 3;
-	const float kDirectionSize = 5.0f;
+	const float kDirectionSize = 1.0f;
 	const float kOtherSize = kDirectionSize / 10;
 }
 using namespace aetherClass;

@@ -1,7 +1,9 @@
 #include "SceneWindowView.h"
 #include <PixelShader.h>
-
+#include <Physics.h>
+#include <GameController.h>
 using namespace aetherClass;
+using namespace aetherFunction;
 SceneWindowView::SceneWindowView():
 GameScene("Scene", GetManager())
 {
@@ -16,12 +18,13 @@ bool SceneWindowView::Initialize(){
 	// シェーダーの初期化用
 	ShaderDesc shaderDesc;
 	bool result = false;
-	if (!m_pivot)
+	if (!m_primitiveObject)
 	{
-		m_pivot = std::make_shared<Pivot>();
-		result = m_pivot->Initialize(&m_viewCamera);
+		m_primitiveObject = std::make_unique<PrimitiveObject>();
+		result = m_primitiveObject->Create(&m_viewCamera);
 		if (!result)
 		{
+		
 			return false;
 		}
 	}
@@ -44,10 +47,9 @@ bool SceneWindowView::Initialize(){
 
 void SceneWindowView::Finalize(){
 
-	if (m_pivot)
+	if (m_primitiveObject)
 	{
-		m_pivot->Finalize();
-		m_pivot.reset();
+		m_primitiveObject.release();
 	}
 
 	if (m_colorShader)
@@ -58,20 +60,29 @@ void SceneWindowView::Finalize(){
 	return;
 }
 
+bool SceneWindowView::Updater(){
+	m_viewCamera.Controller();
+
+	if (GameController::GetMouse().IsLeftButtonTrigger())
+	{
+		if (RaySphereIntersect(*m_primitiveObject->GetCollider(), GameController::GetMouse().GetOrigin(), Vector3(0, 0, 10)))
+		{
+			printf("きた");
+			m_primitiveObject->ChangePivotState();
+		}
+	}
+	return true;
+}
+
 void SceneWindowView::Render(){
 	m_viewCamera.Render();
-	m_pivot->Render(m_colorShader.get());
+
+	m_primitiveObject->Render(m_colorShader.get());
 
 	return;
 }
 
 void SceneWindowView::UIRender(){
 
-}
-
-bool SceneWindowView::Updater(){
-
-
-	m_viewCamera.Controller();
-	return true;
+	return;
 }
