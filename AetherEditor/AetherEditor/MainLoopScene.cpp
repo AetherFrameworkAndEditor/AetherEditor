@@ -26,7 +26,7 @@ MainLoopScene::~MainLoopScene()
 }
 
 bool MainLoopScene::Initialize(){
-
+	Finalize();
 	// scene
 	auto sceneWindowView = new SceneWindowView();
 	if (!sceneWindowView)
@@ -53,12 +53,15 @@ bool MainLoopScene::Initialize(){
 
 	bool result = false;
 	// ‘S‚Ä‚ÌƒV[ƒ“‚Ì‰Šú‰»
-	for (auto scene : m_viewWindow)
+	for (auto& scene : m_viewWindow)
 	{
-		result = scene->Initialize();
-		if (!result)
+		if (scene)
 		{
-			return false;
+			result = scene->Initialize();
+			if (!result)
+			{
+				return false;
+			}
 		}
 	}
 	return true;
@@ -66,7 +69,7 @@ bool MainLoopScene::Initialize(){
 
 //
 void MainLoopScene::Finalize(){
-	for (auto scene : m_viewWindow)
+	for (auto& scene : m_viewWindow)
 	{
 		if (scene)
 		{
@@ -75,6 +78,7 @@ void MainLoopScene::Finalize(){
 			scene = nullptr;
 		}
 	}
+	m_viewWindow.clear();
 }
 
 

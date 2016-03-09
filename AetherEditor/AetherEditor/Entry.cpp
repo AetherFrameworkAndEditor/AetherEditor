@@ -38,6 +38,7 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	window[0]->Create(L"Scene", screenSize);
 	window[1]->Create(L"Game", screenSize);
 	window[2]->Create(L"Property", Vector2(100,100));
+
 	result = frame->Initialize(window,3, 1000000,1);
 	if (!result)
 	{
@@ -46,11 +47,11 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	auto currentScene = std::make_unique<MainLoopScene>();
 	GameSceneManager::SetCurrentScene(currentScene.get());
 
-	WorldReader red;
-	red.Load("text\\test.aether");
-
+	//WorldReader red;
+	//red.Load("text\\test.aether");
+	//red.UnLoad();
 	frame->GameRun();
-	red.UnLoad();
+
 	ConsoleWindow::Close();
 
 	// ”jŠü	

@@ -88,6 +88,7 @@
     <ClCompile Include="GameWindowView.cpp" />
     <ClCompile Include="MainLoopScene.cpp" />
     <ClCompile Include="ObjectWindow.cpp" />
+    <ClCompile Include="Pivot.cpp" />
     <ClCompile Include="PropertyWindowView.cpp" />
     <ClCompile Include="SceneWindowView.cpp" />
     <ClCompile Include="WorldReader.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="GameWindowView.h" />
     <ClInclude Include="MainLoopScene.h" />
     <ClInclude Include="ObjectWindow.h" />
+    <ClInclude Include="Pivot.h" />
     <ClInclude Include="PropertyWindowView.h" />
     <ClInclude Include="SceneWindowView.h" />
     <ClInclude Include="World.h" />
