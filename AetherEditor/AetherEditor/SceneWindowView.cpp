@@ -15,10 +15,15 @@ SceneWindowView::~SceneWindowView()
 bool SceneWindowView::Initialize(){
 	// シェーダーの初期化用
 	ShaderDesc shaderDesc;
+	bool result = false;
 	if (!m_pivot)
 	{
 		m_pivot = std::make_shared<Pivot>();
-		m_pivot->Initialize(&m_viewCamera);
+		result = m_pivot->Initialize(&m_viewCamera);
+		if (!result)
+		{
+			return false;
+		}
 	}
 
 	if (!m_colorShader)

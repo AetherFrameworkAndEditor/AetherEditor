@@ -16,7 +16,8 @@ Pivot::PivotProperty Pivot::m_pivotPropertyArray[kMaxCount] = {
 	{ Color(0.0f, 0.0f, 1.0f, 1.0f), Vector3(kOtherSize, kOtherSize, kDirectionSize), Vector3(0.0f, 0.0f, kDirectionSize) }
 };
 
-Pivot::Pivot()
+Pivot::Pivot():
+m_isInitialize(false)
 {
 }
 
@@ -28,13 +29,18 @@ Pivot::~Pivot()
 //
 bool Pivot::Initialize(ViewCamera* camera){
 	Finalize();
+
 	m_pivot.resize(kMaxCount);
 	int arrayNumber = 0;
+	bool result;
 	for (auto& index : m_pivot)
 	{
-		if (index) continue;
 		index = std::make_shared<Cylinder>();
-		index->Initialize();
+		result = index->Initialize();
+		if (!result)
+		{
+			return false;
+		}
 		index->SetCamera(camera);
 		index->property._transform._scale = m_pivotPropertyArray[arrayNumber]._direction;
 		index->property._transform._translation = m_pivotPropertyArray[arrayNumber]._position;
@@ -42,30 +48,41 @@ bool Pivot::Initialize(ViewCamera* camera){
 
 		arrayNumber += 1;
 	}
+	m_isInitialize = true;
 	return true;
 }
 
 //
 void Pivot::Finalize(){
+	if (!m_isInitialize)return;
+
 	for (auto index : m_pivot)
 	{
-		if (index)
-		{
-			index->Finalize();
-			index.reset();
-		}
+
+		index->Finalize();
+		index.reset();
 	}
 
 	m_pivot.clear();
+	m_isInitialize = false;
+	return;
 }
 
 //
 void Pivot::Render(ShaderBase* shader){
+	if (!m_isInitialize)return;
+
+	for (auto index : m_pivot)
+	{	
+		index->Render(shader);	
+	}
+}
+
+void Pivot::MoveDirection(Vector3 move){
+	if (!m_isInitialize)return;
+
 	for (auto index : m_pivot)
 	{
-		if (index)
-		{	
-			index->Render(shader);
-		}
+		index->property._transform._translation += move;
 	}
 }

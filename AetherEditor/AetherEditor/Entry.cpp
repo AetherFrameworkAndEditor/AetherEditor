@@ -47,9 +47,6 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	auto currentScene = std::make_unique<MainLoopScene>();
 	GameSceneManager::SetCurrentScene(currentScene.get());
 
-	//WorldReader red;
-	//red.Load("text\\test.aether");
-	//red.UnLoad();
 	frame->GameRun();
 
 	ConsoleWindow::Close();

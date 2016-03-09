@@ -32,7 +32,6 @@ bool WorldReader::Load(std::string filePath){
 
 	for (auto index : m_input)
 	{
-		std::cout << std::endl;
 		// タグの行かを確認
 		if (index == "Object" || index == "Material" ||
 			index == "Texture"||index == "Camera" || 
@@ -40,7 +39,6 @@ bool WorldReader::Load(std::string filePath){
 		{
 			// 取り込んでいるタグを設定
 			m_tag = index;
-			std::cout << m_tag;
 			continue;
 		}
 
@@ -78,7 +76,6 @@ void WorldReader::GetObjectInfo(std::string data){
 	while (std::getline(stream,split,','))
 	{
 		spliteArray.push_back(split);
-		std::cout << split << ",";
 	}
 
 	// 位置
@@ -128,7 +125,6 @@ void WorldReader::GetMaterialInfo(std::string data){
 	while (std::getline(stream, split, ','))
 	{
 		spliteArray.push_back(split);
-		std::cout << split << ",";
 	}
 
 	// diffuse
@@ -168,7 +164,7 @@ void WorldReader::GetMaterialInfo(std::string data){
 void WorldReader::GetTextureInfo(std::string data){
 	// タグが違っていたら何もしない
 	if (m_tag != "Texture")return;
-	std::cout << data << ",";
+	
 	Texture* texture = new Texture();
 	texture->Load(data);
 
@@ -189,7 +185,6 @@ void WorldReader::GetCameraInfo(std::string data){
 	while (std::getline(stream, split, ','))
 	{
 		spliteArray.push_back(split);
-		std::cout << split << ",";
 	}
 
 	// 位置情報
@@ -218,7 +213,6 @@ void WorldReader::GetLightInfo(std::string data){
 	while (std::getline(stream, split, ','))
 	{
 		spliteArray.push_back(split);
-		std::cout << split << ",";
 	}
 
 	// 位置情報

@@ -21,9 +21,11 @@ public:
 	bool Initialize(aetherClass::ViewCamera*);
 	void Render(aetherClass::ShaderBase*);
 	void Finalize();
+	void MoveDirection(aetherClass::Vector3);
 private:
 	std::vector<std::shared_ptr<aetherClass::ModelBase>> m_pivot;
 	static PivotProperty m_pivotPropertyArray[];
+	bool m_isInitialize;
 };
 
 #endif
