@@ -11,11 +11,11 @@ PrimitiveObject::~PrimitiveObject()
 	Destroy();
 }
 
-bool PrimitiveObject::Create(ViewCamera* camera){
+bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 	if (!m_primitiveObject)
 	{
 		m_primitiveObject = std::make_unique<PrimitiveObjectInfo>();
-		m_primitiveObject->_primitive = std::make_unique<Cube>();
+		m_primitiveObject->_primitive.reset(model);
 
 		bool result = m_primitiveObject->_primitive->Initialize();
 		if (!result)

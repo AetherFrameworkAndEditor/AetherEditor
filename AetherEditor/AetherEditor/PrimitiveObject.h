@@ -33,7 +33,7 @@ public:
 	PrimitiveObject();
 	~PrimitiveObject();
 
-	bool Create(aetherClass::ViewCamera*);
+	bool Create(aetherClass::ModelBase*,aetherClass::ViewCamera*);
 
 	void Render(aetherClass::ShaderBase*);
 	void Update();
