@@ -102,5 +102,6 @@ void Pivot2D::SetLength(float length){
 	{
 		Vector3 nomalize = index->property._transform._scale.Normalize();
 		index->property._transform._scale = nomalize*length;
+		index->property._transform._translation = nomalize*length;
 	}
 }
