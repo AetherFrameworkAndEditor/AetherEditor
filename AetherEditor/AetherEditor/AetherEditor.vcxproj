@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="FbxModelObject.cpp" />
     <ClCompile Include="GameWindowView.cpp" />
     <ClCompile Include="MainLoopScene.cpp" />
     <ClCompile Include="ObjectWindow.cpp" />
@@ -97,6 +98,7 @@
     <ClCompile Include="WorldReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FbxModelObject.h" />
     <ClInclude Include="Pivot.h" />
     <ClInclude Include="Pivot2D.h" />
     <ClInclude Include="PrimitiveObject.h" />
