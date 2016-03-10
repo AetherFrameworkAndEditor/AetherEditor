@@ -28,12 +28,13 @@ bool SpriteObject::Create(SpriteBase* sprite, ViewCamera* camera){
 
 		// コライダーの作成
 		m_spriteObject->_spriteCollider = std::make_unique<Sphere>(10, 10);
-		m_spriteObject->_spriteCollider->property._transform._scale = 1;
 		result = m_spriteObject->_spriteCollider->Initialize();
 		if (!result)
 		{
 			return false;
 		}
+		m_spriteObject->_spriteCollider->property._transform._scale = 1;
+
 		auto center = m_spriteObject->_sprite->property._transform._scale / 2;
 		auto position = m_spriteObject->_sprite->property._transform._translation;
 		auto centerPoint = position + center;

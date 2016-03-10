@@ -18,6 +18,7 @@ private:
 		aetherClass::Vector3 _directionScale;
 		aetherClass::Vector3 _position;
 	};
+
 public:
 	Pivot3D();
 	~Pivot3D();
@@ -25,8 +26,10 @@ public:
 	void Render(aetherClass::ShaderBase*)override;
 	void MoveDirection(aetherClass::Vector3)override;
 	void SetLength(float)override;
+
 private:
 	void Finalize()override;
+
 private:
 	std::vector<std::shared_ptr<aetherClass::ModelBase>> m_pivot;
 	static Pivot3DProperty m_pivotPropertyArray[];

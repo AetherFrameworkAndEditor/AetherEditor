@@ -18,7 +18,7 @@ public:
 	bool Updater()override;
 private:
 	std::vector<aetherClass::GameScene*> m_viewWindow;
-	static std::wstring m_windowNameArrya[];
+	static std::wstring m_windowNameArray[];
 };
 
 #endif

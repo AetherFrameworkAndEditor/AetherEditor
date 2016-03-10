@@ -95,7 +95,9 @@
     <ClCompile Include="PropertyWindowView.cpp" />
     <ClCompile Include="SceneWindowView.cpp" />
     <ClCompile Include="SpriteObject.cpp" />
+    <ClCompile Include="WorldObjectManager.cpp" />
     <ClCompile Include="WorldReader.cpp" />
+    <ClCompile Include="WorldWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FbxModelObject.h" />
@@ -111,7 +113,9 @@
     <ClInclude Include="PropertyWindowView.h" />
     <ClInclude Include="SceneWindowView.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldObjectManager.h" />
     <ClInclude Include="WorldReader.h" />
+    <ClInclude Include="WorldWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

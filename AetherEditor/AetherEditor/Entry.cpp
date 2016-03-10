@@ -15,6 +15,7 @@
 using namespace aetherClass;
 
 #include "WorldReader.h"
+#include "WorldObjectManager.h"
 #include "ObjectWindow.h"
 #include "MainLoopScene.h"
 namespace{
@@ -46,11 +47,11 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	}
 	auto currentScene = std::make_unique<MainLoopScene>();
 	GameSceneManager::SetCurrentScene(currentScene.get());
-
+	WorldObjectManager::Export("Test2");
 	frame->GameRun();
 
 	ConsoleWindow::Close();
-
+	
 	// ”jŠü	
 	currentScene.release();
 	delete[] window;

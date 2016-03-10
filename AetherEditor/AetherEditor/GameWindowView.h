@@ -15,6 +15,9 @@ public:
 	void Render()override;
 	void UIRender()override;
 	bool Updater()override;
+
+private:
+
 };
 
 #endif

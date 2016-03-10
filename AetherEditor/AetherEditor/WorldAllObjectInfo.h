@@ -24,7 +24,7 @@ private:
 	void Reset(){
 		_materialID = 0;
 		_modelType = "none";
-		_color = aetherClass::Color(0, 0, 0, 0);
+		_color = aetherClass::Color(0, 0, 0, 1);
 		_textureID = 0;
 	}
 };

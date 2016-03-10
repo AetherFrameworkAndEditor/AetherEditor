@@ -12,6 +12,7 @@ PrimitiveObject::~PrimitiveObject()
 	Destroy();
 }
 
+//
 bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 	if (!m_primitiveObject)
 	{
@@ -31,12 +32,13 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 
 		// コライダーの作成
 		m_primitiveObject->_primitiveCollider = std::make_unique<Sphere>(10, 10);
-		m_primitiveObject->_primitiveCollider->property._transform._scale = 1;
 		result = m_primitiveObject->_primitiveCollider->Initialize();
 		if (!result)
 		{
 			return false;
 		}
+		m_primitiveObject->_primitiveCollider->property._transform._scale = 10;
+
 		auto centerPoint = m_primitiveObject->_primitive->property._transform._translation;
 		m_primitiveObject->_primitiveCollider->SetCamera(camera);
 		m_primitiveObject->_primitiveCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);
@@ -50,6 +52,7 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 		// 初期化
 		m_primitiveObject->_isClick = false;
 	}
+	return true;
 }
 
 //
@@ -60,7 +63,7 @@ void PrimitiveObject::Destroy(){
 		m_primitiveObject.release();
 		m_primitiveObject = nullptr;
 	}
-
+	return;
 }
 
 //

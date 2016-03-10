@@ -20,18 +20,18 @@ bool FbxModelObject::Create(std::string path, ViewCamera* camera){
 		m_fbxObject->_fbx = std::make_unique<FbxModel>();
 		// オブジェクトの作成
 		m_fbxObject->_fbx->LoadFBX(path, eAxisSystem::eAxisOpenGL);
-
 		m_fbxObject->_fbx->SetModelMaterialColor(Color(1.0f, 1.0f, 0.0f, 1.0f),eMatrerialType::eDiffuse);
 		m_fbxObject->_fbx->SetCamera(camera);
 
 		// コライダーの作成
 		m_fbxObject->_fbxCollider = std::make_unique<Sphere>(10, 10);
-		m_fbxObject->_fbxCollider->property._transform._scale = 1;
 		bool result = m_fbxObject->_fbxCollider->Initialize();
 		if (!result)
 		{
 			return false;
 		}
+		m_fbxObject->_fbxCollider->property._transform._scale = 1;
+
 		auto centerPoint = m_fbxObject->_fbx->property._transform._translation;
 		m_fbxObject->_fbxCollider->SetCamera(camera);
 		m_fbxObject->_fbxCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);

@@ -9,7 +9,7 @@
 using namespace aetherClass;
 
 //
-std::wstring MainLoopScene::m_windowNameArrya[] = {
+std::wstring MainLoopScene::m_windowNameArray[] = {
 	L"Scene",
 	L"Game",
 	L"Property"
@@ -102,11 +102,13 @@ void MainLoopScene::Render(){
 	int nameArrayNumber = 0;
 	for (auto scene : m_viewWindow)
 	{
-		entity.GetDirect3DManager()->SetTargetWindow(m_windowNameArrya[nameArrayNumber]);
+		entity.GetDirect3DManager()->SetTargetWindow(m_windowNameArray[nameArrayNumber]);
 		if (scene)
 		{
 			scene->Render();
 		}
+
+		nameArrayNumber += 1;
 	}
 }
 
@@ -116,11 +118,13 @@ void MainLoopScene::UIRender(){
 	int nameArrayNumber = 0;
 	for (auto scene : m_viewWindow)
 	{
-		entity.GetDirect3DManager()->SetTargetWindow(m_windowNameArrya[nameArrayNumber]);
+		entity.GetDirect3DManager()->SetTargetWindow(m_windowNameArray[nameArrayNumber]);
 		if (scene)
 		{
 			scene->UIRender();
 		}
+
+		nameArrayNumber += 1;
 	}
 }
 

@@ -83,9 +83,10 @@ bool SceneWindowView::Updater(){
 
 	if (GameController::GetMouse().IsLeftButtonTrigger())
 	{
-		if (RaySphereIntersect(*m_primitiveObject->GetCollider(), GameController::GetMouse().GetOrigin(), Vector3(0, 0, 10)))
+		RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
+		if (RaySphereIntersect(*m_primitiveObject->GetCollider(), ray._origin,ray._direction))
 		{
-		//	m_primitiveObject->ChangePivotState();
+			m_primitiveObject->ChangePivotState();
 		}
 	}
 	m_testPivot->SetLength(0.2);

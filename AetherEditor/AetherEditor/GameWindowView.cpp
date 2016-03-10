@@ -21,17 +21,21 @@ bool GameWindowView::Initialize(){
 
 void GameWindowView::Finalize(){
 
+	return;
 }
 
 
 void GameWindowView::Render(){
 
+	return;
 }
 
 void GameWindowView::UIRender(){
 
+	return;
 }
 
 bool GameWindowView::Updater(){
+
 	return true;
 }
