@@ -21,7 +21,7 @@ public:
 	bool Initialize(aetherClass::ViewCamera*)override;
 	void Render(aetherClass::ShaderBase*)override;
 	void MoveDirection(aetherClass::Vector3)override;
-
+	void SetLength(float)override;
 private:
 	void Finalize()override;
 private:

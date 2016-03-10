@@ -11,7 +11,7 @@ public:
 	virtual bool Initialize(aetherClass::ViewCamera*) = 0;
 	virtual void Render(aetherClass::ShaderBase*) = 0;
 	virtual void MoveDirection(aetherClass::Vector3) = 0;
-
+	virtual void SetLength(float length) = 0;
 private:
 	virtual void Finalize() = 0;
 

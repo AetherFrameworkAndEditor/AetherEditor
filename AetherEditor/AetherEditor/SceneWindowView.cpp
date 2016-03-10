@@ -3,6 +3,7 @@
 #include <Physics.h>
 #include <Cube.h>
 #include <GameController.h>
+#include "Pivot3D.h"
 using namespace aetherClass;
 using namespace aetherFunction;
 SceneWindowView::SceneWindowView():
@@ -14,6 +15,7 @@ GameScene("Scene", GetManager())
 SceneWindowView::~SceneWindowView()
 {
 }
+
 
 //
 bool SceneWindowView::Initialize(){
@@ -43,12 +45,24 @@ bool SceneWindowView::Initialize(){
 
 		m_colorShader->Initialize(shaderDesc, ShaderType::eVertex | ShaderType::ePixel);
 	}
+
+	if (!m_testPivot)
+	{
+		m_testPivot = std::make_unique<Pivot3D>();
+		m_testPivot->Initialize(&m_viewCamera);
+	}
 	
 	return true;
 }
 
 //
 void SceneWindowView::Finalize(){
+
+	if (m_testPivot)
+	{
+		m_testPivot.release();
+		m_testPivot = nullptr;
+	}
 
 	if (m_primitiveObject)
 	{
@@ -71,17 +85,19 @@ bool SceneWindowView::Updater(){
 	{
 		if (RaySphereIntersect(*m_primitiveObject->GetCollider(), GameController::GetMouse().GetOrigin(), Vector3(0, 0, 10)))
 		{
-			m_primitiveObject->ChangePivotState();
+		//	m_primitiveObject->ChangePivotState();
 		}
 	}
+	m_testPivot->SetLength(0.2);
 	return true;
 }
 
 void SceneWindowView::Render(){
 	m_viewCamera.Render();
 
-	m_primitiveObject->Render(m_colorShader.get());
+	//m_primitiveObject->Render(m_colorShader.get());
 
+	m_testPivot->Render(m_colorShader.get());
 	return;
 }
 
