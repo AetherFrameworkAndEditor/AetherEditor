@@ -18,12 +18,34 @@ private:
 		}
 
 		~PrimitiveObjectInfo(){
-			_primitive = nullptr;
-			_primitiveCollider = nullptr;
-			_pivot = nullptr;
-			_isClick = false;
+			Destory();
 		}
 
+		//
+		void Destory(){
+			if (_primitive)
+			{
+				_primitive->Finalize();
+				_primitive.release();
+				_primitive = nullptr;
+			}
+
+			//
+			if (_primitiveCollider)
+			{
+				_primitiveCollider->Finalize();
+				_primitiveCollider.release();
+				_primitiveCollider = nullptr;
+			}
+
+			//
+			if (_pivot)
+			{
+				_pivot.release();
+				_pivot = nullptr;
+			}
+			_isClick = false;
+		}
 		std::unique_ptr<aetherClass::ModelBase> _primitive;
 		std::unique_ptr<aetherClass::Sphere> _primitiveCollider;
 		std::unique_ptr<Pivot> _pivot;

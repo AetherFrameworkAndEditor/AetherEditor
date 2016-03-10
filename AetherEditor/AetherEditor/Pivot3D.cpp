@@ -1,4 +1,4 @@
-#include "Pivot.h"
+#include "Pivot3D.h"
 #include <iostream>
 
 // Pivot‚É‚µ‚©Žg‚í‚È‚¢’è”
@@ -10,24 +10,25 @@ namespace{
 using namespace aetherClass;
 
 // Pivot‚ÌÚ×î•ñ
-Pivot::PivotProperty Pivot::m_pivotPropertyArray[kMaxCount] = {
+Pivot3D::Pivot3DProperty Pivot3D::m_pivotPropertyArray[kMaxCount] = {
 	{ Color(1.0f, 0.0f, 0.0f, 1.0f), Vector3(kDirectionSize, kOtherSize, kOtherSize), Vector3(kDirectionSize, 0.0f, 0.0f), },
 	{ Color(0.0f, 1.0f, 0.0f, 1.0f), Vector3(kOtherSize, kDirectionSize, kOtherSize), Vector3(0.0f, kDirectionSize - kOtherSize, 0.0f), },
 	{ Color(0.0f, 0.0f, 1.0f, 1.0f), Vector3(kOtherSize, kOtherSize, kDirectionSize), Vector3(0.0f, 0.0f, kDirectionSize) }
 };
 
-Pivot::Pivot():
+Pivot3D::Pivot3D() :
 m_isInitialize(false)
 {
 }
 
 
-Pivot::~Pivot()
+Pivot3D::~Pivot3D()
 {
+	Finalize();
 }
 
 //
-bool Pivot::Initialize(ViewCamera* camera){
+bool Pivot3D::Initialize(ViewCamera* camera){
 	Finalize();
 
 	m_pivot.resize(kMaxCount);
@@ -42,7 +43,7 @@ bool Pivot::Initialize(ViewCamera* camera){
 			return false;
 		}
 		index->SetCamera(camera);
-		index->property._transform._scale = m_pivotPropertyArray[arrayNumber]._direction;
+		index->property._transform._scale = m_pivotPropertyArray[arrayNumber]._directionScale;
 		index->property._transform._translation = m_pivotPropertyArray[arrayNumber]._position;
 		index->property._color= m_pivotPropertyArray[arrayNumber]._color;
 
@@ -53,7 +54,7 @@ bool Pivot::Initialize(ViewCamera* camera){
 }
 
 //
-void Pivot::Finalize(){
+void Pivot3D::Finalize(){
 	if (!m_isInitialize)return;
 
 	for (auto index : m_pivot)
@@ -69,7 +70,7 @@ void Pivot::Finalize(){
 }
 
 //
-void Pivot::Render(ShaderBase* shader){
+void Pivot3D::Render(ShaderBase* shader){
 	if (!m_isInitialize)return;
 
 	for (auto index : m_pivot)
@@ -78,7 +79,7 @@ void Pivot::Render(ShaderBase* shader){
 	}
 }
 
-void Pivot::MoveDirection(Vector3 move){
+void Pivot3D::MoveDirection(Vector3 move){
 	if (!m_isInitialize)return;
 
 	for (auto index : m_pivot)

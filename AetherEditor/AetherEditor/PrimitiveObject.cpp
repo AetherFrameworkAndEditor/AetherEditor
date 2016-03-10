@@ -1,4 +1,5 @@
 #include "PrimitiveObject.h"
+#include "Pivot3D.h"
 #include <Cube.h>
 using namespace aetherClass;
 PrimitiveObject::PrimitiveObject()
@@ -34,10 +35,10 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 			return false;
 		}
 		m_primitiveObject->_primitiveCollider->SetCamera(camera);
-		m_primitiveObject->_primitiveCollider->property._color = Color(1.0f, 0.0f, 0.0f, 0.3f);
+		m_primitiveObject->_primitiveCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 		m_primitiveObject->_primitiveCollider->property._transform._translation = m_primitiveObject->_primitive->property._transform._translation;
 
-		m_primitiveObject->_pivot = std::make_unique<Pivot>();
+		m_primitiveObject->_pivot = std::make_unique<Pivot3D>();
 		m_primitiveObject->_pivot->Initialize(camera);
 		m_primitiveObject->_pivot->MoveDirection(m_primitiveObject->_primitive->property._transform._translation);
 
@@ -49,11 +50,11 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 void PrimitiveObject::Destroy(){
 	if (m_primitiveObject)
 	{
-		m_primitiveObject->_primitive->Finalize();
-		m_primitiveObject->_primitiveCollider->Finalize();
-		m_primitiveObject->_pivot->Finalize();
+		m_primitiveObject->Destory();
+		m_primitiveObject.release();
+		m_primitiveObject = nullptr;
 	}
-	m_primitiveObject.release();
+
 }
 
 //
@@ -63,7 +64,7 @@ void PrimitiveObject::Render(aetherClass::ShaderBase* shader){
 	{
 		
 		m_primitiveObject->_pivot->Render(shader);
-		//m_primitiveObject->_primitiveCollider->Render(shader);
+		m_primitiveObject->_primitiveCollider->Render(shader);
 		m_primitiveObject->_primitive->property._color._alpha = 0.3;
 	}
 	else
