@@ -102,3 +102,7 @@ Sphere* PrimitiveObject::GetCollider(){
 void PrimitiveObject::ChangePivotState(){
 	m_primitiveObject->_isClick = !m_primitiveObject->_isClick;
 }
+
+std::unique_ptr<PrimitiveObject::PrimitiveObjectInfo>& PrimitiveObject::GetInfo(){
+	return m_primitiveObject;
+}

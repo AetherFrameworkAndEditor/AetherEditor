@@ -100,3 +100,8 @@ Sphere* SpriteObject::GetCollider(){
 void SpriteObject::ChangePivotState(){
 	m_spriteObject->_isClick = !m_spriteObject->_isClick;
 }
+
+
+std::unique_ptr<SpriteObject::SpriteObjectInfo>& SpriteObject::GetInfo(){
+	return m_spriteObject;
+}

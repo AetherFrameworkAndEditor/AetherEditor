@@ -67,6 +67,7 @@ public:
 	aetherClass::Sphere* GetCollider();
 	void ChangePivotState();
 
+	std::unique_ptr<SpriteObjectInfo>& GetInfo();
 private:
 	void Destroy();
 private:

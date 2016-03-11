@@ -66,11 +66,11 @@ public:
 
 	aetherClass::Sphere* GetCollider();
 	void ChangePivotState();
-
+	std::unique_ptr<PrimitiveObjectInfo> GetInfo();
 private:
 	void Destroy();
 private:
-	std::unique_ptr<PrimitiveObjectInfo> m_primitiveObject;
+	std::unique_ptr<PrimitiveObjectInfo>& m_primitiveObject;
 };
 
 #endif

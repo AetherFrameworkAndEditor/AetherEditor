@@ -94,3 +94,7 @@ Sphere* FbxModelObject::GetCollider(){
 void FbxModelObject::ChangePivotState(){
 	m_fbxObject->_isClick = !m_fbxObject->_isClick;
 }
+
+std::unique_ptr<FbxModelObject::FbxObjectInfo>& FbxModelObject::GetInfo(){
+	return m_fbxObject;
+}
