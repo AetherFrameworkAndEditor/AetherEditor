@@ -89,7 +89,7 @@ void Pivot3D::MoveDirection(Vector3 move){
 }
 
 //
-void Pivot3D::SetLength(float length){
+void Pivot3D::SetScale(float length){
 	for (auto& index : m_pivot)
 	{
 		Vector3 nomalize = index->property._transform._scale.Normalize();

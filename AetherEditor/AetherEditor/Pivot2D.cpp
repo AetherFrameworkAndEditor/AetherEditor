@@ -96,7 +96,7 @@ void Pivot2D::MoveDirection(Vector3 move){
 }
 
 //
-void Pivot2D::SetLength(float length){
+void Pivot2D::SetScale(float length){
 	
 	for (auto& index : m_pivot)
 	{

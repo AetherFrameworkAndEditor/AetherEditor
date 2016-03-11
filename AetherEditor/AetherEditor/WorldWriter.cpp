@@ -182,6 +182,52 @@ void WorldWriter::WriteMaterial(std::ofstream& exportObject, Material* object){
 		exportObject << "none" << std::endl;
 		return;
 	}
+	// diffuse
+	exportObject << object->_diffuse._color._red;
+	exportObject << ',';
+	exportObject << object->_diffuse._color._green;
+	exportObject << ',';
+	exportObject << object->_diffuse._color._blue;
+	exportObject << ',';
+	exportObject << object->_diffuse._color._alpha;
+	exportObject << ',';
+	exportObject << object->_diffuse._texturePath[0];
+	exportObject << ',';
+
+	// ambient
+	exportObject << object->_ambient._color._red;
+	exportObject << ',';
+	exportObject << object->_ambient._color._green;
+	exportObject << ',';
+	exportObject << object->_ambient._color._blue;
+	exportObject << ',';
+	exportObject << object->_ambient._color._alpha;
+	exportObject << ',';
+	exportObject << object->_ambient._texturePath[0];
+	exportObject << ',';
+
+	// specular
+	exportObject << object->_specular._color._red;
+	exportObject << ',';
+	exportObject << object->_specular._color._green;
+	exportObject << ',';
+	exportObject << object->_specular._color._blue;
+	exportObject << ',';
+	exportObject << object->_specular._color._alpha;
+	exportObject << ',';
+	exportObject << object->_specular._texturePath[0];
+	exportObject << ',';
+
+	// emissive
+	exportObject << object->_emissive._color._red;
+	exportObject << ',';
+	exportObject << object->_emissive._color._green;
+	exportObject << ',';
+	exportObject << object->_emissive._color._blue;
+	exportObject << ',';
+	exportObject << object->_emissive._color._alpha;
+	exportObject << ',';
+	exportObject << object->_emissive._texturePath[0];
 
 	exportObject << std::endl;
 }
@@ -192,7 +238,7 @@ void WorldWriter::WriteTexture(std::ofstream& exportObject, Texture* object){
 		exportObject << "none" << std::endl;
 		return;
 	}
-
+	exportObject << object->GetPath();
 	exportObject << std::endl;
 }
 

@@ -165,13 +165,11 @@ void WorldObjectManager::AddFbxModel(FbxModelObject* fbx){
 //
 void WorldObjectManager::RegisterCamera(aetherClass::Light* light){
 	m_light = light;
-
 	return;
 }
 
 //
 void WorldObjectManager::RegisterLight(aetherClass::ViewCamera* camera){
 	m_camera = camera;
-
 	return;
 }

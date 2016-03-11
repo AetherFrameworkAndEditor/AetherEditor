@@ -3,6 +3,7 @@
 #include <Physics.h>
 #include <Cube.h>
 #include <GameController.h>
+#include <GameClock.h>
 #include "Pivot3D.h"
 using namespace aetherClass;
 using namespace aetherFunction;
@@ -52,6 +53,8 @@ bool SceneWindowView::Initialize(){
 		m_testPivot->Initialize(&m_viewCamera);
 	}
 	
+	m_viewCamera.property._translation._z -= 10;
+	m_testPivot->SetScale(0.2);
 	return true;
 }
 
@@ -80,7 +83,12 @@ void SceneWindowView::Finalize(){
 //
 bool SceneWindowView::Updater(){
 	m_viewCamera.Controller();
+	if (GameController::GetKey().IsKeyDown(DIK_UP))
+	{
+		Vector3 move(1, 0, 0);
+		m_testPivot->MoveDirection(move*GameClock::GetDeltaTime());
 
+	}
 	if (GameController::GetMouse().IsLeftButtonTrigger())
 	{
 		RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
@@ -89,7 +97,7 @@ bool SceneWindowView::Updater(){
 			m_primitiveObject->ChangePivotState();
 		}
 	}
-	m_testPivot->SetLength(0.2);
+	
 	return true;
 }
 

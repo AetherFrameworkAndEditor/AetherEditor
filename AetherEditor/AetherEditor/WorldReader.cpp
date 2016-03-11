@@ -135,25 +135,25 @@ void WorldReader::GetMaterialInfo(std::string data){
 	info._diffuse._texturePath.push_back(spliteArray[4]);
 
 	// ambient
-	info._ambient._color._red = std::atof(spliteArray[0].c_str());
-	info._ambient._color._green = std::atof(spliteArray[1].c_str());
-	info._ambient._color._blue = std::atof(spliteArray[2].c_str());
-	info._ambient._color._alpha = std::atof(spliteArray[3].c_str());
-	info._ambient._texturePath.push_back(spliteArray[4]);
+	info._ambient._color._red = std::atof(spliteArray[5].c_str());
+	info._ambient._color._green = std::atof(spliteArray[6].c_str());
+	info._ambient._color._blue = std::atof(spliteArray[7].c_str());
+	info._ambient._color._alpha = std::atof(spliteArray[8].c_str());
+	info._ambient._texturePath.push_back(spliteArray[9]);
 
 	// specular
-	info._specular._color._red = std::atof(spliteArray[0].c_str());
-	info._specular._color._green = std::atof(spliteArray[1].c_str());
-	info._specular._color._blue = std::atof(spliteArray[2].c_str());
-	info._specular._color._alpha = std::atof(spliteArray[3].c_str());
-	info._specular._texturePath.push_back(spliteArray[4]);
+	info._specular._color._red = std::atof(spliteArray[10].c_str());
+	info._specular._color._green = std::atof(spliteArray[11].c_str());
+	info._specular._color._blue = std::atof(spliteArray[12].c_str());
+	info._specular._color._alpha = std::atof(spliteArray[13].c_str());
+	info._specular._texturePath.push_back(spliteArray[14]);
 
 	// emissive
-	info._emissive._color._red = std::atof(spliteArray[0].c_str());
-	info._emissive._color._green = std::atof(spliteArray[1].c_str());
-	info._emissive._color._blue = std::atof(spliteArray[2].c_str());
-	info._emissive._color._alpha = std::atof(spliteArray[3].c_str());
-	info._emissive._texturePath.push_back(spliteArray[4]);
+	info._emissive._color._red = std::atof(spliteArray[15].c_str());
+	info._emissive._color._green = std::atof(spliteArray[16].c_str());
+	info._emissive._color._blue = std::atof(spliteArray[17].c_str());
+	info._emissive._color._alpha = std::atof(spliteArray[18].c_str());
+	info._emissive._texturePath.push_back(spliteArray[19]);
 
 	m_world._material.push_back(info);
 
