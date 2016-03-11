@@ -16,6 +16,9 @@ public:
 	void WriteSprite(std::ofstream&, SpriteObject*);
 	void WriteFbxModel(std::ofstream&, FbxModelObject*);
 
+	void WriteMaterial(std::ofstream&, aetherClass::Material*);
+	void WriteTexture(std::ofstream&, aetherClass::Texture*);
+
 	void WriteCamera(std::ofstream&, aetherClass::ViewCamera*);
 	void WriteLight(std::ofstream&, aetherClass::Light*);
 };

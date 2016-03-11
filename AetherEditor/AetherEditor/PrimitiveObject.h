@@ -15,6 +15,8 @@ private:
 			_primitiveCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
+			_materialID = 0;
+			_textureID = 0;
 		}
 
 		~PrimitiveObjectInfo(){
@@ -66,11 +68,11 @@ public:
 
 	aetherClass::Sphere* GetCollider();
 	void ChangePivotState();
-	std::unique_ptr<PrimitiveObjectInfo> GetInfo();
+	std::unique_ptr<PrimitiveObjectInfo>& GetInfo();
 private:
 	void Destroy();
 private:
-	std::unique_ptr<PrimitiveObjectInfo>& m_primitiveObject;
+	std::unique_ptr<PrimitiveObjectInfo> m_primitiveObject;
 };
 
 #endif

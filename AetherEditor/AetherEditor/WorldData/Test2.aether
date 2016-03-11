@@ -1,10 +1,12 @@
 Object
-primitive
-sprite
-fbx
+none
+none
+none
 Material
+none
 Texture
+none
 Camera
-camera
+none
 Light
-light
+none

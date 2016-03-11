@@ -71,9 +71,11 @@ bool WorldObjectManager::Export(std::string fileName){
 	
 	// Materialタグの設定
 	exportObject << "Material" << std::endl;
+	writer.WriteMaterial(exportObject, nullptr);
 
 	// Textureタグの設定
 	exportObject << "Texture" << std::endl;
+	writer.WriteTexture(exportObject, nullptr);
 
 	// Cameraタグの設定
 	exportObject << "Camera" << std::endl;

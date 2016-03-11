@@ -35,7 +35,7 @@ bool WorldReader::Load(std::string filePath){
 		// タグの行かを確認
 		if (index == "Object" || index == "Material" ||
 			index == "Texture"||index == "Camera" || 
-			index == "Light")
+			index == "Light"||index=="none")
 		{
 			// 取り込んでいるタグを設定
 			m_tag = index;

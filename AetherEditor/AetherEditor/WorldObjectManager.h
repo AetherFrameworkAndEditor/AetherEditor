@@ -3,8 +3,8 @@
 #include "PrimitiveObject.h"
 #include "SpriteObject.h"
 #include "FbxModelObject.h"
-#include "ViewCamera.h"
-#include "Light.h"
+#include <ViewCamera.h>
+#include <Light.h>
 #include "WorldReader.h"
 class WorldObjectManager
 {

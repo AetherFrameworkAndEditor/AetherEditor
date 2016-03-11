@@ -104,5 +104,6 @@ void PrimitiveObject::ChangePivotState(){
 }
 
 std::unique_ptr<PrimitiveObject::PrimitiveObjectInfo>& PrimitiveObject::GetInfo(){
+	
 	return m_primitiveObject;
 }
