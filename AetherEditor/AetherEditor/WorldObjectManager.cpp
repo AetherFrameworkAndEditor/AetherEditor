@@ -7,10 +7,11 @@ using namespace aetherClass;
 std::vector<PrimitiveObject*> WorldObjectManager::m_primitive;
 std::vector<SpriteObject*>    WorldObjectManager::m_sprite;
 std::vector<FbxModelObject*>  WorldObjectManager::m_fbx;
+std::vector<Material*> m_material;
+std::vector<Texture*> m_texture;
 
 Light* WorldObjectManager::m_light = nullptr;
 ViewCamera* WorldObjectManager::m_camera = nullptr;
-WorldReader* WorldObjectManager::m_reader = nullptr;
 
 WorldObjectManager::WorldObjectManager()
 {
@@ -23,20 +24,26 @@ WorldObjectManager::~WorldObjectManager()
 
 
 bool WorldObjectManager::Import(std::string path){
-	if (m_reader)
+
+	std::unique_ptr<WorldReader> reader;
+	if (reader)
 	{
-		m_reader->UnLoad();
-		delete m_reader;
-		m_reader = nullptr;
+		reader->UnLoad();
+		reader.release();
+		reader = nullptr;
 	}
 
-	m_reader = new WorldReader();
-	bool result = m_reader->Load(path);
+	reader = std::make_unique<WorldReader>();
+	bool result = reader->Load(path);
 	if (!result)
 	{
 		return false;
 	}
+	// ƒ[ƒh‚µ‚½Œã‚Ìˆ—
 
+	reader->UnLoad();
+	reader.release();
+	reader = nullptr;
 	return true;
 }
 

@@ -26,11 +26,11 @@ private:
 	static std::vector<PrimitiveObject*> m_primitive;
 	static std::vector<SpriteObject*> m_sprite;
 	static std::vector<FbxModelObject*> m_fbx;
+	static std::vector<aetherClass::Material*> m_material;
+	static std::vector<aetherClass::Texture*> m_texture;
 
 	static aetherClass::Light* m_light;
 	static aetherClass::ViewCamera* m_camera;
-
-	static WorldReader* m_reader;
 };
 
 #endif

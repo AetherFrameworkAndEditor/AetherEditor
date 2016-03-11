@@ -45,10 +45,14 @@ private:
 				_pivot = nullptr;
 			}
 			_isClick = false;
+			_materialID = 0;
+			_textureID = 0;
 		}
 		std::unique_ptr<aetherClass::SpriteBase> _sprite;
 		std::unique_ptr<aetherClass::Sphere> _spriteCollider;
 		std::unique_ptr<Pivot> _pivot;
+		int _materialID;
+		int _textureID;
 		bool _isClick;
 	};
 
