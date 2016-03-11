@@ -9,6 +9,7 @@ public:
 	~WorldReader();
 
 	bool Load(std::string);
+	World GetInputWorldInfo();
 	void UnLoad();
 private:
 	World m_world;

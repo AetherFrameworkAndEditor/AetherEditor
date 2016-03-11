@@ -22,7 +22,7 @@ WorldObjectManager::~WorldObjectManager()
 {
 }
 
-
+//
 bool WorldObjectManager::Import(std::string path){
 
 	std::unique_ptr<WorldReader> reader;
@@ -144,21 +144,18 @@ void WorldObjectManager::Reset(){
 //
 void WorldObjectManager::AddPrimitive(PrimitiveObject* primitive){
 	m_primitive.push_back(primitive);
-
 	return;
 }
 
 //
 void WorldObjectManager::AddSprite(SpriteObject* sprite){
 	m_sprite.push_back(sprite);
-
 	return;
 }
 
 //
 void WorldObjectManager::AddFbxModel(FbxModelObject* fbx){
 	m_fbx.push_back(fbx);
-
 	return;
 }
 

@@ -255,3 +255,8 @@ std::string WorldReader::GetExtension(const std::string path){
 	}
 	return extension;
 }
+
+//
+World WorldReader::GetInputWorldInfo(){
+	return m_world;
+}
