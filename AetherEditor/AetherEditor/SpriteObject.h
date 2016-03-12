@@ -15,6 +15,7 @@ private:
 			_spriteCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
+			_name = "none";
 		}
 
 		~SpriteObjectInfo(){
@@ -54,6 +55,7 @@ private:
 		int _materialID;
 		int _textureID;
 		bool _isClick;
+		std::string _name;
 	};
 
 public:

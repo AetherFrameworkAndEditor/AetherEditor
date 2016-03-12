@@ -19,6 +19,7 @@ struct ObjectInfo
 	std::string _modelType;
 	aetherClass::Color _color;
 	int _textureID;
+	std::string _name;
 
 private:
 	void Reset(){
@@ -26,6 +27,7 @@ private:
 		_modelType = "none";
 		_color = aetherClass::Color(0, 0, 0, 1);
 		_textureID = 0;
+		_name = "none";
 	}
 };
 

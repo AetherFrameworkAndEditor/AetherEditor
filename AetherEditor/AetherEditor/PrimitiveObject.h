@@ -17,6 +17,7 @@ private:
 			_isClick = false;
 			_materialID = 0;
 			_textureID = 0;
+			_name = "none";
 		}
 
 		~PrimitiveObjectInfo(){
@@ -56,6 +57,7 @@ private:
 		bool _isClick;
 		int _materialID;
 		int _textureID;
+		std::string _name;
 	};
 public:
 	PrimitiveObject();

@@ -15,10 +15,10 @@ public:
 	static void RegisterCamera(aetherClass::Light*);
 	static void RegisterLight(aetherClass::ViewCamera*);
 
-	static void Reset();
-
 	static bool Import(std::string);
 	static bool Export(std::string);
+	static void Reset();
+
 private:
 	WorldObjectManager();
 	~WorldObjectManager();

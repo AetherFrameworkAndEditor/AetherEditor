@@ -34,8 +34,8 @@ bool WorldReader::Load(std::string filePath){
 	{
 		// タグの行かを確認
 		if (index == "Object" || index == "Material" ||
-			index == "Texture"||index == "Camera" || 
-			index == "Light"||index=="none")
+			index == "Texture" || index == "Camera" ||
+			index == "Light" || index == "none")
 		{
 			// 取り込んでいるタグを設定
 			m_tag = index;
@@ -64,6 +64,7 @@ void WorldReader::UnLoad(){
 		texture = nullptr;
 	}
 }
+
 // オブジェクト情報を読み取る
 void WorldReader::GetObjectInfo(std::string data){
 
@@ -107,6 +108,10 @@ void WorldReader::GetObjectInfo(std::string data){
 
 	// 適用するテクスチャ番号
 	info._textureID = std::atoi(spliteArray[15].c_str());
+
+	// オブジェクトの名前
+	info._name = spliteArray[16].c_str();
+
 
 	// ワールドに取り込む
 	m_world._objectInfo.push_back(info);

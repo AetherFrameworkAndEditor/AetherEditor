@@ -16,6 +16,7 @@ private:
 			_fbxCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
+			_name = "none";
 		}
 
 		~FbxObjectInfo(){
@@ -55,6 +56,7 @@ private:
 		bool _isClick;
 		int _materialID;
 		int _textureID;
+		std::string _name;
 	};
 public:
 	FbxModelObject();

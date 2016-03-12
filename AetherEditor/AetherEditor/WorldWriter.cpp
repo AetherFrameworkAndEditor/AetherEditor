@@ -62,6 +62,9 @@ void WorldWriter::WritePrimitive(std::ofstream& exportObject, PrimitiveObject* o
 	// TextureID
 	exportObject << object->GetInfo()->_textureID;
 
+	// ‚»‚ê‚¼‚ê‚Ì–¼‘O
+	exportObject << object->GetInfo()->_name;
+
 	exportObject << std::endl;
 	return;
 }
@@ -116,6 +119,9 @@ void WorldWriter::WriteSprite(std::ofstream& exportObject, SpriteObject* object)
 
 	// TextureID
 	exportObject << object->GetInfo()->_textureID;
+
+	// ‚»‚ê‚¼‚ê‚Ì–¼‘O
+	exportObject << object->GetInfo()->_name;
 
 	exportObject << std::endl;
 	return;
@@ -172,6 +178,9 @@ void WorldWriter::WriteFbxModel(std::ofstream& exportObject, FbxModelObject* obj
 
 	// TextureID
 	exportObject << object->GetInfo()->_textureID;
+
+	// ‚»‚ê‚¼‚ê‚Ì–¼‘O
+	exportObject << object->GetInfo()->_name;
 
 	exportObject << std::endl;
 }
