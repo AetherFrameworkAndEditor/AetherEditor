@@ -151,14 +151,14 @@ void WorldObjectManager::AddFbxModel(FbxModelObject* fbx){
 }
 
 //
-void WorldObjectManager::RegisterCamera(Vector3 light){
-	m_light = light;
+void WorldObjectManager::RegisterCamera(CameraValue camera){
+	m_camera = camera;
 	return;
 }
 
 //
-void WorldObjectManager::RegisterLight(CameraValue camera){
-	m_camera = camera;
+void WorldObjectManager::RegisterLight(Vector3 light){
+	m_light = light;
 	return;
 }
 

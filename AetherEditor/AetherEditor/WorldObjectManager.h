@@ -13,8 +13,8 @@ public:
 	static void AddPrimitive(PrimitiveObject*);
 	static void AddSprite(SpriteObject*);
 	static void AddFbxModel(FbxModelObject*);
-	static void RegisterCamera(aetherClass::Vector3);
-	static void RegisterLight(CameraValue);
+	static void RegisterCamera(CameraValue);
+	static void RegisterLight(aetherClass::Vector3);
 
 	static std::vector<PrimitiveObject*> GetPrimitive();
 	static std::vector<SpriteObject*> GetSprite();

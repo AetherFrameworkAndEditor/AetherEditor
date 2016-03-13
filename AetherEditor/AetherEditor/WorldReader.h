@@ -11,6 +11,10 @@ public:
 	bool Load(std::string);
 	World GetInputWorldInfo();
 	void UnLoad();
+
+	void UnLoadTexture();
+	void UnLoadObject();
+	void UnLoadMaterial();
 private:
 	World m_world;
 	std::vector<std::string> m_input;
@@ -22,10 +26,6 @@ private:
 	void GetCameraInfo(std::string);
 	void GetTextureInfo(std::string);
 	void GetLightInfo(std::string);
-
-	void UnLoadTexture();
-	void UnLoadObject();
-	void UnLoadMaterial();
 };
 
 #endif
