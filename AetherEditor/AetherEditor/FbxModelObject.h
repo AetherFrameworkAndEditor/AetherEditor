@@ -16,7 +16,7 @@ private:
 			_fbxCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
-			_name = "none";
+			_name = "null_name";
 			_materialID = 0;
 			_textureID = 0;
 		}

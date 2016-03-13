@@ -17,7 +17,7 @@ private:
 			_isClick = false;
 			_materialID = 0;
 			_textureID = 0;
-			_name = "none";
+			_name = "null_name";
 		}
 
 		~PrimitiveObjectInfo(){
