@@ -20,6 +20,8 @@ public:
 	void UIRender()override;
 	bool Updater()override;
 
+	std::unique_ptr<aetherClass::ShaderBase>m_colorShader;
+
 	static aetherClass::ViewCamera& GetSceneWindowCamera();
 private:
 	static aetherClass::ViewCamera m_viewCamera;
