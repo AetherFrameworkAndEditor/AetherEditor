@@ -17,6 +17,8 @@ private:
 			_pivot = nullptr;
 			_isClick = false;
 			_name = "none";
+			_materialID = 0;
+			_textureID = 0;
 		}
 
 		~FbxObjectInfo(){
