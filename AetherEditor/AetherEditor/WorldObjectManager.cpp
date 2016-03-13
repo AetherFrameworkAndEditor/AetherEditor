@@ -65,18 +65,59 @@ bool WorldObjectManager::Export(std::wstring fileName){
 
 	// Objectタグの設定と書き出し
 	exportObject << "[Object]" << std::endl;
-	writer.WritePrimitive(exportObject,nullptr);
-	writer.WriteSprite(exportObject, nullptr);
-	writer.WriteFbxModel(exportObject, nullptr);
+
+	//
+	for (auto primitive : m_primitive)
+	{
+		if (primitive)
+		{
+			writer.WritePrimitive(exportObject, primitive);
+		}
+
+	}
+
+	//
+	for (auto sprite : m_sprite)
+	{
+		if (sprite)
+		{
+			writer.WriteSprite(exportObject, sprite);
+		}
+	}
+	
+	//
+	for (auto fbx : m_fbx)
+	{
+		if (fbx)
+		{
+			writer.WriteFbxModel(exportObject, fbx);
+		}
+	}
+
+	
 	
 	// Materialタグの設定と書き出し
 	exportObject << "[Material]" << std::endl;
-	writer.WriteMaterial(exportObject, nullptr);
+
+	//
+	for (auto material : m_material)
+	{
+		if (material)
+		{
+			writer.WriteMaterial(exportObject, material);
+		}
+	}
 
 	// Textureタグの設定と書き出し
 	exportObject << "[Texture]" << std::endl;
 	writer.WriteTexture(exportObject, nullptr);
-
+	for (auto texture : m_texture)
+	{
+		if (texture)
+		{
+			writer.WriteTexture(exportObject, texture);
+		}
+	}
 	// Cameraタグの設定と書き出し
 	exportObject << "[Camera]" << std::endl;
 	writer.WriteCamera(exportObject, m_camera);
