@@ -12,7 +12,7 @@ SpriteObject::~SpriteObject()
 	Destroy();
 }
 
-bool SpriteObject::Create(SpriteBase* sprite, ViewCamera* camera){
+bool SpriteObject::Create(SpriteBase* sprite, aetherClass::ViewCamera* camera){
 	if (!m_spriteObject)
 	{
 		m_spriteObject = std::make_unique<SpriteObjectInfo>();
@@ -25,27 +25,15 @@ bool SpriteObject::Create(SpriteBase* sprite, ViewCamera* camera){
 			return false;
 		}
 		m_spriteObject->_sprite->property._color = Color(1.0f, 1.0f, 0.0f, 1.0f);
-
-		// コライダーの作成
-		m_spriteObject->_spriteCollider = std::make_unique<Sphere>(10, 10);
-		result = m_spriteObject->_spriteCollider->Initialize();
-		if (!result)
-		{
-			return false;
-		}
-		m_spriteObject->_spriteCollider->property._transform._scale = 1;
-
-		auto center = m_spriteObject->_sprite->property._transform._scale / 2;
+		
+		auto center = m_spriteObject->_sprite->property._transform._scale;
 		auto position = m_spriteObject->_sprite->property._transform._translation;
-		auto centerPoint = position + center;
-		m_spriteObject->_spriteCollider->SetCamera(camera);
-		m_spriteObject->_spriteCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-		m_spriteObject->_spriteCollider->property._transform._translation = centerPoint;
+		auto centerPoint = (position + center)/2;
 
 		// Pivotの作成
 		m_spriteObject->_pivot = std::make_unique<Pivot2D>();
 		m_spriteObject->_pivot->Initialize(camera);
-		m_spriteObject->_pivot->MoveDirection(centerPoint);
+		m_spriteObject->_pivot->SetScale(100);
 
 		m_spriteObject->_isClick = false;
 	}
@@ -65,11 +53,11 @@ void SpriteObject::Destroy(){
 //
 void SpriteObject::Render(aetherClass::ShaderBase* shader){
 
+	m_spriteObject->_sprite->Render(shader);
+	
 	if (m_spriteObject->_isClick)
 	{
-
 		m_spriteObject->_pivot->Render(shader);
-		m_spriteObject->_spriteCollider->Render(shader);
 		m_spriteObject->_sprite->property._color._alpha = 0.3;
 	}
 	else
@@ -77,23 +65,17 @@ void SpriteObject::Render(aetherClass::ShaderBase* shader){
 		m_spriteObject->_sprite->property._color._alpha = 1.0;
 	}
 
-	m_spriteObject->_sprite->Render(shader);
+	return;
 }
 
 //
 void SpriteObject::Update(){
 
-	auto center = m_spriteObject->_sprite->property._transform._scale / 2;
+	auto scale = m_spriteObject->_sprite->property._transform._scale;
 	auto position = m_spriteObject->_sprite->property._transform._translation;
-	auto centerPoint = position + center;
-	// コライダーとピポット
-	m_spriteObject->_spriteCollider->property._transform._translation = centerPoint;
-	m_spriteObject->_pivot->MoveDirection(centerPoint);
-}
+	auto centerPoint = (position + scale)/2;
 
-//
-Sphere* SpriteObject::GetCollider(){
-	return m_spriteObject->_spriteCollider.get();
+	m_spriteObject->_pivot->MoveDirection(centerPoint);
 }
 
 //

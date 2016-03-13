@@ -1,6 +1,6 @@
 #include "Pivot2D.h"
 #include <iostream>
-#include <Cylinder.h>
+#include <Rectangle2D.h>
 
 // PivotÇ…ÇµÇ©égÇÌÇ»Ç¢íËêî
 namespace{
@@ -12,8 +12,8 @@ using namespace aetherClass;
 
 // PivotÇÃè⁄ç◊èÓïÒ
 Pivot2D::Pivot2DProperty Pivot2D::m_pivotPropertyArray[kMaxCount] = {
-	{ Color(1.0f, 0.0f, 0.0f, 1.0f), Vector3(kDirectionSize, kOtherSize, 0.0f), Vector3(kDirectionSize, 0.0f, 0.0f), },
-	{ Color(0.0f, 1.0f, 0.0f, 1.0f), Vector3(kOtherSize, kDirectionSize, 0.0f), Vector3(0.0f, kDirectionSize - kOtherSize, 0.0f), }
+	{ Color(1.0f, 0.0f, 0.0f, 1.0f), Vector3(kDirectionSize, kOtherSize, 0.0f), Vector3(0, 0.0f, 0.0f), },
+	{ Color(0.0f, 1.0f, 0.0f, 1.0f), Vector3(kOtherSize, -kDirectionSize, 0.0f), Vector3(0.0f, 0, 0.0f), }
 };
 
 Pivot2D::Pivot2D() :
@@ -36,13 +36,12 @@ bool Pivot2D::Initialize(ViewCamera* camera){
 	bool result;
 	for (auto& index : m_pivot)
 	{
-		index = std::make_shared<Cylinder>();
+		index = std::make_shared<Rectangle2D>();
 		result = index->Initialize();
 		if (!result)
 		{
 			return false;
 		}
-		index->SetCamera(camera);
 		index->property._transform._scale = m_pivotPropertyArray[arrayNumber]._directionScale;
 		index->property._transform._translation = m_pivotPropertyArray[arrayNumber]._position;
 		index->property._color = m_pivotPropertyArray[arrayNumber]._color;
@@ -88,8 +87,9 @@ void Pivot2D::MoveDirection(Vector3 move){
 	Vector2 move2d = Vector2(move._x, move._y);
 	for (auto index : m_pivot)
 	{
-		index->property._transform._translation._x += move2d._x;
-		index->property._transform._translation._y += move2d._y;
+		index->property._transform._translation._x = move2d._x - kDirectionSize;
+		index->property._transform._translation._y = move2d._y - kDirectionSize;
+	
 	}
 
 	return;
@@ -102,6 +102,5 @@ void Pivot2D::SetScale(float length){
 	{
 		Vector3 nomalize = index->property._transform._scale.Normalize();
 		index->property._transform._scale = nomalize*length;
-		index->property._transform._translation = nomalize*length;
 	}
 }

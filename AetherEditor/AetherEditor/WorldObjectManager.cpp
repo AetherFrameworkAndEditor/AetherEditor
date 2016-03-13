@@ -163,17 +163,17 @@ void WorldObjectManager::RegisterLight(Vector3 light){
 }
 
 //
-std::vector<PrimitiveObject*> WorldObjectManager::GetPrimitive(){
+std::vector<PrimitiveObject*>& WorldObjectManager::GetPrimitive(){
 	return m_primitive;
 }
 
 //
-std::vector<SpriteObject*> WorldObjectManager::GetSprite(){
+std::vector<SpriteObject*>& WorldObjectManager::GetSprite(){
 	return m_sprite;
 }
 
 //
-std::vector<FbxModelObject*> WorldObjectManager::GetFbxModel(){
+std::vector<FbxModelObject*>& WorldObjectManager::GetFbxModel(){
 	return m_fbx;
 }
 

@@ -16,9 +16,9 @@ public:
 	static void RegisterCamera(CameraValue);
 	static void RegisterLight(aetherClass::Vector3);
 
-	static std::vector<PrimitiveObject*> GetPrimitive();
-	static std::vector<SpriteObject*> GetSprite();
-	static std::vector<FbxModelObject*> GetFbxModel();
+	static std::vector<PrimitiveObject*>& GetPrimitive();
+	static std::vector<SpriteObject*>& GetSprite();
+	static std::vector<FbxModelObject*>& GetFbxModel();
 	static CameraValue GetCamera();
 	static aetherClass::Vector3 GetLight();
 

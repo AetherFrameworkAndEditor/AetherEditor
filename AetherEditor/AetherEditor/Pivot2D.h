@@ -1,7 +1,7 @@
 #ifndef _PIVOT2D_H
 #define _PIVOT2D_H
 #include <memory>
-#include <ModelBase.h>
+#include <SpriteBase.h>
 #include <Vector2.h>
 #include <Color.h>
 #include "Pivot.h"
@@ -26,7 +26,7 @@ public:
 private:
 	void Finalize()override;
 private:
-	std::vector<std::shared_ptr<aetherClass::ModelBase>> m_pivot;
+	std::vector<std::shared_ptr<aetherClass::SpriteBase>> m_pivot;
 	static Pivot2DProperty m_pivotPropertyArray[];
 	bool m_isInitialize;
 };

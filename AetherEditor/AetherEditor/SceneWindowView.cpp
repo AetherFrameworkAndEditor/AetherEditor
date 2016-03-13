@@ -5,6 +5,10 @@
 #include <GameController.h>
 #include <GameClock.h>
 #include "Pivot3D.h"
+#include "Pivot2D.h"
+#include "SpriteObject.h"
+#include "Rectangle2D.h"
+#include <iostream>
 using namespace aetherClass;
 using namespace aetherFunction;
 SceneWindowView::SceneWindowView():
@@ -18,6 +22,7 @@ SceneWindowView::~SceneWindowView()
 }
 
 
+SpriteObject sprite;
 //
 bool SceneWindowView::Initialize(){
 	// シェーダーの初期化用
@@ -25,13 +30,13 @@ bool SceneWindowView::Initialize(){
 	bool result = false;
 	if (!m_primitiveObject)
 	{
-		m_primitiveObject = std::make_unique<PrimitiveObject>();
+		/*m_primitiveObject = std::make_unique<PrimitiveObject>();
 		result = m_primitiveObject->Create(new Cube,&m_viewCamera);
 		if (!result)
 		{
 		
 			return false;
-		}
+		}*/
 	}
 
 	if (!m_colorShader)
@@ -49,12 +54,15 @@ bool SceneWindowView::Initialize(){
 
 	if (!m_testPivot)
 	{
-		m_testPivot = std::make_unique<Pivot3D>();
+		m_testPivot = std::make_unique<Pivot2D>();
 		m_testPivot->Initialize(&m_viewCamera);
 	}
 	
 	m_viewCamera.property._translation._z -= 10;
-	m_testPivot->SetScale(0.2);
+	m_testPivot->SetScale(100);
+
+	sprite.Create(new Rectangle2D, nullptr);
+	sprite.GetInfo()->_sprite->property._transform._scale = 100;
 	return true;
 }
 
@@ -85,19 +93,28 @@ bool SceneWindowView::Updater(){
 	m_viewCamera.Controller();
 	if (GameController::GetKey().IsKeyDown(DIK_UP))
 	{
-		Vector3 move(1, 0, 0);
+
+		Vector3 move(0, 100, 0);
 		m_testPivot->MoveDirection(move*GameClock::GetDeltaTime());
 
 	}
+
+	RECT spriteScale;
+	spriteScale.left = sprite.GetInfo()->_sprite->property._transform._translation._x;
+	spriteScale.top = sprite.GetInfo()->_sprite->property._transform._translation._y;
+	spriteScale.right = sprite.GetInfo()->_sprite->property._transform._translation._x + sprite.GetInfo()->_sprite->property._transform._scale._x;
+	spriteScale.bottom = sprite.GetInfo()->_sprite->property._transform._translation._y + sprite.GetInfo()->_sprite->property._transform._scale._y;
 	if (GameController::GetMouse().IsLeftButtonTrigger())
 	{
-		RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
-		if (RaySphereIntersect(*m_primitiveObject->GetCollider(), ray._origin,ray._direction))
+		POINT mouse = GameController::GetMouse().GetMousePosition();
+		
+		if (mouse.x > spriteScale.left&&mouse.x<spriteScale.right&&
+			mouse.x>spriteScale.top&&mouse.y < spriteScale.bottom)
 		{
-			m_primitiveObject->ChangePivotState();
+			sprite.ChangePivotState();
 		}
 	}
-	
+	sprite.Update();
 	return true;
 }
 
@@ -106,11 +123,12 @@ void SceneWindowView::Render(){
 
 	//m_primitiveObject->Render(m_colorShader.get());
 
-	m_testPivot->Render(m_colorShader.get());
+	
+	//m_testPivot->Render(m_colorShader.get());
 	return;
 }
 
 void SceneWindowView::UIRender(){
-
+	sprite.Render(m_colorShader.get());
 	return;
 }
