@@ -7,8 +7,8 @@ using namespace aetherClass;
 std::vector<PrimitiveObject*> WorldObjectManager::m_primitive;
 std::vector<SpriteObject*>    WorldObjectManager::m_sprite;
 std::vector<FbxModelObject*>  WorldObjectManager::m_fbx;
-std::vector<Material*> m_material;
-std::vector<Texture*> m_texture;
+std::vector<Material*> WorldObjectManager::m_material;
+std::vector<Texture*> WorldObjectManager::m_texture;
 
 Vector3 WorldObjectManager::m_light = Vector3(NULL,NULL,NULL);
 CameraValue WorldObjectManager::m_camera;
