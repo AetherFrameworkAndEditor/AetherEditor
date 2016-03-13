@@ -77,6 +77,7 @@ private:
 	void Destroy();
 private:
 	std::unique_ptr<PrimitiveObjectInfo> m_primitiveObject;
+	
 };
 
 #endif

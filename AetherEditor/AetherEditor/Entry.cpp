@@ -16,7 +16,8 @@ using namespace aetherClass;
 
 #include "WorldReader.h"
 #include "ObjectWindow.h"
-#include"SceneWindow.h"
+#include "SceneWindow.h"
+#include "PropertyWindow.h"
 #include "MainLoopScene.h"
 namespace{
 	const int kExit = 0;
@@ -30,7 +31,7 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 
 	bool result;
 	Vector2 screenSize(800, 600);
-	WindowBase*window[3] = { new SceneWindow(), new ObjectWindow(), new WindowBase() };
+	WindowBase*window[3] = { new SceneWindow(), new ObjectWindow(), new PropertyWindow() };
 
 	WindowBase::WindowStyleDesc desc;
 	desc._windowStyle = WS_OVERLAPPED | WS_SYSMENU;
@@ -42,10 +43,10 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	desc._classStyle = CS_NOCLOSE;
 	window[1]->SetWindowStyles(desc);
 	window[1]->Create(L"Game", screenSize, Vector2(100, 100));
+	
+	window[2]->Create(L"Property", Vector2(150, 200));
 
-	window[2]->Create(L"Property", Vector2(100, 100));
-
-	result = frame->Initialize(window,3, 1000000,1);
+	result = frame->Initialize(window,2, 1000000,1);
 	if (!result)
 	{
 		return kError;

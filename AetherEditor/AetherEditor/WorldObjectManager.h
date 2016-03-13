@@ -9,6 +9,24 @@
 #include <unordered_map>
 #include <ViewCamera.h>
 #include <Light.h>
+enum class eObjectType{
+	eNull,
+	ePrimitive,
+	eSprite,
+	eFBX,
+	eCamera,
+	eLight,
+};
+
+struct CurrentSelectObject{
+	CurrentSelectObject(){
+		_objectType = eObjectType::eNull;
+		int _nhumber = NULL;
+	}
+	eObjectType _objectType;
+	int _number;
+};
+
 class WorldObjectManager
 {
 public:
@@ -28,6 +46,9 @@ public:
 	static bool Import(std::string);
 	static bool Export(std::wstring);
 	static void Reset();
+
+	static void SetCurrentSelectObject(CurrentSelectObject);
+	static CurrentSelectObject GetCurrentSelectObject();
 private:
 	WorldObjectManager();
 	~WorldObjectManager();
@@ -35,6 +56,8 @@ private:
 	static void CreateFBX(ObjectInfo*);
 	static void CreateSprite(ObjectInfo*);
 	static void CreatePrimitive(ObjectInfo*);
+
+	static void SelectOff();
 private:
 	static std::vector<PrimitiveObject*> m_primitive;
 	static std::vector<SpriteObject*> m_sprite;
@@ -47,6 +70,7 @@ private:
 	static CameraValue m_cameraValue;
 	static aetherClass::ViewCamera m_camera;
 	static std::string m_modelType;
+	static CurrentSelectObject m_currnetSelectObject;
 
 };
 

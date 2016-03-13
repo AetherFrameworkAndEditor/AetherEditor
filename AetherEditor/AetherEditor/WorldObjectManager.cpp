@@ -29,7 +29,7 @@ Light WorldObjectManager::m_light;
 CameraValue WorldObjectManager::m_cameraValue;
 ViewCamera WorldObjectManager::m_camera;
 std::string WorldObjectManager::m_modelType = "none";
-
+CurrentSelectObject WorldObjectManager::m_currnetSelectObject;
 //
 static ModelBase* GetPrimitiveModel(std::string type){
 	if (type == "Point"){
@@ -379,4 +379,46 @@ void WorldObjectManager::CreateSprite(ObjectInfo* object){
 		}
 	}
 	return;
+}
+
+//
+void WorldObjectManager::SetCurrentSelectObject(CurrentSelectObject currnet){
+	SelectOff();
+	m_currnetSelectObject = currnet;
+}
+
+//
+CurrentSelectObject WorldObjectManager::GetCurrentSelectObject(){
+	return m_currnetSelectObject;
+
+}
+
+void WorldObjectManager::SelectOff(){
+	const int id = m_currnetSelectObject._number;
+	switch (m_currnetSelectObject._objectType)
+	{
+	case eObjectType::eCamera:
+		//カメラのフラグオフ
+		break;
+	case eObjectType::eLight:
+		// ライトのフラグをオフ
+		break;
+
+	case eObjectType::eFBX:
+		m_fbx[id]->GetInfo()->_isClick = false;
+		break;
+
+	case eObjectType::ePrimitive:
+		m_primitive[id]->GetInfo()->_isClick = false;
+		break;
+
+	case eObjectType::eSprite:
+		m_sprite[id]->GetInfo()->_isClick = false;
+		break;
+
+	case eObjectType::eNull:
+		break;
+	default:
+		break;
+	}
 }

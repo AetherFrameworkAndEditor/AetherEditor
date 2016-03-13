@@ -5,14 +5,13 @@
 #include "MainLoopScene.h"
 #include "GameWindowView.h"
 #include "SceneWindowView.h"
-#include "PropertyWindowView.h"
-using namespace aetherClass;
+
+using namespace aetherClass; 
 
 //
 std::wstring MainLoopScene::m_windowNameArray[] = {
 	L"Scene",
 	L"Game",
-	L"Property"
 };
 //
 MainLoopScene::MainLoopScene() :
@@ -27,6 +26,7 @@ MainLoopScene::~MainLoopScene()
 
 bool MainLoopScene::Initialize(){
 	Finalize();
+	
 	// scene
 	auto sceneWindowView = new SceneWindowView();
 	if (!sceneWindowView)
@@ -42,14 +42,6 @@ bool MainLoopScene::Initialize(){
 		return false;
 	}
 	m_viewWindow.push_back(gameWindowView);
-
-	// property
-	auto propertyWindowView = new PropertyWindowView();
-	if (!propertyWindowView)
-	{
-		return false;
-	}
-	m_viewWindow.push_back(propertyWindowView);
 
 	bool result = false;
 	// ‘S‚Ä‚ÌƒV[ƒ“‚Ì‰Šú‰»
@@ -85,6 +77,7 @@ void MainLoopScene::Finalize(){
 //
 bool MainLoopScene::Updater(){
 	bool result = false;
+
 	for (auto scene : m_viewWindow)
 	{
 		result = scene->Updater();
