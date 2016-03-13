@@ -3,17 +3,24 @@
 #include "PrimitiveObject.h"
 #include "SpriteObject.h"
 #include "FbxModelObject.h"
+#include "WorldReader.h"
+#include "WorldAllObjectInfo.h"
 #include <ViewCamera.h>
 #include <Light.h>
-#include "WorldReader.h"
 class WorldObjectManager
 {
 public:
 	static void AddPrimitive(PrimitiveObject*);
 	static void AddSprite(SpriteObject*);
 	static void AddFbxModel(FbxModelObject*);
-	static void RegisterCamera(aetherClass::Light*);
-	static void RegisterLight(aetherClass::ViewCamera*);
+	static void RegisterCamera(aetherClass::Vector3);
+	static void RegisterLight(CameraValue);
+
+	static std::vector<PrimitiveObject*> GetPrimitive();
+	static std::vector<SpriteObject*> GetSprite();
+	static std::vector<FbxModelObject*> GetFbxModel();
+	static CameraValue GetCamera();
+	static aetherClass::Vector3 GetLight();
 
 	static bool Import(std::string);
 	static bool Export(std::string);
@@ -29,8 +36,8 @@ private:
 	static std::vector<aetherClass::Material*> m_material;
 	static std::vector<aetherClass::Texture*> m_texture;
 
-	static aetherClass::Light* m_light;
-	static aetherClass::ViewCamera* m_camera;
+	static aetherClass::Vector3 m_light;
+	static CameraValue m_camera;
 };
 
 #endif

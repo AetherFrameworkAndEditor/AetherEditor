@@ -8,7 +8,7 @@ struct World{
 	std::vector<ObjectInfo> _objectInfo;
 	std::vector<aetherClass::Material> _material;
 	std::vector<aetherClass::Texture*> _texture;
-	CameraInfo _camera;
+	CameraValue _camera;
 	aetherClass::Vector3 _lightPosition;
 };
 #endif

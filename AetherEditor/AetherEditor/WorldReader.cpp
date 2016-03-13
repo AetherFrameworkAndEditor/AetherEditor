@@ -183,7 +183,7 @@ void WorldReader::GetCameraInfo(std::string data){
 
 	// ƒ^ƒO‚ªˆá‚Á‚Ä‚¢‚½‚ç‰½‚à‚µ‚È‚¢
 	if (m_tag != "Camera")return;
-	CameraInfo info;
+	CameraValue value;
 	std::string split;
 	std::vector<std::string> spliteArray;
 	std::stringstream stream(data);
@@ -193,16 +193,16 @@ void WorldReader::GetCameraInfo(std::string data){
 	}
 
 	// ˆÊ’uî•ñ
-	info._translation._x = std::atof(spliteArray[0].c_str());
-	info._translation._y = std::atof(spliteArray[1].c_str());
-	info._translation._z = std::atof(spliteArray[2].c_str());
+	value._position._x = std::atof(spliteArray[0].c_str());
+	value._position._y = std::atof(spliteArray[1].c_str());
+	value._position._z = std::atof(spliteArray[2].c_str());
 
 	// ‰ñ“]î•ñ
-	info._rotation._x = std::atof(spliteArray[3].c_str());
-	info._rotation._y = std::atof(spliteArray[4].c_str());
-	info._rotation._z = std::atof(spliteArray[5].c_str());
+	value._rotation._x = std::atof(spliteArray[3].c_str());
+	value._rotation._y = std::atof(spliteArray[4].c_str());
+	value._rotation._z = std::atof(spliteArray[5].c_str());
 
-	m_world._camera = info;
+	m_world._camera = value;
 	return;
 }
 

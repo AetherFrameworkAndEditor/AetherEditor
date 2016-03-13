@@ -5,6 +5,12 @@
 #include <Color.h>
 #include <Material.h>
 #include <string>
+
+struct CameraValue{
+	aetherClass::Vector3 _position;
+	aetherClass::Vector3 _rotation;
+};
+
 struct ObjectInfo
 {
 	ObjectInfo(){
@@ -29,13 +35,6 @@ private:
 		_textureID = 0;
 		_name = "none";
 	}
-};
-
-// 
-struct CameraInfo
-{
-	aetherClass::Vector3 _rotation;
-	aetherClass::Vector3 _translation;
 };
 
 #endif

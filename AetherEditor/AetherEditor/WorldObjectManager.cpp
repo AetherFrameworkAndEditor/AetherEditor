@@ -10,8 +10,8 @@ std::vector<FbxModelObject*>  WorldObjectManager::m_fbx;
 std::vector<Material*> m_material;
 std::vector<Texture*> m_texture;
 
-Light* WorldObjectManager::m_light = nullptr;
-ViewCamera* WorldObjectManager::m_camera = nullptr;
+Vector3 WorldObjectManager::m_light = Vector3(NULL,NULL,NULL);
+CameraValue WorldObjectManager::m_camera;
 
 WorldObjectManager::WorldObjectManager()
 {
@@ -79,11 +79,11 @@ bool WorldObjectManager::Export(std::string fileName){
 
 	// Cameraタグの設定
 	exportObject << "Camera" << std::endl;
-	writer.WriteCamera(exportObject, nullptr);
+	writer.WriteCamera(exportObject, m_camera);
 
 	// Lightタグの設定
 	exportObject << "Light" << std::endl;
-	writer.WriteLight(exportObject, nullptr);
+	writer.WriteLight(exportObject, m_light);
 
 	exportObject.close();
 	return true;
@@ -126,20 +126,11 @@ void WorldObjectManager::Reset(){
 	m_fbx.clear();
 
 	//
-	if (m_camera)
-	{
-		delete m_camera;
-		m_camera = nullptr;
-	}
-	m_camera = nullptr;
+	m_camera._position = NULL;
+	m_camera._rotation = NULL;
 
 	//
-	if (m_light)
-	{
-		delete m_light;
-		m_light = nullptr;
-	}
-	m_light = nullptr;
+	m_light = NULL;
 }
 //
 void WorldObjectManager::AddPrimitive(PrimitiveObject* primitive){
@@ -160,13 +151,38 @@ void WorldObjectManager::AddFbxModel(FbxModelObject* fbx){
 }
 
 //
-void WorldObjectManager::RegisterCamera(aetherClass::Light* light){
+void WorldObjectManager::RegisterCamera(Vector3 light){
 	m_light = light;
 	return;
 }
 
 //
-void WorldObjectManager::RegisterLight(aetherClass::ViewCamera* camera){
+void WorldObjectManager::RegisterLight(CameraValue camera){
 	m_camera = camera;
 	return;
+}
+
+//
+std::vector<PrimitiveObject*> WorldObjectManager::GetPrimitive(){
+	return m_primitive;
+}
+
+//
+std::vector<SpriteObject*> WorldObjectManager::GetSprite(){
+	return m_sprite;
+}
+
+//
+std::vector<FbxModelObject*> WorldObjectManager::GetFbxModel(){
+	return m_fbx;
+}
+
+//
+CameraValue WorldObjectManager::GetCamera(){
+	return m_camera;
+}
+
+//
+Vector3 WorldObjectManager::GetLight(){
+	return m_light;
 }

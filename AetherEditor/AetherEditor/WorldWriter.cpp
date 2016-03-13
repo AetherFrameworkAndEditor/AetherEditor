@@ -251,42 +251,38 @@ void WorldWriter::WriteTexture(std::ofstream& exportObject, Texture* object){
 	exportObject << std::endl;
 }
 
+
+
 //
-void WorldWriter::WriteCamera(std::ofstream& exportObject, aetherClass::ViewCamera* object){
-	if (!object) {
-		exportObject << "none" << std::endl;
-		return;
-	}
+void WorldWriter::WriteCamera(std::ofstream& exportObject, CameraValue object){
+	
 	// ˆÊ’u
-	exportObject << object->property._translation._x;
+	exportObject << object._position._x;
 	exportObject << ',';
-	exportObject << object->property._translation._y;
+	exportObject << object._position._y;
 	exportObject << ',';
-	exportObject << object->property._translation._z;
+	exportObject << object._position._z;
 	exportObject << ',';
 
 	// ‰ñ“]
-	exportObject << object->property._rotation._x;
+	exportObject << object._rotation._x;
 	exportObject << ',';
-	exportObject << object->property._rotation._y;
+	exportObject << object._rotation._y;
 	exportObject << ',';
-	exportObject << object->property._rotation._z;
+	exportObject << object._rotation._z;
 	exportObject << std::endl;
 	return;
 }
 
 //
-void WorldWriter::WriteLight(std::ofstream& exportObject, aetherClass::Light* object){
-	if (!object) {
-		exportObject << "none" << std::endl;
-		return;
-	}
+void WorldWriter::WriteLight(std::ofstream& exportObject, Vector3 object){
+	
 	// ˆÊ’u
-	exportObject << object->property._translation._x;
+	exportObject << object._x;
 	exportObject << ',';
-	exportObject << object->property._translation._y;
+	exportObject << object._y;
 	exportObject << ',';
-	exportObject << object->property._translation._z;
+	exportObject << object._z;
 	exportObject << std::endl;
 	return;
 }
