@@ -24,6 +24,7 @@ bool SpriteObject::Create(SpriteBase* sprite){
 		{
 			return false;
 		}
+		m_spriteObject->_sprite->property._transform._scale = Vector3(50.0f, 50.0f,0.0f);
 		m_spriteObject->_sprite->property._color = Color(1.0f, 1.0f, 0.0f, 1.0f);
 		
 		auto center = m_spriteObject->_sprite->property._transform._scale;
