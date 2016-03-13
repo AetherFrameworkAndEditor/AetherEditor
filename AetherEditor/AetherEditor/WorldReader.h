@@ -22,6 +22,10 @@ private:
 	void GetCameraInfo(std::string);
 	void GetTextureInfo(std::string);
 	void GetLightInfo(std::string);
+
+	void UnLoadTexture();
+	void UnLoadObject();
+	void UnLoadMaterial();
 };
 
 #endif

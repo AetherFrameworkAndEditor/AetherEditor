@@ -63,26 +63,26 @@ bool WorldObjectManager::Export(std::string fileName){
 	// ワールド情報を書き出すオブジェクト
 	WorldWriter writer;
 
-	// Objectタグの設定
-	exportObject << "Object" << std::endl;
+	// Objectタグの設定と書き出し
+	exportObject << "[Object]" << std::endl;
 	writer.WritePrimitive(exportObject,nullptr);
 	writer.WriteSprite(exportObject, nullptr);
 	writer.WriteFbxModel(exportObject, nullptr);
 	
-	// Materialタグの設定
-	exportObject << "Material" << std::endl;
+	// Materialタグの設定と書き出し
+	exportObject << "[Material]" << std::endl;
 	writer.WriteMaterial(exportObject, nullptr);
 
-	// Textureタグの設定
-	exportObject << "Texture" << std::endl;
+	// Textureタグの設定と書き出し
+	exportObject << "[Texture]" << std::endl;
 	writer.WriteTexture(exportObject, nullptr);
 
-	// Cameraタグの設定
-	exportObject << "Camera" << std::endl;
+	// Cameraタグの設定と書き出し
+	exportObject << "[Camera]" << std::endl;
 	writer.WriteCamera(exportObject, m_camera);
 
-	// Lightタグの設定
-	exportObject << "Light" << std::endl;
+	// Lightタグの設定と書き出し
+	exportObject << "[Light]" << std::endl;
 	writer.WriteLight(exportObject, m_light);
 
 	exportObject.close();
