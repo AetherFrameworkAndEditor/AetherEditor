@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 using namespace aetherClass;
 WorldReader::WorldReader(){
 	m_tag = "none";
@@ -22,20 +23,21 @@ bool WorldReader::Load(std::string filePath){
 	}
 	std::ifstream reader;
 	reader.open(filePath,std::ios::in);
-
+	
+	reader.unsetf(std::ios::skipws);
 	while (!reader.eof())
 	{
 		std::string line;
-		reader >> line;
+		std::getline(reader, line);
 		m_input.push_back(line);
 	}
 
 	for (auto index : m_input)
 	{
-		// タグの行かを確認
+		// タグの行もしくは項目の状態を確認
 		if (index == "[Object]" || index == "[Material]" ||
 			index == "[Texture]" || index == "[Camera]" ||
-			index == "[Light]" || index == "none")
+			index == "[Light]" || index == "none"||index=="")
 		{
 			// 取り込んでいるタグを設定
 			m_tag = index;
@@ -114,6 +116,8 @@ void WorldReader::GetObjectInfo(std::string data){
 		spliteArray.push_back(split);
 	}
 
+	if (spliteArray.size() < 0) return;
+
 	// 位置
 	info->_transform._translation._x = std::atof(spliteArray[0].c_str());
 	info->_transform._translation._y = std::atof(spliteArray[1].c_str());
@@ -173,6 +177,8 @@ void WorldReader::GetMaterialInfo(std::string data){
 	{
 		spliteArray.push_back(split);
 	}
+
+	if (spliteArray.size() < 0) return;
 
 	// diffuse
 	info->_diffuse._color._red = std::atof(spliteArray[0].c_str());
@@ -234,6 +240,8 @@ void WorldReader::GetCameraInfo(std::string data){
 		spliteArray.push_back(split);
 	}
 
+	if (spliteArray.size() < 0) return;
+
 	// 位置情報
 	value._position._x = std::atof(spliteArray[0].c_str());
 	value._position._y = std::atof(spliteArray[1].c_str());
@@ -262,6 +270,8 @@ void WorldReader::GetLightInfo(std::string data){
 		spliteArray.push_back(split);
 	}
 
+	if (spliteArray.size() < 0) return;
+	
 	// 位置情報
 	info._x = std::atof(spliteArray[0].c_str());
 	info._y = std::atof(spliteArray[1].c_str());

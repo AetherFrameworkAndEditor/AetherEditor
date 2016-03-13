@@ -93,6 +93,7 @@
     <ClCompile Include="Pivot3D.cpp" />
     <ClCompile Include="PrimitiveObject.cpp" />
     <ClCompile Include="PropertyWindowView.cpp" />
+    <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="SceneWindowView.cpp" />
     <ClCompile Include="SpriteObject.cpp" />
     <ClCompile Include="WorldObjectManager.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Pivot.h" />
     <ClInclude Include="Pivot2D.h" />
     <ClInclude Include="PrimitiveObject.h" />
+    <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="SpriteObject.h" />
     <ClInclude Include="WorldAllObjectInfo.h" />
     <ClInclude Include="GameWindowView.h" />

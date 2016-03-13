@@ -286,6 +286,5 @@ void WorldWriter::WriteLight(std::ofstream& exportObject, Vector3 object){
 	exportObject << object._y;
 	exportObject << ',';
 	exportObject << object._z;
-	exportObject << std::endl;
 	return;
 }

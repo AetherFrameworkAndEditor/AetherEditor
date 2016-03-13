@@ -103,7 +103,15 @@ void PrimitiveObject::ChangePivotState(){
 	m_primitiveObject->_isClick = !m_primitiveObject->_isClick;
 }
 
+//
 std::unique_ptr<PrimitiveObject::PrimitiveObjectInfo>& PrimitiveObject::GetInfo(){
 	
 	return m_primitiveObject;
+}
+
+//
+void PrimitiveObject::SetCamera(ViewCamera* camera){
+	m_primitiveObject->_primitive->SetCamera(camera);
+	m_primitiveObject->_primitiveCollider->SetCamera(camera);
+	m_primitiveObject->_pivot->SetCamera(camera);
 }

@@ -71,6 +71,8 @@ public:
 	aetherClass::Sphere* GetCollider();
 	void ChangePivotState();
 	std::unique_ptr<PrimitiveObjectInfo>& GetInfo();
+
+	void SetCamera(aetherClass::ViewCamera*);
 private:
 	void Destroy();
 private:

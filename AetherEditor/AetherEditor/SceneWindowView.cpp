@@ -55,9 +55,11 @@ void SceneWindowView::Render(){
 	m_viewCamera.Render();
 	
 	for (auto itr : WorldObjectManager::GetPrimitive()){
+		itr->SetCamera(&m_viewCamera);
 		itr->Render(m_colorShader.get());
 	}
 	for (auto itr : WorldObjectManager::GetFbxModel()){
+		itr->SetCamera(&m_viewCamera);
 		itr->Render(m_colorShader.get());
 	}
 
@@ -67,6 +69,7 @@ void SceneWindowView::Render(){
 }
 
 void SceneWindowView::UIRender(){
+	m_viewCamera.Render();
 	for (auto itr : WorldObjectManager::GetSprite()){
 		itr->Render(m_colorShader.get());
 	}
