@@ -26,6 +26,7 @@ public:
 	void Render(aetherClass::ShaderBase*)override;
 	void MoveDirection(aetherClass::Vector3)override;
 	void SetScale(float)override;
+	void SetCamera(aetherClass::ViewCamera*)override;
 private:
 	void Finalize()override;
 

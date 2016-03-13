@@ -74,7 +74,7 @@ void WorldReader::UnLoadTexture(){
 
 //
 void WorldReader::UnLoadObject(){
-	for (auto object : m_world._objectInfo)
+	for (auto object : m_world._object)
 	{
 		// ポインタの破棄
 		if (!object)continue;
@@ -149,7 +149,7 @@ void WorldReader::GetObjectInfo(std::string data){
 
 
 	// ワールドに取り込む
-	m_world._objectInfo.push_back(info);
+	m_world._object.push_back(info);
 	return;
 }
 

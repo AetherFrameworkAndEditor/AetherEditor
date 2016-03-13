@@ -12,6 +12,7 @@ std::vector<Texture*> WorldObjectManager::m_texture;
 
 Vector3 WorldObjectManager::m_light = Vector3(NULL,NULL,NULL);
 CameraValue WorldObjectManager::m_camera;
+std::string WorldObjectManager::m_modelType = "none";
 
 WorldObjectManager::WorldObjectManager()
 {
@@ -40,7 +41,14 @@ bool WorldObjectManager::Import(std::string path){
 		return false;
 	}
 	// ロードした後の処理
+	
+	for (auto object : reader->GetInputWorldInfo()._object)
+	{
+		// モデルタイプの取得
+		m_modelType = object->_modelType;
 
+		CreateFBX(object);
+	}
 	reader->UnLoad();
 	reader.release();
 	reader = nullptr;
@@ -73,7 +81,6 @@ bool WorldObjectManager::Export(std::wstring fileName){
 		{
 			writer.WritePrimitive(exportObject, primitive);
 		}
-
 	}
 
 	//
@@ -94,8 +101,6 @@ bool WorldObjectManager::Export(std::wstring fileName){
 		}
 	}
 
-	
-	
 	// Materialタグの設定と書き出し
 	exportObject << "[Material]" << std::endl;
 
@@ -226,4 +231,18 @@ CameraValue WorldObjectManager::GetCamera(){
 //
 Vector3 WorldObjectManager::GetLight(){
 	return m_light;
+}
+
+//
+bool WorldObjectManager::CreateFBX(ObjectInfo* object){
+	FbxModelObject* fbx = new FbxModelObject();
+	bool result = fbx->Create(object->_name, nullptr);
+	if (!result)
+	{
+		return false;
+	}
+
+	AddFbxModel(fbx);
+	
+	return true;
 }

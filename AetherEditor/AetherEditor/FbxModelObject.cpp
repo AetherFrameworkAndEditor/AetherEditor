@@ -95,6 +95,14 @@ void FbxModelObject::ChangePivotState(){
 	m_fbxObject->_isClick = !m_fbxObject->_isClick;
 }
 
+//
 std::unique_ptr<FbxModelObject::FbxObjectInfo>& FbxModelObject::GetInfo(){
 	return m_fbxObject;
+}
+
+//
+void FbxModelObject::SetCamera(aetherClass::ViewCamera* camera){
+	m_fbxObject->_fbx->SetCamera(camera); 
+	m_fbxObject->_fbxCollider->SetCamera(camera);
+	m_fbxObject->_pivot->SetCamera(camera);
 }

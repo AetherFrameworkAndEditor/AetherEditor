@@ -12,6 +12,7 @@ public:
 	virtual void Render(aetherClass::ShaderBase*) = 0;
 	virtual void MoveDirection(aetherClass::Vector3) = 0;
 	virtual void SetScale(float length) = 0;
+	virtual void SetCamera(aetherClass::ViewCamera*){ return; }
 private:
 	virtual void Finalize() = 0;
 

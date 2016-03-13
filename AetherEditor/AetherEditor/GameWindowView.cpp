@@ -31,7 +31,7 @@ void GameWindowView::Render(){
 }
 
 void GameWindowView::UIRender(){
-
+	
 	return;
 }
 

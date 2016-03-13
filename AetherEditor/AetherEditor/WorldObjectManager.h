@@ -29,6 +29,8 @@ public:
 private:
 	WorldObjectManager();
 	~WorldObjectManager();
+
+	static bool CreateFBX(ObjectInfo*);
 private:
 	static std::vector<PrimitiveObject*> m_primitive;
 	static std::vector<SpriteObject*> m_sprite;
@@ -38,6 +40,8 @@ private:
 
 	static aetherClass::Vector3 m_light;
 	static CameraValue m_camera;
+
+	static std::string m_modelType;
 };
 
 #endif

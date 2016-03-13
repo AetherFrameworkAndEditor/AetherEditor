@@ -165,7 +165,7 @@ void WorldWriter::WriteFbxModel(std::ofstream& exportObject, FbxModelObject* obj
 
 	// モデルタイプ
 	// とりあえずFBXだけモデルのパスを吐き出すようにする
-	exportObject << object->GetInfo()->_fbx->GetModelPath(); 
+	exportObject << "FbxModel";
 	exportObject << ',';
 
 	// カラー
@@ -183,7 +183,7 @@ void WorldWriter::WriteFbxModel(std::ofstream& exportObject, FbxModelObject* obj
 	exportObject << ',';
 
 	// それぞれの名前
-	exportObject << object->GetInfo()->_name;
+	exportObject << object->GetInfo()->_fbx->GetModelPath();
 
 	exportObject << std::endl;
 }

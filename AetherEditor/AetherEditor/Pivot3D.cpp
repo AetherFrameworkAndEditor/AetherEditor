@@ -97,3 +97,13 @@ void Pivot3D::SetScale(float length){
 		index->property._transform._translation = nomalize*length;
 	}
 }
+
+//
+void Pivot3D::SetCamera(aetherClass::ViewCamera* camera){
+	for (auto index : m_pivot)
+	{
+		index->SetCamera(camera);
+	}
+
+	return;
+}

@@ -16,7 +16,7 @@ private:
 			_fbxCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
-			_name = "null_name";
+			_path = "null_path";
 			_materialID = 0;
 			_textureID = 0;
 		}
@@ -58,7 +58,7 @@ private:
 		bool _isClick;
 		int _materialID;
 		int _textureID;
-		std::string _name;
+		std::string _path;
 	};
 public:
 	FbxModelObject();
@@ -68,7 +68,7 @@ public:
 
 	void Render(aetherClass::ShaderBase*);
 	void Update();
-
+	void SetCamera(aetherClass::ViewCamera*);
 	aetherClass::Sphere* GetCollider();
 	void ChangePivotState();
 	std::unique_ptr<FbxObjectInfo>& GetInfo();

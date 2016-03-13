@@ -5,7 +5,7 @@
 #include <Vector3.h>
 #include "WorldAllObjectInfo.h"
 struct World{
-	std::vector<ObjectInfo*> _objectInfo;
+	std::vector<ObjectInfo*> _object;
 	std::vector<aetherClass::Material*> _material;
 	std::vector<aetherClass::Texture*> _texture;
 	CameraValue _camera;
