@@ -23,7 +23,7 @@ public:
 	static aetherClass::Vector3 GetLight();
 
 	static bool Import(std::string);
-	static bool Export(std::string);
+	static bool Export(std::wstring);
 	static void Reset();
 
 private:

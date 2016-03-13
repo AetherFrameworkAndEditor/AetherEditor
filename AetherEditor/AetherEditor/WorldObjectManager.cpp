@@ -48,14 +48,14 @@ bool WorldObjectManager::Import(std::string path){
 }
 
 //
-bool WorldObjectManager::Export(std::string fileName){
+bool WorldObjectManager::Export(std::wstring fileName){
 
 	// ディレクトリがないときはディレクトリを作成
-	std::string directoryName = "WorldData";
-	_mkdir(directoryName.c_str());
+	/*std::string directoryName = "WorldData\\";
+	_mkdir(directoryName.c_str());*/
 
 	// 相対パスを含めと拡張子を含めたファイル名にする
-	std::string exprotFileName = directoryName + "\\" + fileName + ".aether";
+	std::wstring exprotFileName =  fileName;
 
 	// ファイルに書き込むオブジェクト
 	std::ofstream exportObject(exprotFileName, std::ios::out);

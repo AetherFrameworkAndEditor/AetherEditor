@@ -20,11 +20,9 @@ public:
 	void UIRender()override;
 	bool Updater()override;
 
+	static aetherClass::ViewCamera& GetSceneWindowCamera();
 private:
-	std::unique_ptr<PrimitiveObject> m_primitiveObject;
-	std::unique_ptr<aetherClass::ShaderBase> m_colorShader;
-	std::unique_ptr<Pivot> m_testPivot;
-	aetherClass::ViewCamera m_viewCamera;
+	static aetherClass::ViewCamera m_viewCamera;
 };
 
 #endif
