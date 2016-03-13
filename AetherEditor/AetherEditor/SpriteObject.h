@@ -51,7 +51,7 @@ private:
 public:
 	SpriteObject();
 	~SpriteObject();
-	bool Create(aetherClass::SpriteBase*,aetherClass::ViewCamera*);
+	bool Create(aetherClass::SpriteBase*);
 
 	void Render(aetherClass::ShaderBase*);
 	void Update();

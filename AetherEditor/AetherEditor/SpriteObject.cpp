@@ -12,7 +12,7 @@ SpriteObject::~SpriteObject()
 	Destroy();
 }
 
-bool SpriteObject::Create(SpriteBase* sprite, aetherClass::ViewCamera* camera){
+bool SpriteObject::Create(SpriteBase* sprite){
 	if (!m_spriteObject)
 	{
 		m_spriteObject = std::make_unique<SpriteObjectInfo>();
@@ -32,7 +32,7 @@ bool SpriteObject::Create(SpriteBase* sprite, aetherClass::ViewCamera* camera){
 
 		// Pivot�̍쐬
 		m_spriteObject->_pivot = std::make_unique<Pivot2D>();
-		m_spriteObject->_pivot->Initialize(camera);
+		m_spriteObject->_pivot->Initialize(nullptr);
 		m_spriteObject->_pivot->SetScale(100);
 
 		m_spriteObject->_isClick = false;
