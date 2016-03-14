@@ -22,7 +22,7 @@ private:
 	void SetRotation();
 	void SetScale();
 	void SetColor();
-	void Delete();
+	void DeleteObject();
 
 	// Createån
 	void CreateNameEdit();

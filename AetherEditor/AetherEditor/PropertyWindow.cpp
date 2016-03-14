@@ -89,7 +89,7 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 			return S_OK;
 
 		case eDelete:
-			MessageBox(NULL, L"íœ", L"Error", MB_OK);
+			DeleteObject();
 			return S_OK;
 		}
 		return 0;
@@ -116,7 +116,7 @@ void PropertyWindow::OnCreate(){
 }
 
 //
-void PropertyWindow::Delete(){
+void PropertyWindow::DeleteObject(){
 	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
@@ -136,6 +136,7 @@ void PropertyWindow::Delete(){
 	default:
 		break;
 	}
+	return;
 }
 //
 void PropertyWindow::CheckWorldObject(){
@@ -143,29 +144,85 @@ void PropertyWindow::CheckWorldObject(){
 	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
-	case eObjectType::eCamera:
+	case eObjectType::ePrimitive:{
 		SetWindowText(m_inputNameEdit, L"Camera");
 		SetWindowText(m_inputTextureEdit, L"00");
 		SetWindowText(m_inputMaterialEdit, L"00");
+		auto value = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._transform;
+		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
+		
+		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
+		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
+		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
+		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue, };
+		for (int i = 0; i < kMaxSize; ++i)
+		{
+			std::wstring position;
+			position = std::to_wstring(positionArray[i]);
+			SetWindowText(m_inputPositionEdit[i], position.c_str());
 
+			std::wstring rotation;
+			rotation = std::to_wstring(rotationArray[i]);
+			SetWindowText(m_inputRotationEdit[i], rotation.c_str());
+
+			std::wstring scale;
+			scale = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+
+			std::wstring color;
+			color = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputColorEdit[i], color.c_str());
+		}
+	}
+		break;
+	case eObjectType::eSprite:
+
+		Remove<SpriteObject*>(WorldObjectManager::GetSprite(), current._number);
+		break;
+
+	case eObjectType::eFBX:
+
+		Remove<FbxModelObject*>(WorldObjectManager::GetFbxModel(), current._number);
+		break;
+	case eObjectType::eCamera:{
+		SetWindowText(m_inputNameEdit, L"Camera");
+		SetWindowText(m_inputTextureEdit, L"00");
+		SetWindowText(m_inputMaterialEdit, L"00");
+		auto position = WorldObjectManager::GetCameraValue();
+		
+		float positionArray[3] = { position._position._x, position._position._y, position._position._z };
+		float rotationArray[3] = { position._rotation._x, position._rotation._y, position._rotation._z };
 		for (int i = 0; i < 3; ++i)
 		{
+			std::wstring position;
+			position = std::to_wstring(positionArray[i]);
+			std::wstring rotation;
+			rotation = std::to_wstring(rotationArray[i]);
+			SetWindowText(m_inputPositionEdit[i], position.c_str());
+			SetWindowText(m_inputRotationEdit[i], rotation.c_str());
 			SetWindowText(m_inputScaleEdit[i], L"null");
 			SetWindowText(m_inputColorEdit[i], L"null");
 		}
+	}
 		break;
 
-	case eObjectType::eLight:
+	case eObjectType::eLight:{
 		SetWindowText(m_inputNameEdit, L"Light");
 		SetWindowText(m_inputTextureEdit, L"00");
 		SetWindowText(m_inputMaterialEdit, L"00");
-
+		auto light = WorldObjectManager::GetLightValue();
+		
+		float positionArray[kMaxSize] = { light._x, light._y, light._z };
 		for (int i = 0; i < 3; ++i)
 		{
+			std::wstring position;
+			position = std::to_wstring(positionArray[i]);
+			SetWindowText(m_inputPositionEdit[i], position.c_str());
 			SetWindowText(m_inputRotationEdit[i], L"null");
 			SetWindowText(m_inputScaleEdit[i], L"null");
 			SetWindowText(m_inputColorEdit[i], L"null");
 		}
+	}
 		break;
 
 	case eObjectType::eNull:
