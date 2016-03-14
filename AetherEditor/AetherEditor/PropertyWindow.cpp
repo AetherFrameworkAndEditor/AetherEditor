@@ -145,16 +145,28 @@ void PropertyWindow::CheckWorldObject(){
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:{
-		SetWindowText(m_inputNameEdit, L"Camera");
-		SetWindowText(m_inputTextureEdit, L"00");
-		SetWindowText(m_inputMaterialEdit, L"00");
+		// 名前
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
+		std::string name = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_name;
+		std::wstring objectName = converter.from_bytes(name);
+		SetWindowText(m_inputNameEdit, objectName.c_str());
+
+		// テクスチャID
+		const int textureID = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputTextureEdit, std::to_wstring(textureID).c_str());
+
+		//　マテリアルID
+		const int materialID = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputMaterialEdit, std::to_wstring(materialID).c_str());
+
+
 		auto value = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._transform;
 		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
 		
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
-		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue, };
+		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue };
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -175,14 +187,92 @@ void PropertyWindow::CheckWorldObject(){
 		}
 	}
 		break;
-	case eObjectType::eSprite:
+	case eObjectType::eSprite:{
+		// 名前
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
+		std::string name = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_name;
+		std::wstring objectName = converter.from_bytes(name);
+		SetWindowText(m_inputNameEdit, objectName.c_str());
 
-		Remove<SpriteObject*>(WorldObjectManager::GetSprite(), current._number);
+		// テクスチャID
+		const int textureID = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputTextureEdit, std::to_wstring(textureID).c_str());
+
+		//　マテリアルID
+		const int materialID = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputMaterialEdit, std::to_wstring(materialID).c_str());
+
+
+		auto value = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform;
+		auto colorValue = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color;
+
+		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, NULL };
+		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, NULL };
+		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, NULL };
+		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue };
+		for (int i = 0; i < kMaxSize; ++i)
+		{
+			std::wstring position;
+			position = std::to_wstring(positionArray[i]);
+			SetWindowText(m_inputPositionEdit[i], position.c_str());
+
+			std::wstring rotation;
+			rotation = std::to_wstring(rotationArray[i]);
+			SetWindowText(m_inputRotationEdit[i], rotation.c_str());
+
+			std::wstring scale;
+			scale = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+
+			std::wstring color;
+			color = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputColorEdit[i], color.c_str());
+		}
+	}
 		break;
 
-	case eObjectType::eFBX:
+	case eObjectType::eFBX:{
+		// 名前
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
+		std::string name = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_name;
+		std::wstring objectName = converter.from_bytes(name);
+		SetWindowText(m_inputNameEdit, objectName.c_str());
 
-		Remove<FbxModelObject*>(WorldObjectManager::GetFbxModel(), current._number);
+		// テクスチャID
+		const int textureID = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputTextureEdit, std::to_wstring(textureID).c_str());
+
+		//　マテリアルID
+		const int materialID = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_textureID;
+		SetWindowText(m_inputMaterialEdit, std::to_wstring(materialID).c_str());
+
+
+		auto value = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_fbx->property._transform;
+		
+		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
+		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
+		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
+		float colorArray[kMaxSize] = { NULL };
+		for (int i = 0; i < kMaxSize; ++i)
+		{
+			std::wstring position;
+			position = std::to_wstring(positionArray[i]);
+			SetWindowText(m_inputPositionEdit[i], position.c_str());
+
+			std::wstring rotation;
+			rotation = std::to_wstring(rotationArray[i]);
+			SetWindowText(m_inputRotationEdit[i], rotation.c_str());
+
+			std::wstring scale;
+			scale = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+
+			std::wstring color;
+			color = std::to_wstring(scaleArray[i]);
+			SetWindowText(m_inputColorEdit[i], color.c_str());
+		}
+	}
+
 		break;
 	case eObjectType::eCamera:{
 		SetWindowText(m_inputNameEdit, L"Camera");
