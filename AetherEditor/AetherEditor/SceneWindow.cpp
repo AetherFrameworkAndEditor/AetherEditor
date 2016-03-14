@@ -31,7 +31,7 @@ SceneWindow::~SceneWindow()
 enum eMenuItem
 {
 	eProject = 0,
-	eImport,eExport,eReset,eQuit,
+	eImport,eExport,eReset,eResetCamera,eQuit,
 	ePrimitive = 10,
 	ePoint,eLine,eTriangle,eRectangle,eCircle,eCube,eCylinder,eSphere,eFbx,
 	eUI = 20,
@@ -89,6 +89,12 @@ void SceneWindow::OnCreate(){
 	mii.hSubMenu = createMenu;
 	mii.dwTypeData = L"Create";
 	InsertMenuItem(hMenu, 1, FALSE, &mii);
+
+	HMENU viewMenu = CreateMenu();
+	mii.hSubMenu = viewMenu;
+	mii.dwTypeData = L"View";
+	InsertMenuItem(hMenu, 2, FALSE, &mii);
+
 
 	HMENU primitiveMenu = CreateMenu();
 	mii.hSubMenu = primitiveMenu;
@@ -158,6 +164,9 @@ void SceneWindow::OnCreate(){
 	mii.dwTypeData = L"Quit";
 	InsertMenuItem(projectMenu, 0, FALSE, &mii);
 
+	mii.wID = eResetCamera;
+	mii.dwTypeData = L"カメラを初期位置に戻す";
+	InsertMenuItem(viewMenu, 0, FALSE, &mii);
 
 	FontDesc fontDesc;
 	fontDesc._fontSize = 30;
@@ -271,11 +280,24 @@ void SceneWindow::UpdateCommand(int nId){
 		break;
 	case eReset:
 	{
-		int result = MessageBox(NULL, L"配置したオブジェクトをすべて破棄します",L"リセット", MB_OKCANCEL);
+		int result = MessageBox(NULL, L"配置したオブジェクトをすべて破棄しますか？",L"リセット", MB_OKCANCEL);
 		if (result == 2) return;
 		WorldObjectManager::Reset();
 	}
 		break;
+
+	case eResetCamera:
+	{
+		SceneWindowView::GetSceneWindowCamera().property._rotation = 0;
+		SceneWindowView::GetSceneWindowCamera().property._translation = 0;
+		SceneWindowView::GetSceneWindowCamera().property._lookUp = 0;
+		SceneWindowView::GetSceneWindowCamera().property._lookAt = 0;
+
+		SceneWindowView::GetSceneWindowCamera().property._translation._z = -10;
+		SceneWindowView::GetSceneWindowCamera().property._lookUp._y = 1.0f;
+		SceneWindowView::GetSceneWindowCamera().property._lookAt._z = 1.0f;
+	}
+	break;
 
 	case eQuit:
 	{
@@ -308,9 +330,9 @@ void SceneWindow::UpdateCommand(int nId){
 	break;
 	case eRectangle:
 	{
-		std::shared_ptr<PrimitiveObject>obj = std::make_shared<PrimitiveObject>();
+		PrimitiveObject *obj = new PrimitiveObject;
 		obj->Create(new Rectangle3D, &SceneWindowView::GetSceneWindowCamera());
-		WorldObjectManager::AddPrimitive(obj.get());
+		WorldObjectManager::AddPrimitive(obj);
 	}
 	break;
 	case eCircle:
