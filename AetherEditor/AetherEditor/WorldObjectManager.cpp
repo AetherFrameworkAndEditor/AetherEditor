@@ -304,15 +304,14 @@ void WorldObjectManager::CreateFBX(ObjectInfo* object){
 	if (object->_modelType != "FbxModel") return;
 
 	FbxModelObject* fbx = new FbxModelObject();
-	bool result = fbx->Create(object->_name, &m_camera);
+	bool result = fbx->Create(object->_path, &m_camera);
 	if (!result)
 	{
+		MessageBox(NULL, L"Do not Load fbx", L"Error", MB_OK);
 		return;
 	}
 
 	fbx->GetInfo()->_fbx->property._transform = object->_transform;
-	fbx->GetInfo()->_path = object->_name;
-
 	// “o˜^
 	AddFbxModel(fbx);
 	return;

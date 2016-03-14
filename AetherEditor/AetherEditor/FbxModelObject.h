@@ -16,9 +16,9 @@ private:
 			_fbxCollider = nullptr;
 			_pivot = nullptr;
 			_isClick = false;
-			_path = "null_path";
 			_materialID = 0;
 			_textureID = 0;
+			_name = "none_name";
 		}
 
 		~FbxObjectInfo(){
@@ -51,6 +51,7 @@ private:
 			_isClick = false;
 			_materialID = 0;
 			_textureID = 0;
+
 		}
 		std::unique_ptr<aetherClass::FbxModel> _fbx;
 		std::unique_ptr<aetherClass::Sphere> _fbxCollider;
@@ -58,7 +59,7 @@ private:
 		bool _isClick;
 		int _materialID;
 		int _textureID;
-		std::string _path;
+		std::string _name;
 	};
 public:
 	FbxModelObject();

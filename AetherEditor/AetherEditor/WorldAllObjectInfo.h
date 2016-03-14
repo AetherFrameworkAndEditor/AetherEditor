@@ -26,6 +26,7 @@ struct ObjectInfo
 	aetherClass::Color _color;
 	int _textureID;
 	std::string _name;
+	std::string _path;
 
 private:
 	void Reset(){
@@ -34,6 +35,7 @@ private:
 		_color = aetherClass::Color(0, 0, 0, 1);
 		_textureID = 0;
 		_name = "none";
+		_path = "null";
 	}
 };
 

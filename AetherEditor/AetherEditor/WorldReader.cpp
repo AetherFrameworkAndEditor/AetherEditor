@@ -151,7 +151,12 @@ void WorldReader::GetObjectInfo(std::string data){
 	// オブジェクトの名前
 	info->_name = spliteArray[16].c_str();
 
-
+	// 前バージョンとの互換性を持たせるために一応チェック
+	if (spliteArray.size() > 17)
+	{
+		// パス（FBX用）
+		info->_path = spliteArray[17].c_str();
+	}
 	// ワールドに取り込む
 	m_world._object.push_back(info);
 	return;

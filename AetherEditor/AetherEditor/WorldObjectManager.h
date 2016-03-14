@@ -21,7 +21,7 @@ enum class eObjectType{
 struct CurrentSelectObject{
 	CurrentSelectObject(){
 		_objectType = eObjectType::eNull;
-		int _nhumber = NULL;
+		_number = NULL;
 	}
 	eObjectType _objectType;
 	int _number;

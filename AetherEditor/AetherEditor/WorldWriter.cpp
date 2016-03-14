@@ -65,6 +65,10 @@ void WorldWriter::WritePrimitive(std::ofstream& exportObject, PrimitiveObject* o
 
 	// それぞれの名前
 	exportObject << object->GetInfo()->_name;
+	exportObject << ',';
+
+	// オブジェクトのパス
+	exportObject << "null_path";
 
 	exportObject << std::endl;
 	return;
@@ -124,6 +128,10 @@ void WorldWriter::WriteSprite(std::ofstream& exportObject, SpriteObject* object)
 
 	// それぞれの名前
 	exportObject << object->GetInfo()->_name;
+	exportObject << ',';
+
+	// オブジェクトのパス
+	exportObject << "null_path";
 
 	exportObject << std::endl;
 	return;
@@ -183,6 +191,10 @@ void WorldWriter::WriteFbxModel(std::ofstream& exportObject, FbxModelObject* obj
 	exportObject << ',';
 
 	// それぞれの名前
+	exportObject << object->GetInfo()->_name;
+	exportObject << ',';
+
+	// オブジェクトのパス
 	exportObject << object->GetInfo()->_fbx->GetModelPath();
 
 	exportObject << std::endl;

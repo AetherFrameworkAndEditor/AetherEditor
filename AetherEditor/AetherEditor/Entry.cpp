@@ -43,8 +43,9 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	desc._classStyle = CS_NOCLOSE;
 	window[1]->SetWindowStyles(desc);
 	window[1]->Create(L"Game", screenSize, Vector2(100, 100));
-	
-	window[2]->Create(L"Property", Vector2(150, 200));
+	desc._windowStyle = WS_OVERLAPPED |WS_SYSMENU;
+	window[2]->SetWindowStyles(desc);
+	window[2]->Create(L"Property", Vector2(310, 330));
 
 	result = frame->Initialize(window,2, 1000000,1);
 	if (!result)
