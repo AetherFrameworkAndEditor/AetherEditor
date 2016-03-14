@@ -194,7 +194,7 @@ bool SceneWindowView::NotPlayingProcess(){
 		m_IsPlay = true;
 	}
 
-	m_objectTransform._translation._x = 0.1;
+	//m_objectTransform._translation._x = 0.1;
 	
 	UpdateCamera();
 	if (!m_controllCamera){

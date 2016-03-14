@@ -276,6 +276,7 @@ void SceneWindow::UpdateCommand(int nId){
 			return;
 		}
 		WorldObjectManager::Export(path);
+		MessageBox(NULL, L"•Û‘¶‚ªŠ®—¹‚µ‚Ü‚µ‚½", L"", MB_OK);
 	}
 		break;
 	case eReset:

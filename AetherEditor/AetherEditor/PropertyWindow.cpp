@@ -31,7 +31,7 @@ void Remove(std::vector<Type>& vector, unsigned int index)
 	auto object = vector.begin() + index;
 	if (*object)
 	{
-		delete (*object);
+	//	delete (*object);
 	}
 	vector.erase(object);
 }
@@ -51,8 +51,9 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 	if (WorldObjectManager::GetCurrentSelectObject()._objectType != m_prevSelectObject._objectType||
 		WorldObjectManager::GetCurrentSelectObject()._number != m_prevSelectObject._number)
 	{
-		CheckWorldObject();
+
 		m_prevSelectObject = WorldObjectManager::GetCurrentSelectObject();
+		CheckWorldObject();
 	}
 	UINT flg = LOWORD(wParam);
 	switch (uMsg)
@@ -118,6 +119,12 @@ void PropertyWindow::OnCreate(){
 //
 void PropertyWindow::DeleteObject(){
 	auto current = m_prevSelectObject;
+	// çÌèúÇµÇΩÇÁNULLÇ…ÇµÇƒÇ®Ç≠
+	CurrentSelectObject currentObject;
+	currentObject._objectType = eObjectType::eNull;
+	currentObject._number = 0;
+	WorldObjectManager::SetCurrentSelectObject(currentObject);
+	CheckWorldObject();
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -136,11 +143,7 @@ void PropertyWindow::DeleteObject(){
 	default:
 		break;
 	}
-	// çÌèúÇµÇΩÇÁNULLÇ…ÇµÇƒÇ®Ç≠
-	CurrentSelectObject currentObject;
-	currentObject._objectType = eObjectType::eNull;
-	currentObject._number = 0;
-	WorldObjectManager::SetCurrentSelectObject(currentObject);
+	
 	return;
 }
 
