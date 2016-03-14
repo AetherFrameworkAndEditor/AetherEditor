@@ -9,7 +9,6 @@
 #include "SpriteObject.h"
 #include "Rectangle2D.h"
 #include <iostream>
-#include"WorldObjectManager.h"
 #include"ModelUtility.h"
 #include"MathUtility.h"
 
@@ -47,7 +46,7 @@ bool SceneWindowView::Initialize(){
 
 	m_objectTransform._translation = 0;
 	m_objectTransform._rotation = 0;
-	m_objectTransform._scale= 1;
+	m_objectTransform._scale= 0;
 	m_cursorShowFlg = 0;
 	return true;
 }
@@ -195,17 +194,19 @@ bool SceneWindowView::NotPlayingProcess(){
 		m_IsPlay = true;
 	}
 
+	m_objectTransform._translation._x = 0.1;
 	
 	UpdateCamera();
-	if (m_controllCamera){
-		if (GameController::GetMouse().IsLeftButtonDown()){
+	if (!m_controllCamera){
+		/*if (GameController::GetMouse().IsLeftButtonDown()){
 			Vector2 mouse = GameController::GetMouse().GetMousePosition();
-		}
+		}*/
 		//オブジェクトセレクト
 		if (GameController::GetMouse().IsLeftButtonTrigger()){
 			RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
 			ray._scaler = 100;
-			SelectObject(ray);
+			CurrentSelectObject currentSelected = SelectObject(ray);
+			WorldObjectManager::SetCurrentSelectObject(currentSelected);
 		}
 	}
 
@@ -221,7 +222,7 @@ bool SceneWindowView::NotPlayingProcess(){
 	return true;
 }
 
-void SceneWindowView::SelectObject(RayVector ray){
+CurrentSelectObject SceneWindowView::SelectObject(RayVector ray){
 	int index = 0;
 	CurrentSelectObject currentSelected;
 
@@ -230,8 +231,7 @@ void SceneWindowView::SelectObject(RayVector ray){
 		if (aetherFunction::RaySphereIntersect(*itr->GetCollider(), ray)){
 			itr->ChangePivotState();
 			currentSelected._number = index;
-			WorldObjectManager::SetCurrentSelectObject(currentSelected);
-			return;
+			return currentSelected;
 		}
 		index++;
 	}
@@ -243,8 +243,7 @@ void SceneWindowView::SelectObject(RayVector ray){
 		if (aetherFunction::RaySphereIntersect(*itr->GetCollider(), ray)){
 			itr->ChangePivotState();
 			currentSelected._number = index;
-			WorldObjectManager::SetCurrentSelectObject(currentSelected);
-			return;
+			return currentSelected;
 		}
 		index++;
 	}
@@ -257,6 +256,10 @@ void SceneWindowView::SelectObject(RayVector ray){
 		//return;
 	}
 //	index++;
+	currentSelected._objectType = eObjectType::eNull;
+	index = 0;
+	return currentSelected;
+
 }
 
 bool SceneWindowView::PlayingProcess(){
