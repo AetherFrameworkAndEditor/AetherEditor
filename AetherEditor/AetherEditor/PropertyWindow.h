@@ -9,9 +9,6 @@ public:
 	~PropertyWindow();
 	LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 	void OnCreate()override;
-
-private:
-	HWND m_hWndEdit;
 };
 
 #endif

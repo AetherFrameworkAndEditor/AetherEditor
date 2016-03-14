@@ -9,7 +9,7 @@ PropertyWindow::PropertyWindow()
 PropertyWindow::~PropertyWindow()
 {
 }
-
+HWND m_hWndEdit;
 LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 	UINT flg = LOWORD(wParam);
 	switch (uMsg)
@@ -31,21 +31,20 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 }
 
 void PropertyWindow::OnCreate(){
+	static SCROLLINFO scr;
+	static TCHAR strScroll[32];
+
 	
-	m_hWndEdit = CreateWindowEx(
-		0,
-		TEXT("EDIT"),
-		TEXT("名前入力"),					// ウインドウのタイトル名
-		WS_OVERLAPPED | WS_CHILD | WS_VISIBLE | 
-		WS_BORDER|WS_CHILD,		// ウインドウスタイル
-		0,												// ウィンドウの表示X座標
-		0,												// ウィンドウの表示Y座標
-		180,						// ウィンドウの幅
-		150,						// 高さ
-		m_hWnd,														// 親ウインドウ
-		NULL,														// ウインドウメニュー
-		GetModuleHandle(NULL),													// インスタンスハンドル
-		NULL);													 // WM_CREATE情報
+	scr.cbSize = sizeof(SCROLLINFO);
+	scr.fMask = SIF_PAGE | SIF_RANGE;
+	scr.nMin = 0;	scr.nMax = 9;
+	scr.nPage = 2;
+
+	SetScrollInfo(m_hWnd, SB_VERT, &scr, TRUE);
+	scr.fMask = SIF_POS;
+
+	m_hWndEdit = CreateWindowEx(0, TEXT("EDIT"), TEXT("name"),
+		WS_CHILD,0,	0,180,150,m_hWnd,NULL,GetModuleHandle(NULL),NULL);
 	ShowWindow(m_hWndEdit, SW_SHOW);
 	UpdateWindow(m_hWndEdit);
 
