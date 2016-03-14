@@ -24,6 +24,7 @@ enum eButton{
 	eDelete,
 };
 
+// vectoríœŠÖ”
 template<typename Type>
 void Remove(std::vector<Type>& vector, unsigned int index)
 {
