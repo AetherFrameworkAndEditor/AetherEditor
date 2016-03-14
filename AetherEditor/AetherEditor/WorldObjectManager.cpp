@@ -382,6 +382,7 @@ void WorldObjectManager::CreateSprite(ObjectInfo* object){
 
 //
 void WorldObjectManager::SetCurrentSelectObject(CurrentSelectObject currnet){
+	if (m_currnetSelectObject._number == currnet._number && m_currnetSelectObject._objectType == currnet._objectType)return;
 	SelectOff();
 	m_currnetSelectObject = currnet;
 }

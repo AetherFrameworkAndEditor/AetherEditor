@@ -10,6 +10,7 @@
 #include "PrimitiveObject.h"
 #include"Line.h"
 #include"Light.h"
+#include"WorldObjectManager.h"
 class SceneWindowView :
 	public aetherClass::GameScene
 {
@@ -36,7 +37,7 @@ private:
 	void TransformInitialize(aetherClass::Transform transform);
 	void SceneWindowView::LockMouseCursor(HWND hWnd);
 	void UpdateCurrentObject();
-	void SelectObject(aetherClass::RayVector);
+	CurrentSelectObject SelectObject(aetherClass::RayVector);
 private:
 	static aetherClass::ViewCamera m_viewCamera;
 	aetherClass::ViewCamera m_gameCamera;
