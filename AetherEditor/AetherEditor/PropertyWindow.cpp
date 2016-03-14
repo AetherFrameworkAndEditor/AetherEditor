@@ -136,8 +136,14 @@ void PropertyWindow::DeleteObject(){
 	default:
 		break;
 	}
+	// çÌèúÇµÇΩÇÁNULLÇ…ÇµÇƒÇ®Ç≠
+	CurrentSelectObject currentObject;
+	currentObject._objectType = eObjectType::eNull;
+	currentObject._number = 0;
+	WorldObjectManager::SetCurrentSelectObject(currentObject);
 	return;
 }
+
 //
 void PropertyWindow::CheckWorldObject(){
 
@@ -187,6 +193,8 @@ void PropertyWindow::CheckWorldObject(){
 		}
 	}
 		break;
+
+
 	case eObjectType::eSprite:{
 		// ñºëO
 		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
