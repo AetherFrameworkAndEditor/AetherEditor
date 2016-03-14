@@ -4,6 +4,8 @@
 #ifndef _GAMEWINDOWVIEW_H
 #define _GAMEWINDOWVIEW_H
 #include <GameScene.h>
+#include<memory>
+#include"PixelShader.h"
 class GameWindowView :
 	public aetherClass::GameScene
 {
@@ -17,7 +19,9 @@ public:
 	bool Updater()override;
 
 private:
-
+	std::unique_ptr<aetherClass::ShaderBase>m_colorShader;
+	bool m_IsPlay;
+	std::shared_ptr<aetherClass::ViewCamera>m_gameCamera;
 };
 
 #endif
