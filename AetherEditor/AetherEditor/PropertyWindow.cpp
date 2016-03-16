@@ -12,6 +12,8 @@
 using namespace aetherClass;
 namespace{
 	const int kMaxSize = 3;
+	const int kMaxColorSize = 4;
+	const auto kJudeType = EN_UPDATE;
 }
 enum eButton{
 	eName = 1000,
@@ -31,7 +33,7 @@ void Remove(std::vector<Type>& vector, unsigned int index)
 	auto object = vector.begin() + index;
 	if (*object)
 	{
-	//	delete (*object);
+		delete (*object);
 	}
 	vector.erase(object);
 }
@@ -48,7 +50,7 @@ PropertyWindow::~PropertyWindow()
 {
 }
 LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-	if (WorldObjectManager::GetCurrentSelectObject()._objectType != m_prevSelectObject._objectType||
+	if (WorldObjectManager::GetCurrentSelectObject()._objectType != m_prevSelectObject._objectType ||
 		WorldObjectManager::GetCurrentSelectObject()._number != m_prevSelectObject._number)
 	{
 
@@ -61,39 +63,64 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case eName:
-			// 名前の設定
-			SetName();
+			if (HIWORD(wParam) == kJudeType)
+			{
+				SetName();
+			}
 			return S_OK;
 
 		case ePosition:
-			SetPosition();
+			if (HIWORD(wParam) == kJudeType)
+			{
+				SetPosition();
+			}
 			return S_OK;
 
 		case eRotation:
-			SetRotation();
+			if (HIWORD(wParam) == kJudeType)
+			{
+				// ScaleのEditがどれか一つでも変更された時
+				SetRotation();
+			}
 			return S_OK;
 
 		case eScale:
-			SetScale();
+			if (HIWORD(wParam) == kJudeType)
+			{
+				// ScaleのEditがどれか一つでも変更された時
+				SetScale();
+			}
 			return S_OK;
 
 		case eColor:
-			SetColor();
+			if (HIWORD(wParam) == kJudeType)
+			{
+				// ColorのEditがどれか一つでも変更された時
+				SetColor();
+			}
 			return S_OK;
 
 		case eTexture:
-			MessageBox(NULL, L"テクスチャ", L"Error", MB_OK);
+			if (HIWORD(wParam) == kJudeType)
+			{
+				// TextureのEditがどれか一つでも変更された時
+			}
 			return S_OK;
 
+			
 		case eMaterial:
-			MessageBox(NULL, L"マテリアル", L"Error", MB_OK);
+			if (HIWORD(wParam) == kJudeType)
+			{
+				// MaterialのEditが変更された時の処理
+			}
 			return S_OK;
 
 		case eDelete:
+			// Deleteボタンが押された時
 			DeleteObject();
 			return S_OK;
 		}
-		return 0;
+		break;
 	default:
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
@@ -321,6 +348,10 @@ void PropertyWindow::CheckWorldObject(){
 			SetWindowText(m_inputPositionEdit[i], position.c_str());
 			SetWindowText(m_inputRotationEdit[i], L"null");
 			SetWindowText(m_inputScaleEdit[i], L"null");
+		}
+
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
 			SetWindowText(m_inputColorEdit[i], L"null");
 		}
 	}
@@ -377,6 +408,9 @@ void PropertyWindow::SetName(){
 
 //
 void PropertyWindow::SetPosition(){
+	auto current = m_prevSelectObject;
+	if (current._objectType == eObjectType::eNull)return;
+
 	TCHAR position[kMaxSize][256] = { NULL };
 	float positionArrray[kMaxSize];
 	// 入力されている文字の取得
@@ -389,14 +423,13 @@ void PropertyWindow::SetPosition(){
 
 		if (std::any_of(objectPosition.cbegin(), objectPosition.cend(), std::isalpha))
 		{
-			ErrorBox(L"数値を入力してください");
+			SetWindowText(m_inputPositionEdit[i], L"");
 			return;
 		}
 
 		positionArrray[i] = std::atof(objectPosition.c_str());
 	}
 	CameraValue camera;
-	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -429,26 +462,30 @@ void PropertyWindow::SetPosition(){
 
 //
 void PropertyWindow::SetRotation(){
+	auto current = m_prevSelectObject;
+	if (current._objectType == eObjectType::eNull || 
+		current._objectType == eObjectType::eLight)return;
+
 	TCHAR rotation[kMaxSize][256] = { NULL };
 	float rotationArrray[kMaxSize];
 	// 入力されている文字の取得
 	for (int i = 0; i < kMaxSize; ++i)
 	{
-		GetWindowText(m_inputPositionEdit[i], rotation[i], sizeof(rotation) / sizeof(TCHAR));
+		GetWindowText(m_inputRotationEdit[i], rotation[i], sizeof(rotation) / sizeof(TCHAR));
 		// コンバートオブジェクト
 		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
 		std::string objectRotation = converter.to_bytes(rotation[i]);
 
+		// 文字が含まれていたら何もしない
 		if (std::any_of(objectRotation.cbegin(), objectRotation.cend(), std::isalpha))
 		{
-			ErrorBox(L"数値を入力してください");
+			SetWindowText(m_inputPositionEdit[i], L""); 
 			return;
 		}
 
 		rotationArrray[i] = std::atof(objectRotation.c_str());
 	}
 	CameraValue camera;
-	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -476,27 +513,30 @@ void PropertyWindow::SetRotation(){
 
 //
 void PropertyWindow::SetScale(){
+	auto current = m_prevSelectObject;
+	if (current._objectType == eObjectType::eNull||
+		current._objectType == eObjectType::eLight||
+		current._objectType==eObjectType::eCamera)return;
+
 	TCHAR scale[kMaxSize][256] = { NULL };
 	float scaleArrray[kMaxSize];
 	// 入力されている文字の取得
 	for (int i = 0; i < kMaxSize; ++i)
 	{
-		GetWindowText(m_inputPositionEdit[i], scale[i], sizeof(scale) / sizeof(TCHAR));
+		GetWindowText(m_inputScaleEdit[i], scale[i], sizeof(scale) / sizeof(TCHAR));
 		// コンバートオブジェクト
 		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
 		std::string objectScale= converter.to_bytes(scale[i]);
 
 		if (std::any_of(objectScale.cbegin(), objectScale.cend(), std::isalpha))
 		{
-			ErrorBox(L"数値を入力してください");
+			SetWindowText(m_inputScaleEdit[i], L"");
 			return;
 		}
 
 		scaleArrray[i] = std::atof(objectScale.c_str());
 	}
 
-
-	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -521,8 +561,14 @@ void PropertyWindow::SetScale(){
 
 //
 void PropertyWindow::SetColor(){
-	TCHAR color[kMaxSize][256] = { NULL };
-	float colorArrray[kMaxSize];
+	auto current = m_prevSelectObject;
+	if (current._objectType == eObjectType::eNull ||
+		current._objectType == eObjectType::eLight ||
+		current._objectType == eObjectType::eCamera||
+		current._objectType == eObjectType::eFBX)return;
+
+	TCHAR color[kMaxColorSize][256] = { NULL };
+	float colorArray[kMaxColorSize];
 	// 入力されている文字の取得
 	for (int i = 0; i < kMaxSize; ++i)
 	{
@@ -537,19 +583,17 @@ void PropertyWindow::SetColor(){
 			return;
 		}
 
-		colorArrray[i] = std::atof(objectColor.c_str());
+		colorArray[i] = std::atof(objectColor.c_str());
 	}
 
-
-	auto current = m_prevSelectObject;
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
-		WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color = Color(colorArrray[0], colorArrray[1], colorArrray[2],1.0f);
 		break;
+		WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color = Color(colorArray[0], colorArray[1], colorArray[2],colorArray[3]);
 
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArrray[0], colorArrray[1], 0, 1.0f);
+		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[4]);
 		break;
 	default:
 		break;
@@ -568,13 +612,8 @@ void PropertyWindow::CreateNameEdit(){
 
 	// name 入力
 	m_inputNameEdit = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 60, 0, 150, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 60, 0, 240, 20, m_hWnd, (HMENU)eName, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputNameEdit, SW_SHOW);
-
-	// name 適用 ボタン
-	HWND m_button = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 210, 0, 90, 20, m_hWnd, (HMENU)eName, GetModuleHandle(NULL), NULL);
-	ShowWindow(m_button, SW_SHOW);
 
 	return;
 }
@@ -593,34 +632,28 @@ void PropertyWindow::CreatePositionEdit(){
 
 	// Xの入力
 	m_inputPositionEdit[0] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 20, 45, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 20, 45, 80, 20, m_hWnd, (HMENU)ePosition, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputPositionEdit[0], SW_SHOW);
 
 	// Y
 	HWND YStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Y :"),
-		WS_CHILD, 80, 45, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 100, 45, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(YStatic, SW_SHOW);
 
 	// Yの入力
 	m_inputPositionEdit[1] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 100, 45, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 120, 45, 80, 20, m_hWnd, (HMENU)ePosition, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputPositionEdit[1], SW_SHOW);
 
 	// Z
 	HWND ZStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Z :"),
-		WS_CHILD, 160, 45, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 200, 45, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(ZStatic, SW_SHOW);
 
 	// Zの入力
 	m_inputPositionEdit[2] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 180, 45, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 220, 45, 80, 20, m_hWnd, (HMENU)ePosition, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputPositionEdit[2], SW_SHOW);
-
-
-	// ボタン
-	HWND positionButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 240, 45, 60, 20, m_hWnd, (HMENU)ePosition, GetModuleHandle(NULL), NULL);
-	ShowWindow(positionButton, SW_SHOW);
 
 	return;
 }
@@ -639,34 +672,28 @@ void PropertyWindow::CreateRotationEdit(){
 
 	// Xの入力
 	m_inputRotationEdit[0] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 20, 90, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 20, 90, 80, 20, m_hWnd, (HMENU)eRotation, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputRotationEdit[0], SW_SHOW);
 
 	// Y
 	HWND YStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Y :"),
-		WS_CHILD, 80, 90, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 100, 90, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(YStatic, SW_SHOW);
 
 	// Yの入力
 	m_inputRotationEdit[1] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 100, 90, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 120, 90, 80, 20, m_hWnd, (HMENU)eRotation, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputRotationEdit[1], SW_SHOW);
 
 	// Z
 	HWND ZStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Z :"),
-		WS_CHILD, 160, 90, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 200, 90, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(ZStatic, SW_SHOW);
 
 	// Zの入力
 	m_inputRotationEdit[2] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 180, 90, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 220, 90, 80, 20, m_hWnd, (HMENU)eRotation, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputRotationEdit[2], SW_SHOW);
-
-
-	// ボタン
-	HWND rotationButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 240, 90, 60, 20, m_hWnd, (HMENU)eRotation, GetModuleHandle(NULL), NULL);
-	ShowWindow(rotationButton, SW_SHOW);
 
 	return;
 }
@@ -685,35 +712,28 @@ void PropertyWindow::CreateScaleEdit(){
 
 	// Xの入力
 	m_inputScaleEdit[0] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 20, 135, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 20, 135, 80, 20, m_hWnd, (HMENU)eScale, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputScaleEdit[0], SW_SHOW);
 
 	// Y
 	HWND YStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Y :"),
-		WS_CHILD, 80, 135, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 100, 135, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(YStatic, SW_SHOW);
 
 	// Yの入力
 	m_inputScaleEdit[1] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 100, 135, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 120, 135, 80, 20, m_hWnd, (HMENU)eScale, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputScaleEdit[1], SW_SHOW);
 
 	// Z
 	HWND ZStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("Z :"),
-		WS_CHILD, 160, 135, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 200, 135, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(ZStatic, SW_SHOW);
 
 	// Zの入力
 	m_inputScaleEdit[2] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 180, 135, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 220, 135, 80, 20, m_hWnd, (HMENU)eScale, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputScaleEdit[2], SW_SHOW);
-
-
-	// ボタン
-	HWND scaleButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 240, 135, 60, 20, m_hWnd, (HMENU)eScale, GetModuleHandle(NULL), NULL);
-	ShowWindow(scaleButton, SW_SHOW);
-
 	return;
 }
 
@@ -730,7 +750,7 @@ void PropertyWindow::CreateColorEdit(){
 
 	// redの入力
 	m_inputColorEdit[0] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 20, 180, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 20, 180, 60, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputColorEdit[0], SW_SHOW);
 
 	// green
@@ -740,7 +760,7 @@ void PropertyWindow::CreateColorEdit(){
 
 	// greenの入力
 	m_inputColorEdit[1] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 100, 180, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 100, 180, 60, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputColorEdit[1], SW_SHOW);
 
 	// blue
@@ -750,14 +770,18 @@ void PropertyWindow::CreateColorEdit(){
 
 	// blueの入力
 	m_inputColorEdit[2] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD, 180, 180, 60, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD, 180, 180, 60, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputColorEdit[2], SW_SHOW);
 
+	// alpha
+	HWND alphaStatic = CreateWindowEx(0, TEXT("STATIC"), TEXT("A:"),
+		WS_CHILD, 240, 180, 25, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+	ShowWindow(alphaStatic, SW_SHOW);
 
-	// ボタン
-	HWND scaleButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 240, 180, 60, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
-	ShowWindow(scaleButton, SW_SHOW);
+	// blueの入力
+	m_inputColorEdit[3] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
+		WS_CHILD, 265, 180, 35, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
+	ShowWindow(m_inputColorEdit[3], SW_SHOW);
 }
 
 //
@@ -769,13 +793,8 @@ void PropertyWindow::CreateTextureEdit(){
 	ShowWindow(texture, SW_SHOW);
 
 	m_inputTextureEdit = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD | ES_RIGHT, 152.5, 205, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD | ES_RIGHT, 152.5, 205, 20, 20, m_hWnd, (HMENU)eTexture, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputTextureEdit, SW_SHOW);
-
-	// ボタン
-	HWND textureButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 175, 205, 130, 20, m_hWnd, (HMENU)eTexture, GetModuleHandle(NULL), NULL);
-	ShowWindow(textureButton, SW_SHOW);
 	return;
 }
 
@@ -787,13 +806,8 @@ void PropertyWindow::CreateMaterialEdit(){
 	ShowWindow(material, SW_SHOW);
 
 	m_inputMaterialEdit = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
-		WS_CHILD | ES_RIGHT, 152.5, 230, 20, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
+		WS_CHILD | ES_RIGHT, 152.5, 230, 20, 20, m_hWnd, (HMENU)eMaterial, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputMaterialEdit, SW_SHOW);
-
-	// ボタン
-	HWND textureButton = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Apply"),
-		WS_CHILD, 175, 230, 130, 20, m_hWnd, (HMENU)eMaterial, GetModuleHandle(NULL), NULL);
-	ShowWindow(textureButton, SW_SHOW);
 	return;
 }
 
