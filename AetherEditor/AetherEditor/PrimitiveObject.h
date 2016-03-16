@@ -24,6 +24,15 @@ private:
 			Destory();
 		}
 
+		std::unique_ptr<aetherClass::ModelBase> _primitive;
+		std::unique_ptr<aetherClass::Sphere> _primitiveCollider;
+		std::unique_ptr<Pivot> _pivot;
+		bool _isClick;
+		int _materialID;
+		int _textureID;
+		std::string _name;
+
+	private:
 		//
 		void Destory(){
 			if (_primitive)
@@ -51,13 +60,6 @@ private:
 			_materialID = 0;
 			_textureID = 0;
 		}
-		std::unique_ptr<aetherClass::ModelBase> _primitive;
-		std::unique_ptr<aetherClass::Sphere> _primitiveCollider;
-		std::unique_ptr<Pivot> _pivot;
-		bool _isClick;
-		int _materialID;
-		int _textureID;
-		std::string _name;
 	};
 public:
 	PrimitiveObject();

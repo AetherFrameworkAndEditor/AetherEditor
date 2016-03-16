@@ -30,6 +30,25 @@ CameraValue WorldObjectManager::m_cameraValue;
 ViewCamera WorldObjectManager::m_camera;
 std::string WorldObjectManager::m_modelType = "none";
 CurrentSelectObject WorldObjectManager::m_currnetSelectObject;
+
+// リセット時に呼び出す
+template<typename Type>
+static void ResetVector(std::vector<Type>& vector)
+{
+	if (!vector.empty())
+	{
+		//
+		for (auto object : vector)
+		{
+			if (object)
+			{
+				delete object;
+				object = nullptr;
+			}
+		}
+	}
+	vector.clear();
+}
 //
 static ModelBase* GetPrimitiveModel(std::string type){
 	if (type == "Point"){
@@ -192,37 +211,13 @@ bool WorldObjectManager::Export(std::wstring fileName){
 void WorldObjectManager::Reset(){
 
 	//
-	for (auto primitive : m_primitive)
-	{
-		if (primitive)
-		{
-			delete primitive;
-			primitive = nullptr;
-		}
-	}
-	m_primitive.clear();
+	ResetVector<PrimitiveObject*>(m_primitive);
 
 	//
-	for (auto sprite : m_sprite)
-	{
-		if (sprite)
-		{
-			delete sprite;
-			sprite = nullptr;
-		}
-	}
-	m_sprite.clear();
+	ResetVector<SpriteObject*>(m_sprite);
 
 	//
-	for (auto fbx : m_fbx)
-	{
-		if (fbx)
-		{
-			delete fbx;
-			fbx = nullptr;
-		}
-	}
-	m_fbx.clear();
+	ResetVector<FbxModelObject*>(m_fbx);
 
 	//
 	m_cameraValue._position = NULL;
@@ -230,6 +225,10 @@ void WorldObjectManager::Reset(){
 
 	//
 	m_lightValue = NULL;
+
+	//
+	m_currnetSelectObject._objectType = eObjectType::eNull;
+	return;
 }
 //
 void WorldObjectManager::AddPrimitive(PrimitiveObject* primitive){

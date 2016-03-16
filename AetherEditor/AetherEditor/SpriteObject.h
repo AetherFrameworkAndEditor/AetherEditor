@@ -22,7 +22,15 @@ private:
 		~SpriteObjectInfo(){
 			Destory();
 		}
+		
+		std::unique_ptr<aetherClass::SpriteBase> _sprite;
+		std::unique_ptr<Pivot> _pivot;
+		int _materialID;
+		int _textureID;
+		bool _isClick;
+		std::string _name;
 
+	private:
 		//
 		void Destory(){
 			if (_sprite)
@@ -42,12 +50,6 @@ private:
 			_materialID = 0;
 			_textureID = 0;
 		}
-		std::unique_ptr<aetherClass::SpriteBase> _sprite;
-		std::unique_ptr<Pivot> _pivot;
-		int _materialID;
-		int _textureID;
-		bool _isClick;
-		std::string _name;
 	};
 
 public:

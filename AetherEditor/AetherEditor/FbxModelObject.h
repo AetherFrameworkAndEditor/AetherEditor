@@ -25,6 +25,15 @@ private:
 			Destory();
 		}
 
+		std::unique_ptr<aetherClass::FbxModel> _fbx;
+		std::unique_ptr<aetherClass::Sphere> _fbxCollider;
+		std::unique_ptr<Pivot> _pivot;
+		bool _isClick;
+		int _materialID;
+		int _textureID;
+		std::string _name;
+
+	private:
 		//
 		void Destory(){
 			if (_fbx)
@@ -53,13 +62,7 @@ private:
 			_textureID = 0;
 
 		}
-		std::unique_ptr<aetherClass::FbxModel> _fbx;
-		std::unique_ptr<aetherClass::Sphere> _fbxCollider;
-		std::unique_ptr<Pivot> _pivot;
-		bool _isClick;
-		int _materialID;
-		int _textureID;
-		std::string _name;
+		
 	};
 public:
 	FbxModelObject();

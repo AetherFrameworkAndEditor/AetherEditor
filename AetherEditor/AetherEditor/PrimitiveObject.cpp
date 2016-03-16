@@ -59,7 +59,6 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 void PrimitiveObject::Destroy(){
 	if (m_primitiveObject)
 	{
-		m_primitiveObject->Destory();
 		m_primitiveObject.release();
 		m_primitiveObject = nullptr;
 	}

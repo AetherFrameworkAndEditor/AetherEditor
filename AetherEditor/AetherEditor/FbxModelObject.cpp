@@ -51,7 +51,6 @@ bool FbxModelObject::Create(std::string path, ViewCamera* camera){
 void FbxModelObject::Destroy(){
 	if (m_fbxObject)
 	{
-		m_fbxObject->Destory();
 		m_fbxObject.release();
 		m_fbxObject = nullptr;
 	}

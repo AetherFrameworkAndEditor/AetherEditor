@@ -44,7 +44,6 @@ bool SpriteObject::Create(SpriteBase* sprite){
 void SpriteObject::Destroy(){
 	if (m_spriteObject)
 	{
-		m_spriteObject->Destory();
 		m_spriteObject.release();
 		m_spriteObject = nullptr;
 	}
