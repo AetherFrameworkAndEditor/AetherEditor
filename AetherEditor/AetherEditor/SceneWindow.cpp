@@ -95,16 +95,16 @@ void SceneWindow::OnCreate(){
 	mii.dwTypeData = L"View";
 	InsertMenuItem(hMenu, 2, FALSE, &mii);
 
+	HMENU uiMenu = CreateMenu();
+	mii.hSubMenu = uiMenu;
+	mii.dwTypeData = L"UI";
+	InsertMenuItem(createMenu, 0, FALSE, &mii);
 
 	HMENU primitiveMenu = CreateMenu();
 	mii.hSubMenu = primitiveMenu;
 	mii.dwTypeData = L"Primitive";
 	InsertMenuItem(createMenu, 0, FALSE, &mii);
 
-	HMENU uiMenu = CreateMenu();
-	mii.hSubMenu = uiMenu;
-	mii.dwTypeData = L"UI";
-	InsertMenuItem(createMenu, 1, FALSE, &mii);
 
 
 	//subMenuList
@@ -113,7 +113,7 @@ void SceneWindow::OnCreate(){
 	
 	mii.wID = eFbx;
 	mii.dwTypeData = L"FbxImport";
-	InsertMenuItem(createMenu, 0, FALSE, &mii);
+	InsertMenuItem(createMenu, 1, FALSE, &mii);
 	
 	mii.wID = ePoint;
 	mii.dwTypeData = L"Point";

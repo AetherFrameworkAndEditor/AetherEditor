@@ -15,6 +15,8 @@ namespace{
 	const int kMaxColorSize = 4;
 	const auto kJudeType = EN_UPDATE;
 }
+
+
 enum eButton{
 	eName = 1000,
 	ePosition,
@@ -46,10 +48,11 @@ PropertyWindow::PropertyWindow()
 }
 
 
-PropertyWindow::~PropertyWindow()
-{
-}
+PropertyWindow::~PropertyWindow(){}
+
+//
 LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+	
 	if (WorldObjectManager::GetCurrentSelectObject()._objectType != m_prevSelectObject._objectType ||
 		WorldObjectManager::GetCurrentSelectObject()._number != m_prevSelectObject._number)
 	{
@@ -57,6 +60,8 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 		m_prevSelectObject = WorldObjectManager::GetCurrentSelectObject();
 		CheckWorldObject();
 	}
+
+
 	UINT flg = LOWORD(wParam);
 	switch (uMsg)
 	{
@@ -202,7 +207,7 @@ void PropertyWindow::CheckWorldObject(){
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
-		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue };
+		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -216,7 +221,10 @@ void PropertyWindow::CheckWorldObject(){
 			std::wstring scale;
 			scale = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+		}
 
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
 			std::wstring color;
 			color = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputColorEdit[i], color.c_str());
@@ -247,7 +255,7 @@ void PropertyWindow::CheckWorldObject(){
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, NULL };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, NULL };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, NULL };
-		float colorArray[kMaxSize] = { colorValue._red, colorValue._green, colorValue._blue };
+		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -261,7 +269,10 @@ void PropertyWindow::CheckWorldObject(){
 			std::wstring scale;
 			scale = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+		}
 
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
 			std::wstring color;
 			color = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputColorEdit[i], color.c_str());
@@ -304,7 +315,10 @@ void PropertyWindow::CheckWorldObject(){
 			std::wstring scale;
 			scale = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
+		}
 
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
 			std::wstring color;
 			color = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputColorEdit[i], color.c_str());
@@ -318,9 +332,9 @@ void PropertyWindow::CheckWorldObject(){
 		SetWindowText(m_inputMaterialEdit, L"00");
 		auto position = WorldObjectManager::GetCameraValue();
 		
-		float positionArray[3] = { position._position._x, position._position._y, position._position._z };
-		float rotationArray[3] = { position._rotation._x, position._rotation._y, position._rotation._z };
-		for (int i = 0; i < 3; ++i)
+		float positionArray[kMaxSize] = { position._position._x, position._position._y, position._position._z };
+		float rotationArray[kMaxSize] = { position._rotation._x, position._rotation._y, position._rotation._z };
+		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
 			position = std::to_wstring(positionArray[i]);
@@ -328,8 +342,12 @@ void PropertyWindow::CheckWorldObject(){
 			rotation = std::to_wstring(rotationArray[i]);
 			SetWindowText(m_inputPositionEdit[i], position.c_str());
 			SetWindowText(m_inputRotationEdit[i], rotation.c_str());
-			SetWindowText(m_inputScaleEdit[i], L"null");
-			SetWindowText(m_inputColorEdit[i], L"null");
+			SetWindowText(m_inputScaleEdit[i], L"0.0");
+		}
+
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
+			SetWindowText(m_inputColorEdit[i], L"0.0");
 		}
 	}
 		break;
@@ -346,13 +364,13 @@ void PropertyWindow::CheckWorldObject(){
 			std::wstring position;
 			position = std::to_wstring(positionArray[i]);
 			SetWindowText(m_inputPositionEdit[i], position.c_str());
-			SetWindowText(m_inputRotationEdit[i], L"null");
-			SetWindowText(m_inputScaleEdit[i], L"null");
+			SetWindowText(m_inputRotationEdit[i], L"0.0");
+			SetWindowText(m_inputScaleEdit[i], L"0.0");
 		}
 
 		for (int i = 0; i < kMaxColorSize; ++i)
 		{
-			SetWindowText(m_inputColorEdit[i], L"null");
+			SetWindowText(m_inputColorEdit[i], L"0.0");
 		}
 	}
 		break;
@@ -362,12 +380,16 @@ void PropertyWindow::CheckWorldObject(){
 		SetWindowText(m_inputTextureEdit, L"00");
 		SetWindowText(m_inputMaterialEdit, L"00");
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < kMaxSize; ++i)
 		{
-			SetWindowText(m_inputPositionEdit[i], L"null");
-			SetWindowText(m_inputRotationEdit[i], L"null");
-			SetWindowText(m_inputScaleEdit[i], L"null");
-			SetWindowText(m_inputColorEdit[i], L"null");
+			SetWindowText(m_inputPositionEdit[i], L"0.0");
+			SetWindowText(m_inputRotationEdit[i], L"0.0");
+			SetWindowText(m_inputScaleEdit[i], L"0.0");
+		}
+
+		for (int i = 0; i < kMaxColorSize; ++i)
+		{
+			SetWindowText(m_inputColorEdit[i], L"0.0");
 		}
 		break;
 	}
