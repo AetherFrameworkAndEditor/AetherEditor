@@ -61,10 +61,10 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 		CheckWorldObject();
 	}
 
-
 	UINT flg = LOWORD(wParam);
 	switch (uMsg)
 	{
+
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case eName:
@@ -127,6 +127,7 @@ LRESULT CALLBACK  PropertyWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM w
 		}
 		break;
 	default:
+		
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 	return S_OK;
@@ -434,7 +435,7 @@ void PropertyWindow::SetPosition(){
 	if (current._objectType == eObjectType::eNull)return;
 
 	TCHAR position[kMaxSize][256] = { NULL };
-	float positionArrray[kMaxSize];
+	float positionArrray[kMaxSize] = { NULL };
 	// “ü—Í‚³‚ê‚Ä‚¢‚é•¶Žš‚ÌŽæ“¾
 	for (int i = 0; i < kMaxSize; ++i)
 	{
@@ -489,7 +490,7 @@ void PropertyWindow::SetRotation(){
 		current._objectType == eObjectType::eLight)return;
 
 	TCHAR rotation[kMaxSize][256] = { NULL };
-	float rotationArrray[kMaxSize];
+	float rotationArrray[kMaxSize] = { NULL };
 	// “ü—Í‚³‚ê‚Ä‚¢‚é•¶Žš‚ÌŽæ“¾
 	for (int i = 0; i < kMaxSize; ++i)
 	{
@@ -541,7 +542,7 @@ void PropertyWindow::SetScale(){
 		current._objectType==eObjectType::eCamera)return;
 
 	TCHAR scale[kMaxSize][256] = { NULL };
-	float scaleArrray[kMaxSize];
+	float scaleArrray[kMaxSize] = { NULL };
 	// “ü—Í‚³‚ê‚Ä‚¢‚é•¶Žš‚ÌŽæ“¾
 	for (int i = 0; i < kMaxSize; ++i)
 	{
@@ -590,7 +591,7 @@ void PropertyWindow::SetColor(){
 		current._objectType == eObjectType::eFBX)return;
 
 	TCHAR color[kMaxColorSize][256] = { NULL };
-	float colorArray[kMaxColorSize];
+	float colorArray[kMaxColorSize] = { NULL };
 	// “ü—Í‚³‚ê‚Ä‚¢‚é•¶Žš‚ÌŽæ“¾
 	for (int i = 0; i < kMaxSize; ++i)
 	{
@@ -615,7 +616,7 @@ void PropertyWindow::SetColor(){
 		WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color = Color(colorArray[0], colorArray[1], colorArray[2],colorArray[3]);
 
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[4]);
+		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
 		break;
 	default:
 		break;
