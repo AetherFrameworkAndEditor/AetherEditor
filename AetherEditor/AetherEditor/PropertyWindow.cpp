@@ -201,14 +201,13 @@ void PropertyWindow::CheckWorldObject(){
 		const int materialID = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_textureID;
 		SetWindowText(m_inputMaterialEdit, std::to_wstring(materialID).c_str());
 
-
+		// トランスフォーム
 		auto value = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._transform;
-		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
-		
+	
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
-		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
+		
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -223,12 +222,22 @@ void PropertyWindow::CheckWorldObject(){
 			scale = std::to_wstring(scaleArray[i]);
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
 		}
-
+		// 色
+		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
+		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxColorSize; ++i)
 		{
-			std::wstring color;
-			color = std::to_wstring(scaleArray[i]);
-			SetWindowText(m_inputColorEdit[i], color.c_str());
+			std::wstring colorString;
+			
+			colorString = std::to_wstring(colorArray[i]);
+			
+			std::wstring output;
+			for (int id = 0; id < kMaxColorSize; ++id)
+			{
+				output.push_back(colorString[id]);
+			}
+
+			SetWindowText(m_inputColorEdit[i], output.c_str());
 		}
 	}
 		break;
@@ -251,12 +260,10 @@ void PropertyWindow::CheckWorldObject(){
 
 
 		auto value = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform;
-		auto colorValue = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color;
 
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, NULL };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, NULL };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, NULL };
-		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -272,11 +279,22 @@ void PropertyWindow::CheckWorldObject(){
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
 		}
 
+		// 色
+		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
+		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxColorSize; ++i)
 		{
-			std::wstring color;
-			color = std::to_wstring(scaleArray[i]);
-			SetWindowText(m_inputColorEdit[i], color.c_str());
+			std::wstring colorString;
+
+			colorString = std::to_wstring(colorArray[i]);
+
+			std::wstring output;
+			for (int id = 0; id < kMaxColorSize; ++id)
+			{
+				output.push_back(colorString[id]);
+			}
+
+			SetWindowText(m_inputColorEdit[i], output.c_str());
 		}
 	}
 		break;
@@ -593,9 +611,9 @@ void PropertyWindow::SetColor(){
 	TCHAR color[kMaxColorSize][256] = { NULL };
 	float colorArray[kMaxColorSize] = { NULL };
 	// 入力されている文字の取得
-	for (int i = 0; i < kMaxSize; ++i)
+	for (int i = 0; i < kMaxColorSize; ++i)
 	{
-		GetWindowText(m_inputPositionEdit[i], color[i], sizeof(color) / sizeof(TCHAR));
+		GetWindowText(m_inputColorEdit[i], color[i], sizeof(color) / sizeof(TCHAR));
 		// コンバートオブジェクト
 		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>converter;
 		std::string objectColor = converter.to_bytes(color[i]);
@@ -612,9 +630,9 @@ void PropertyWindow::SetColor(){
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
+		WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
 		break;
-		WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color = Color(colorArray[0], colorArray[1], colorArray[2],colorArray[3]);
-
+	
 	case eObjectType::eSprite:
 		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
 		break;
@@ -801,7 +819,7 @@ void PropertyWindow::CreateColorEdit(){
 		WS_CHILD, 240, 180, 25, 20, m_hWnd, (HMENU)100, GetModuleHandle(NULL), NULL);
 	ShowWindow(alphaStatic, SW_SHOW);
 
-	// blueの入力
+	// alphaの入力
 	m_inputColorEdit[3] = CreateWindowEx(0, TEXT("EDIT"), TEXT(""),
 		WS_CHILD, 265, 180, 35, 20, m_hWnd, (HMENU)eColor, GetModuleHandle(NULL), NULL);
 	ShowWindow(m_inputColorEdit[3], SW_SHOW);
