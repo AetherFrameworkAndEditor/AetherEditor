@@ -314,13 +314,12 @@ void PropertyWindow::CheckWorldObject(){
 		const int materialID = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_textureID;
 		SetWindowText(m_inputMaterialEdit, std::to_wstring(materialID).c_str());
 
-
 		auto value = WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_fbx->property._transform;
 		
 		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
 		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z };
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, value._scale._z };
-		float colorArray[kMaxSize] = { NULL };
+		
 		for (int i = 0; i < kMaxSize; ++i)
 		{
 			std::wstring position;
@@ -336,10 +335,11 @@ void PropertyWindow::CheckWorldObject(){
 			SetWindowText(m_inputScaleEdit[i], scale.c_str());
 		}
 
+		float colorArray[kMaxSize] = { NULL };
 		for (int i = 0; i < kMaxColorSize; ++i)
 		{
 			std::wstring color;
-			color = std::to_wstring(scaleArray[i]);
+			color = std::to_wstring(colorArray[i]);
 			SetWindowText(m_inputColorEdit[i], color.c_str());
 		}
 	}
