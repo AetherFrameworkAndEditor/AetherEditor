@@ -25,9 +25,9 @@ std::vector<Material*> WorldObjectManager::m_material;
 std::vector<Texture*> WorldObjectManager::m_texture;
 
 Vector3 WorldObjectManager::m_lightValue = Vector3(NULL,NULL,NULL);
-Light WorldObjectManager::m_light;
+
 CameraValue WorldObjectManager::m_cameraValue;
-ViewCamera WorldObjectManager::m_camera;
+
 std::string WorldObjectManager::m_modelType = "none";
 CurrentSelectObject WorldObjectManager::m_currnetSelectObject;
 
@@ -251,15 +251,14 @@ void WorldObjectManager::AddFbxModel(FbxModelObject* fbx){
 //
 void WorldObjectManager::RegisterCameraValue(CameraValue camera){
 	m_cameraValue = camera;
-	m_camera.property._translation = camera._position;
-	m_camera.property._rotation = camera._rotation;
+
 	return;
 }
 
 //
 void WorldObjectManager::RegisterLightValue(Vector3 lightValue){
 	m_lightValue = lightValue;
-	m_light.property._translation = m_lightValue;
+
 	return;
 }
 
@@ -279,31 +278,23 @@ std::vector<FbxModelObject*>& WorldObjectManager::GetFbxModel(){
 }
 
 //
-CameraValue WorldObjectManager::GetCameraValue(){
+CameraValue& WorldObjectManager::GetCameraValue(){
 	return m_cameraValue;
 }
 
-//
-ViewCamera WorldObjectManager::GetCamera(){
-	return m_camera;
-}
 
 //
-Vector3 WorldObjectManager::GetLightValue(){
+Vector3& WorldObjectManager::GetLightValue(){
 	return m_lightValue;
 }
 
-//
-Light WorldObjectManager::GetLight(){
-	return m_light;
-}
 
 //
 void WorldObjectManager::CreateFBX(ObjectInfo* object){
 	if (object->_modelType != "FbxModel") return;
 
 	FbxModelObject* fbx = new FbxModelObject();
-	bool result = fbx->Create(object->_path, &m_camera);
+	bool result = fbx->Create(object->_path, nullptr);
 	if (!result)
 	{
 		MessageBox(NULL, L"Do not Load fbx", L"Error", MB_OK);
@@ -323,7 +314,7 @@ void WorldObjectManager::CreatePrimitive(ObjectInfo* object){
 
 	PrimitiveObject* primitive = new PrimitiveObject();
 
-	bool result = primitive->Create(GetPrimitiveModel(object->_modelType), &m_camera);
+	bool result = primitive->Create(GetPrimitiveModel(object->_modelType), nullptr);
 
 	if (!result)
 	{

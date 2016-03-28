@@ -67,9 +67,9 @@ void SpriteObject::Update(){
 
 	auto scale = m_spriteObject->_sprite->property._transform._scale;
 	auto position = m_spriteObject->_sprite->property._transform._translation;
-	auto centerPoint = (position + scale)/2;
+	auto center = (position + (scale / 2));
 
-	m_spriteObject->_pivot->MoveDirection(centerPoint);
+	m_spriteObject->_pivot->MoveDirection(center);
 }
 
 //
