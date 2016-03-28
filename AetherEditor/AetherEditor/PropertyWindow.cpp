@@ -280,7 +280,7 @@ void PropertyWindow::CheckWorldObject(){
 		}
 
 		// F
-		auto colorValue = WorldObjectManager::GetPrimitive()[current._number]->GetInfo()->_primitive->property._color;
+		auto colorValue = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color;
 		float colorArray[kMaxColorSize] = { colorValue._red, colorValue._green, colorValue._blue, colorValue._alpha };
 		for (int i = 0; i < kMaxColorSize; ++i)
 		{
@@ -634,7 +634,7 @@ void PropertyWindow::SetColor(){
 		break;
 	
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
+		//WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
 		break;
 	default:
 		break;

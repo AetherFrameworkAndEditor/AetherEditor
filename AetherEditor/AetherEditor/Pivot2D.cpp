@@ -85,11 +85,12 @@ void Pivot2D::MoveDirection(Vector3 move){
 	if (!m_isInitialize)return;
 	/*	2D—p‚ÌˆÚ“®ˆ— ˆø”‚Å‚ÍVector2‚ðŽó‚¯Žæ‚é‚ªVector2‚É•ÏŠ·‚·‚é*/
 	Vector2 move2d = Vector2(move._x, move._y);
+	int id = 0;
 	for (auto index : m_pivot)
 	{
-		index->property._transform._translation._x = move2d._x - kDirectionSize;
-		index->property._transform._translation._y = move2d._y - kDirectionSize;
-	
+		index->property._transform._translation._x = move2d._x + m_pivotPropertyArray[id]._position._x;
+		index->property._transform._translation._y = move2d._y + m_pivotPropertyArray[id]._position._y;
+		id += 1;
 	}
 
 	return;

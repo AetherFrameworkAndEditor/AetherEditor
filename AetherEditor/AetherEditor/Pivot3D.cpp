@@ -81,10 +81,11 @@ void Pivot3D::Render(ShaderBase* shader){
 
 void Pivot3D::MoveDirection(Vector3 move){
 	if (!m_isInitialize)return;
-
+	int id = 0;
 	for (auto index : m_pivot)
 	{
-		index->property._transform._translation += move;
+		index->property._transform._translation = move + m_pivotPropertyArray[id]._position;
+		id += 1;
 	}
 }
 

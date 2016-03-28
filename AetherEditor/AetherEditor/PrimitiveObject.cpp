@@ -71,9 +71,9 @@ void PrimitiveObject::Render(aetherClass::ShaderBase* shader){
 	m_primitiveObject->_primitive->Render(shader);
 	if (m_primitiveObject->_isClick)
 	{	
-		
-		m_primitiveObject->_primitiveCollider->Render(shader);
 		m_primitiveObject->_pivot->Render(shader);
+		m_primitiveObject->_primitiveCollider->Render(shader);
+		
 	}	
 }
 
