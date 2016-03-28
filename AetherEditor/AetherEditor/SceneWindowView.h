@@ -11,6 +11,7 @@
 #include"Line.h"
 #include"Light.h"
 #include"WorldObjectManager.h"
+#include "CameraObject.h"
 class SceneWindowView :
 	public aetherClass::GameScene
 {
@@ -43,14 +44,14 @@ private:
 	void DragCurrentObject();
 private:
 	static aetherClass::ViewCamera m_viewCamera;
-	aetherClass::ViewCamera m_gameCamera;
+	CameraObject m_gameCamera;
 	aetherClass::Light m_gamelight;
 	aetherClass::DirectXEntity m_directX;
 
 	bool m_IsPlay;
 	bool m_controllCamera;
 	int m_cursorShowFlg;
-
+	
 	aetherClass::Transform m_objectTransform;
 
 	struct SceneObject{

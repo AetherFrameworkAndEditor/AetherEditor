@@ -39,8 +39,9 @@ bool SceneWindowView::Initialize(){
 	m_colorShader = std::make_unique<PixelShader>();
 	m_colorShader->Initialize(desc, eVertex | ePixel);
 	
-	m_viewCamera.property._translation._z = -10;
-	m_gameCamera.property._translation._z = -10;
+	m_viewCamera.property._translation._z = -20;
+	m_gameCamera.Initialize(&m_viewCamera);
+	m_gameCamera.SetTranslation(Vector3(0, 0, -10));
 
 	m_IsPlay = false;
 	m_controllCamera= false;
@@ -142,9 +143,10 @@ bool SceneWindowView::NotPlayingProcess(){
 
 	//移動対象オブジェクトアップデート(位置更新とか)
 	UpdateCurrentObject();
+	m_gameCamera.Update();
 	//ゲームカメラ更新
-	value._position = m_gameCamera.property._translation;
-	value._rotation = m_gameCamera.property._rotation;
+	value._position = m_gameCamera.GetTranslation();
+	value._rotation = m_gameCamera.GetRotation();
 	WorldObjectManager::RegisterCameraValue(value);
 	
 //	m_viewCamera.Controller();
@@ -431,6 +433,8 @@ void SceneWindowView::Render(){
 	if (m_IsPlay)return;
 	auto inverseVec = m_sceneObjectList;
 	std::reverse(inverseVec.begin(),inverseVec.end());
+	m_gameCamera.Render(m_colorShader.get());
+
 	for (auto itr : inverseVec){
 		switch (itr.type)
 		{
@@ -445,11 +449,13 @@ void SceneWindowView::Render(){
 		case eObjectType::eLight:
 			break;
 		case eObjectType::eCamera:
+			
 			break;
 		default:
 			break;
 		}
 	}
+	
 	return;
 }
 
