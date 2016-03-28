@@ -58,13 +58,7 @@ void SpriteObject::Render(aetherClass::ShaderBase* shader){
 	if (m_spriteObject->_isClick)
 	{
 		m_spriteObject->_pivot->Render(shader);
-		m_spriteObject->_sprite->property._color._alpha = 0.3;
 	}
-	else
-	{
-		m_spriteObject->_sprite->property._color._alpha = 1.0;
-	}
-
 	return;
 }
 

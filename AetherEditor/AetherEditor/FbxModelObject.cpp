@@ -30,11 +30,11 @@ bool FbxModelObject::Create(std::string path, ViewCamera* camera){
 		{
 			return false;
 		}
-		m_fbxObject->_fbxCollider->property._transform._scale = 1;
+		m_fbxObject->_fbxCollider->property._transform._scale = 2;
 
 		auto centerPoint = m_fbxObject->_fbx->property._transform._translation;
 		m_fbxObject->_fbxCollider->SetCamera(camera);
-		m_fbxObject->_fbxCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+		m_fbxObject->_fbxCollider->property._color = Color(1.0f, 0.0f, 0.0f, 0.5f);
 		m_fbxObject->_fbxCollider->property._transform._translation = centerPoint;
 
 		// Pivot�̍쐬
@@ -60,9 +60,9 @@ void FbxModelObject::Destroy(){
 //
 void FbxModelObject::Render(aetherClass::ShaderBase* shader){
 
+	m_fbxObject->_fbx->Render(shader);
 	if (m_fbxObject->_isClick)
 	{
-
 		m_fbxObject->_pivot->Render(shader);
 		m_fbxObject->_fbxCollider->Render(shader);
 		m_fbxObject->_fbx->SetModelMaterialColor(Color(1.0f, 1.0f, 0.0f, 0.3f), eMatrerialType::eDiffuse);
@@ -72,7 +72,6 @@ void FbxModelObject::Render(aetherClass::ShaderBase* shader){
 		m_fbxObject->_fbx->SetModelMaterialColor(Color(1.0f, 1.0f, 0.0f, 1.0f), eMatrerialType::eDiffuse);
 	}
 
-	m_fbxObject->_fbx->Render(shader);
 }
 
 //

@@ -28,26 +28,28 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	ConsoleWindow::Create();
 
 	auto frame = std::make_unique<GameFrame>();
+	WindowBase::WindowStyleDesc desc;
 
 	bool result;
 	Vector2 screenSize(800, 600);
+	float screenCenterPos = (GetSystemMetrics(SM_CYSCREEN) - screenSize._y) / 2;
 	WindowBase*window[3] = { new SceneWindow(), new ObjectWindow(), new PropertyWindow() };
 
-	WindowBase::WindowStyleDesc desc;
-	desc._windowStyle = WS_OVERLAPPED | WS_SYSMENU;
-
-	window[0]->SetWindowStyles(desc);
-	window[0]->Create(L"Scene", screenSize);
-
-	desc._windowStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_MAXIMIZEBOX| WS_SYSMENU;
+	desc._windowStyle =  WS_OVERLAPPED;
 	desc._classStyle = CS_NOCLOSE;
 	window[1]->SetWindowStyles(desc);
-	window[1]->Create(L"Game", screenSize, Vector2(100, 100));
-	desc._windowStyle = WS_OVERLAPPED |WS_SYSMENU;
-	window[2]->SetWindowStyles(desc);
-	window[2]->Create(L"Property", Vector2(310, 330));
+	window[1]->Create(L"Game", screenSize, Vector2(100, screenCenterPos));
+	ShowWindow(window[1]->GetWindowHandle(), SW_HIDE);
 
-	result = frame->Initialize(window,2, 1000000,1);
+	window[2]->SetWindowStyles(desc);
+	window[2]->Create(L"Property", Vector2(310, 330),Vector2(900,130));
+
+	desc._classStyle = NULL;
+	desc._windowStyle += WS_SYSMENU;
+	window[0]->SetWindowStyles(desc);
+	window[0]->Create(L"Scene", screenSize,Vector2(100,screenCenterPos));
+
+	result = frame->Initialize(window,2, 100000,1);
 	if (!result)
 	{
 		return kError;
@@ -61,6 +63,11 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	ConsoleWindow::Close();
 
 	// ”jŠü	
+
+	for (int i = 0; i < 3; ++i){
+		delete window[i];
+	}
+	WorldObjectManager::Reset();
 	currentScene.release();
 	return kExit;
 }

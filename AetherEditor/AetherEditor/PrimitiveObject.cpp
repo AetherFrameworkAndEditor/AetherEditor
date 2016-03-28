@@ -37,11 +37,11 @@ bool PrimitiveObject::Create(ModelBase* model,ViewCamera* camera){
 		{
 			return false;
 		}
-		m_primitiveObject->_primitiveCollider->property._transform._scale = 10;
+		m_primitiveObject->_primitiveCollider->property._transform._scale = 2;
 
 		auto centerPoint = m_primitiveObject->_primitive->property._transform._translation;
 		m_primitiveObject->_primitiveCollider->SetCamera(camera);
-		m_primitiveObject->_primitiveCollider->property._color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+		m_primitiveObject->_primitiveCollider->property._color = Color(1.0f, 0.0f, 0.0f, 0.4f);
 		m_primitiveObject->_primitiveCollider->property._transform._translation = centerPoint;
 
 		// Pivot�̍쐬
@@ -68,19 +68,13 @@ void PrimitiveObject::Destroy(){
 //
 void PrimitiveObject::Render(aetherClass::ShaderBase* shader){
 	
-	if (m_primitiveObject->_isClick)
-	{
-		
-		m_primitiveObject->_pivot->Render(shader);
-		m_primitiveObject->_primitiveCollider->Render(shader);
-		m_primitiveObject->_primitive->property._color._alpha = 0.3;
-	}
-	else
-	{
-		m_primitiveObject->_primitive->property._color._alpha =1.0;
-	}
-	
 	m_primitiveObject->_primitive->Render(shader);
+	if (m_primitiveObject->_isClick)
+	{	
+		
+		m_primitiveObject->_primitiveCollider->Render(shader);
+		m_primitiveObject->_pivot->Render(shader);
+	}	
 }
 
 //

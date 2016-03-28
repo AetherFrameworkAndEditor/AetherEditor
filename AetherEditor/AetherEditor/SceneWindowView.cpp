@@ -11,6 +11,7 @@
 #include <iostream>
 #include"ModelUtility.h"
 #include"MathUtility.h"
+#include<algorithm>
 
 using namespace aetherClass;
 using namespace aetherFunction;
@@ -26,7 +27,7 @@ SceneWindowView::~SceneWindowView()
 {
 }
 
-//
+//初期化
 bool SceneWindowView::Initialize(){
 	
 	ShaderDesc desc;
@@ -51,52 +52,38 @@ bool SceneWindowView::Initialize(){
 	return true;
 }
 
-//
+//終了
 void SceneWindowView::Finalize(){
 	m_colorShader->Finalize();
 	return;
 }
-
-void SceneWindowView::TransformInitialize(Transform transform){
-	transform._translation = 0;
-	transform._rotation = 0;
-	transform._scale = 0;
-}
-
-void SceneWindowView::UpdateCurrentObject(){
+//トランスフォーム初期化
+void SceneWindowView::TransformInitialize(Transform &transform){
 	CurrentSelectObject *obj = &WorldObjectManager::GetCurrentSelectObject();
+	if (!obj)return;
 	switch (obj->_objectType){
-		case eObjectType::ePrimitive:
-			WorldObjectManager::GetPrimitive()[obj->_number]->GetInfo()->_primitive->property._transform._translation += m_objectTransform._translation;
-			WorldObjectManager::GetPrimitive()[obj->_number]->GetInfo()->_primitive->property._transform._rotation += m_objectTransform._rotation;
-			WorldObjectManager::GetPrimitive()[obj->_number]->GetInfo()->_primitive->property._transform._scale += m_objectTransform._scale;
-
-			WorldObjectManager::GetPrimitive()[obj->_number]->Update();
-			break;
-		case eObjectType::eFBX:
-			WorldObjectManager::GetFbxModel()[obj->_number]->GetInfo()->_fbx->property._transform._translation += m_objectTransform._translation;
-			WorldObjectManager::GetFbxModel()[obj->_number]->GetInfo()->_fbx->property._transform._rotation += m_objectTransform._rotation;
-			WorldObjectManager::GetFbxModel()[obj->_number]->GetInfo()->_fbx->property._transform._scale += m_objectTransform._scale;
-
-			WorldObjectManager::GetFbxModel()[obj->_number]->Update();
-			break;
-		case eObjectType::eSprite:
-			WorldObjectManager::GetSprite()[obj->_number]->GetInfo()->_sprite->property._transform._translation += m_objectTransform._translation;
-			WorldObjectManager::GetSprite()[obj->_number]->GetInfo()->_sprite->property._transform._rotation += m_objectTransform._rotation;
-			WorldObjectManager::GetSprite()[obj->_number]->GetInfo()->_sprite->property._transform._scale += m_objectTransform._scale;
-
-			WorldObjectManager::GetSprite()[obj->_number]->Update();
-			break;
-		case eObjectType::eCamera:
-			//		WorldObjectManager::GetCamera()->Update();
-		case eObjectType::eLight:
-			//		WorldObjectManager::GetLight()->Update();
-			break;
+	case eObjectType::ePrimitive:
+		transform = WorldObjectManager::GetPrimitive().at(obj->_number)->GetInfo()->_primitive->property._transform;
+		break;
+	case eObjectType::eFBX:
+		transform = WorldObjectManager::GetFbxModel().at(obj->_number)->GetInfo()->_fbx->property._transform;
+		break;
+	case eObjectType::eSprite:
+		transform = WorldObjectManager::GetSprite().at(obj->_number)->GetInfo()->_sprite->property._transform;
+		break;
+	case eObjectType::eCamera:
+		//		WorldObjectManager::GetCamera()->Update();
+	case eObjectType::eLight:
+		//		WorldObjectManager::GetLight()->Update();
+		break;
+	default:
+		SecureZeroMemory(&transform, sizeof(Transform));
+		transform._scale = 1;
+		return;
 	}
-
 }
 
-//
+//更新振り分け
 bool SceneWindowView::Updater(){
 	bool result;
 	if (!m_IsPlay){
@@ -108,7 +95,233 @@ bool SceneWindowView::Updater(){
 	if (!result) return false;
 	return true;
 }
+//プレイ中の処理
+bool SceneWindowView::PlayingProcess(){
+	if (GameController::GetKey().IsKeyDown(DIK_F5)){
+		m_IsPlay = false;
+	}
+	return true;
+}
 
+//プレイ中じゃない時の処理
+bool SceneWindowView::NotPlayingProcess(){
+	TransformInitialize(m_objectTransform);
+	static CameraValue value;
+	m_controllCamera = false;
+	m_viewCamera.Render();
+
+	if (m_cursorShowFlg < 0){
+		m_cursorShowFlg = ShowCursor(true);
+	}
+	if (GameController::GetKey().IsKeyDown(DIK_F5)){
+		m_IsPlay = true;
+		return true;
+	}
+
+	//シーンカメラ更新
+	UpdateCamera();
+	UpdateViewObject();
+
+	if (!m_controllCamera){
+		//マウス移動
+		if (GameController::GetMouse().IsLeftButtonDown()){
+			DragCurrentObject();
+		}
+		//オブジェクトセレクト
+		if (GameController::GetMouse().IsLeftButtonTrigger()){
+			RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
+			ray._scaler = 100;
+			CurrentSelectObject currentSelected = SelectObject(ray);
+			WorldObjectManager::SetCurrentSelectObject(currentSelected);
+			if (currentSelected._objectType != eObjectType::eNull){
+				return true;
+			}
+		}
+	}
+
+	//移動対象オブジェクトアップデート(位置更新とか)
+	UpdateCurrentObject();
+	//ゲームカメラ更新
+	value._position = m_gameCamera.property._translation;
+	value._rotation = m_gameCamera.property._rotation;
+	WorldObjectManager::RegisterCameraValue(value);
+	
+//	m_viewCamera.Controller();
+	return true;
+}
+
+//最前面選択するためにシーン上のオブジェクトを配列へ登録
+void SceneWindowView::UpdateViewObject(){
+	m_sceneObjectList.clear();
+	int index = 0;
+
+	Matrix4x4 viewMatrix = m_viewCamera.GetViewMatrix();
+	SceneObject appendObj;
+	
+	//プリミティブ
+	appendObj.type = eObjectType::ePrimitive;
+	for (auto itr : WorldObjectManager::GetPrimitive()){
+		Transform transform = itr->GetInfo()->_primitive->property._transform;
+		Vector3 pos = transform._translation.TransformCoord(viewMatrix);
+		
+		//カメラの裏側にあるやつ	ｚ-
+		if (pos._z < 0)continue;
+		appendObj.distance = (pos._x * pos._x) + (pos._y * pos._y) + (pos._z * pos._z);
+		appendObj.index = index++;
+
+		m_sceneObjectList.push_back(appendObj);
+	}
+
+	index = 0;
+	appendObj.type = eObjectType::eFBX;
+	for (auto itr : WorldObjectManager::GetFbxModel()){
+		Transform transform = itr->GetInfo()->_fbx->property._transform;
+		Vector3 pos = transform._translation.TransformCoord(viewMatrix);
+
+		//カメラの裏側にあるやつ	ｚ-
+		if (pos._z < 0)continue;
+		appendObj.distance = (pos._x * pos._x) + (pos._y * pos._y) + (pos._z * pos._z);
+		appendObj.index = index++;
+
+		m_sceneObjectList.push_back(appendObj);
+	}
+
+	index = 0;
+	appendObj.type = eObjectType::eSprite;
+	for (auto itr : WorldObjectManager::GetSprite()){
+		Transform transform = itr->GetInfo()->_sprite->property._transform;
+
+		appendObj.distance = transform._translation._z;
+		appendObj.index = index++;
+
+		m_sceneObjectList.push_back(appendObj);
+	}
+
+	if (!m_sceneObjectList.size() > 0)return;
+	std::sort(m_sceneObjectList.begin(), m_sceneObjectList.end());
+	auto itr = m_sceneObjectList.begin();
+
+}
+
+//オブジェクトの選択
+CurrentSelectObject SceneWindowView::SelectObject(RayVector ray){
+
+	int index = 0;
+	bool result = false;
+	CurrentSelectObject currentSelected;
+
+	for (auto itr : m_sceneObjectList){
+		switch (itr.type)
+		{
+		case eObjectType::ePrimitive:
+			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
+			if (result){
+				WorldObjectManager::GetPrimitive().at(itr.index)->GetInfo()->_isClick = true;
+			}
+			break;
+		case eObjectType::eFBX:
+			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetFbxModel().at(itr.index)->GetCollider(), ray);
+			if (result){
+				WorldObjectManager::GetFbxModel().at(itr.index)->GetInfo()->_isClick = true;
+			}
+			break;
+		case eObjectType::eSprite:
+			result = HitSprite(WorldObjectManager::GetSprite().at(itr.index)->GetInfo()->_sprite.get());
+			if (result){
+				WorldObjectManager::GetSprite().at(itr.index)->GetInfo()->_isClick = true;
+			}
+			break;
+		case eObjectType::eLight:
+			//			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
+			break;
+		case eObjectType::eCamera:
+			//			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
+			break;
+		default:
+			break;
+		}
+		if (result){
+			currentSelected._number = itr.index;
+			currentSelected._objectType = itr.type;
+			return currentSelected;
+		}
+	}//forLoop
+
+	currentSelected._objectType = eObjectType::eNull;
+	index = 0;
+	return currentSelected;
+}
+
+//選択中オブジェクトをマウスでドラッグする
+void SceneWindowView::DragCurrentObject(){
+	Transform objTransform;
+
+	CurrentSelectObject *obj = &WorldObjectManager::GetCurrentSelectObject();
+	if (!obj)return;
+	switch (obj->_objectType){
+	case eObjectType::ePrimitive:
+		objTransform = WorldObjectManager::GetPrimitive().at(obj->_number)->GetInfo()->_primitive->property._transform;
+		break;
+	case eObjectType::eFBX:
+		objTransform = WorldObjectManager::GetFbxModel().at(obj->_number)->GetInfo()->_fbx->property._transform;
+		break;
+	case eObjectType::eSprite:
+		objTransform = WorldObjectManager::GetSprite().at(obj->_number)->GetInfo()->_sprite->property._transform;
+		break;
+	case eObjectType::eCamera:
+		//		WorldObjectManager::GetCamera()->Update();
+	case eObjectType::eLight:
+		//		WorldObjectManager::GetLight()->Update();
+		break;
+	default:
+		return;
+	}
+	
+
+	Vector2 mousePos = GameController::GetMouse().GetMousePosition();
+	Vector2 screen = aetherFunction::GetWindowSize(m_directX.GetWindowHandle(L"Scene"));
+	mousePos._x = (mousePos._x / (screen._x - GetSystemMetrics(SM_CXDLGFRAME) * 2))* screen._x;
+	mousePos._y = (mousePos._y / (screen._y - GetSystemMetrics(SM_CYCAPTION) - GetSystemMetrics(SM_CYMENUSIZE) - GetSystemMetrics(SM_CXDLGFRAME)))* screen._y;
+
+	if (obj->_objectType != eObjectType::eSprite){
+		Matrix4x4 roteMat, viewMat;
+		Vector3 rote = m_viewCamera.property._rotation;
+		Vector3 cameraTrans = m_viewCamera.property._translation;
+
+		rote *= kAetherRadian;
+		roteMat.PitchYawRoll(rote);
+		viewMat = m_viewCamera.GetViewMatrix();
+
+
+		float length = objTransform._translation.TransformCoord(viewMat)._z;
+
+		//	printf("%.2f,%.2f,%.2f\n", vec1._x, vec1._y, vec1._z);
+
+		mousePos._x = ((2.0f*mousePos._x) / screen._x) - 1.0f;
+		mousePos._y = (((2.0f*mousePos._y) / screen._y) - 1.0f)*-1.0f;
+
+		mousePos._x = (length / 2)* mousePos._x;
+		mousePos._y = (length / 2)* mousePos._y;
+
+
+
+		Vector3 translation(mousePos._x, mousePos._y, 0);
+		translation = translation.TransformCoordNormal(roteMat);
+		Vector3 cameraZoffset(0, 0, length);
+		cameraZoffset = cameraZoffset.TransformCoordNormal(roteMat);
+		cameraTrans += cameraZoffset;
+		objTransform._translation = translation + cameraTrans;
+
+		m_objectTransform = objTransform;
+	}
+	else{	//スプライトの時
+		Vector3 translate = Vector3(mousePos._x, mousePos._y, objTransform._translation._z);
+		objTransform._translation = translate;
+		m_objectTransform = objTransform;
+	}
+}
+
+//マウスカーソルのロック
 void SceneWindowView::LockMouseCursor(HWND hWnd){
 	RECT screen;
 	GetWindowRect(hWnd, &screen);
@@ -116,7 +329,7 @@ void SceneWindowView::LockMouseCursor(HWND hWnd){
 	POINT mousePos(screenCenter);
 
 	SetCursorPos(screenCenter.x, screenCenter.y);
-	
+
 	if (m_cursorShowFlg >= 0){
 		m_cursorShowFlg = ShowCursor(false);
 	}
@@ -124,6 +337,7 @@ void SceneWindowView::LockMouseCursor(HWND hWnd){
 	return;
 }
 
+//カメラの操作
 void SceneWindowView::UpdateCamera(){
 	if (GameController::GetMouse().IsRightButtonDown()){
 		Vector2 vec = GameController::GetMouse().GetMouseMovement();
@@ -136,13 +350,14 @@ void SceneWindowView::UpdateCamera(){
 
 		m_controllCamera = true;
 		return;
-	}else if (GameController::GetMouse().IsWheelDown()){
+	}
+	else if (GameController::GetMouse().IsWheelDown()){
 		Vector2 vec = GameController::GetMouse().GetMouseMovement();
 		LockMouseCursor(m_directX.GetWindowHandle(L"Scene"));
 		if (!vec._x && !vec._y)return;
 
 		vec /= kCameraTransVal;
-	
+
 
 		Vector3 translation(vec._x, vec._y, 0);
 		Matrix4x4 roteMat;
@@ -181,114 +396,68 @@ void SceneWindowView::UpdateCamera(){
 
 }
 
-
-bool SceneWindowView::NotPlayingProcess(){
-
-	static CameraValue value;
-	m_controllCamera = false;
-
-	if (m_cursorShowFlg < 0){
-		m_cursorShowFlg = ShowCursor(true);
+//選択中オブジェクトの更新
+void SceneWindowView::UpdateCurrentObject(){
+	CurrentSelectObject *obj = &WorldObjectManager::GetCurrentSelectObject();
+	if (!obj)return;
+	switch (obj->_objectType){
+	case eObjectType::ePrimitive:
+		WorldObjectManager::GetPrimitive()[obj->_number]->GetInfo()->_primitive->property._transform = m_objectTransform;
+		WorldObjectManager::GetPrimitive()[obj->_number]->Update();
+		break;
+	case eObjectType::eFBX:
+		WorldObjectManager::GetFbxModel()[obj->_number]->GetInfo()->_fbx->property._transform = m_objectTransform;
+		WorldObjectManager::GetFbxModel()[obj->_number]->Update();
+		break;
+	case eObjectType::eSprite:
+		WorldObjectManager::GetSprite()[obj->_number]->GetInfo()->_sprite->property._transform = m_objectTransform;
+		WorldObjectManager::GetSprite()[obj->_number]->Update();
+		break;
+	case eObjectType::eCamera:
+		//		WorldObjectManager::GetCamera()->Update();
+	case eObjectType::eLight:
+		//		WorldObjectManager::GetLight()->Update();
+		break;
 	}
-	if (GameController::GetKey().IsKeyDown(DIK_F5)){
-		m_IsPlay = true;
-	}
-
-	
-	UpdateCamera();
-	if (!m_controllCamera){
-		/*if (GameController::GetMouse().IsLeftButtonDown()){
-			Vector2 mouse = GameController::GetMouse().GetMousePosition();
-		}*/
-		//オブジェクトセレクト
-		if (GameController::GetMouse().IsLeftButtonTrigger()){
-			RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
-			ray._scaler = 100;
-			CurrentSelectObject currentSelected = SelectObject(ray);
-			WorldObjectManager::SetCurrentSelectObject(currentSelected);
-		}
-	}
-
-	//移動対象オブジェクトアップデート(位置更新とか)
-	UpdateCurrentObject();
-	
-	//カメラ更新
-	value._position = m_gameCamera.property._translation;
-	value._rotation = m_gameCamera.property._rotation;
-	WorldObjectManager::RegisterCameraValue(value);
-	
-//	m_viewCamera.Controller();
-	return true;
-}
-
-CurrentSelectObject SceneWindowView::SelectObject(RayVector ray){
-	int index = 0;
-	CurrentSelectObject currentSelected;
-
-	currentSelected._objectType = eObjectType::ePrimitive;
-	for (auto itr : WorldObjectManager::GetPrimitive()){
-		if (aetherFunction::RaySphereIntersect(*itr->GetCollider(), ray)){
-			itr->ChangePivotState();
-			currentSelected._number = index;
-			return currentSelected;
-		}
-		index++;
-	}
-	
-	index = 0;
-	currentSelected._objectType = eObjectType::eFBX;
-	for (auto itr : WorldObjectManager::GetFbxModel()){
-		itr->Update();
-		if (aetherFunction::RaySphereIntersect(*itr->GetCollider(), ray)){
-			itr->ChangePivotState();
-			currentSelected._number = index;
-			return currentSelected;
-		}
-		index++;
-	}
-	
-	currentSelected._objectType = eObjectType::eSprite;
-	index = 0;
-	for (auto itr : WorldObjectManager::GetSprite()){
-		//currentSelected._number = index;
-		//WorldObjectManager::SetCurrentSelectObject(currentSelected);
-		//return;
-	}
-//	index++;
-	currentSelected._objectType = eObjectType::eNull;
-	index = 0;
-	return currentSelected;
 
 }
 
-bool SceneWindowView::PlayingProcess(){
-	if (GameController::GetKey().IsKeyDown(DIK_F5)){
-		m_IsPlay = false;
-	}
-	return true;
-}
 
 
+
+//以下描画
 void SceneWindowView::Render(){
 	if (m_IsPlay)return;
-	m_viewCamera.Render();
-	
-	for (auto itr : WorldObjectManager::GetPrimitive()){
-		itr->SetCamera(&m_viewCamera);
-		itr->Render(m_colorShader.get());
+	auto inverseVec = m_sceneObjectList;
+	std::reverse(inverseVec.begin(),inverseVec.end());
+	for (auto itr : inverseVec){
+		switch (itr.type)
+		{
+		case eObjectType::ePrimitive:
+			WorldObjectManager::GetPrimitive().at(itr.index)->SetCamera(&m_viewCamera);
+			WorldObjectManager::GetPrimitive().at(itr.index)->Render(m_colorShader.get());
+			break;
+		case eObjectType::eFBX:
+			WorldObjectManager::GetFbxModel().at(itr.index)->SetCamera(&m_viewCamera);
+			WorldObjectManager::GetFbxModel().at(itr.index)->Render(m_colorShader.get());
+			break;
+		case eObjectType::eLight:
+			break;
+		case eObjectType::eCamera:
+			break;
+		default:
+			break;
+		}
 	}
-	for (auto itr : WorldObjectManager::GetFbxModel()){
-		itr->SetCamera(&m_viewCamera);
-		itr->Render(m_colorShader.get());
-	}
-
-
 	return;
 }
 
 void SceneWindowView::UIRender(){
 	if (m_IsPlay)return;
 	for (auto itr : WorldObjectManager::GetSprite()){
+//		Color col = itr->GetInfo()->_sprite->property._color;
+//		printf("%.2f,%.2f,%.2f,%.2f\n", col._red, col._green, col._blue, col._alpha);
+
 		itr->Render(m_colorShader.get());
 	}
 
@@ -298,4 +467,19 @@ void SceneWindowView::UIRender(){
 
 ViewCamera& SceneWindowView::GetSceneWindowCamera(){
 	return m_viewCamera;
+}
+
+bool SceneWindowView::HitSprite(SpriteBase* sprite){
+	Vector3 position = sprite->property._transform._translation;
+	Vector3 size = sprite->property._transform._scale;
+	Vector2 mousePos = GameController::GetMouse().GetMousePosition();
+	Vector2 screen = aetherFunction::GetWindowSize(m_directX.GetWindowHandle(L"Scene"));
+	mousePos._x = (mousePos._x / (screen._x - GetSystemMetrics(SM_CXDLGFRAME) * 2))* screen._x;
+	mousePos._y = (mousePos._y / (screen._y - GetSystemMetrics(SM_CYCAPTION) - GetSystemMetrics(SM_CYMENUSIZE) - GetSystemMetrics(SM_CXDLGFRAME)))* screen._y;
+
+	if (mousePos._x > position._x && mousePos._y > position._y &&
+		mousePos._x < position._x + size._x && mousePos._y < position._y + size._y){
+		return true;
+	}
+	return false;
 }

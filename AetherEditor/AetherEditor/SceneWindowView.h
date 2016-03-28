@@ -34,10 +34,13 @@ private:
 	bool NotPlayingProcess();
 
 	void UpdateCamera();
-	void TransformInitialize(aetherClass::Transform transform);
+	void TransformInitialize(aetherClass::Transform &transform);
 	void SceneWindowView::LockMouseCursor(HWND hWnd);
 	void UpdateCurrentObject();
 	CurrentSelectObject SelectObject(aetherClass::RayVector);
+	void UpdateViewObject();
+	bool HitSprite(aetherClass::SpriteBase*);
+	void DragCurrentObject();
 private:
 	static aetherClass::ViewCamera m_viewCamera;
 	aetherClass::ViewCamera m_gameCamera;
@@ -47,7 +50,19 @@ private:
 	bool m_IsPlay;
 	bool m_controllCamera;
 	int m_cursorShowFlg;
+
 	aetherClass::Transform m_objectTransform;
+
+	struct SceneObject{
+		float distance;
+		eObjectType type;
+		int index;
+
+		SceneObject(){ distance = 0, type = eObjectType::eNull, index = 0; }
+		bool operator <(SceneObject input){ return this->distance < input.distance; }
+		bool operator >(SceneObject input){ return this->distance > input.distance; }
+	};
+	std::vector<SceneObject>m_sceneObjectList;
 };
 
 #endif
