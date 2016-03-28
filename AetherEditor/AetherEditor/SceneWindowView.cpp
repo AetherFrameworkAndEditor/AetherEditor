@@ -150,7 +150,7 @@ bool SceneWindowView::NotPlayingProcess(){
 			ray._scaler = 100;
 			CurrentSelectObject currentSelected = SelectObject(ray);
 			WorldObjectManager::SetCurrentSelectObject(currentSelected);
-			if (currentSelected._objectType == eObjectType::eNull){
+			if (currentSelected._objectType != eObjectType::eNull){
 				return true;
 			}
 		}
@@ -260,38 +260,30 @@ CurrentSelectObject SceneWindowView::SelectObject(RayVector ray){
 			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
 			if (result){
 				WorldObjectManager::GetPrimitive().at(itr.index)->GetInfo()->_isClick = true;
-				m_gamelight.GetInfo()->_isClick = false;
-				m_gameCamera.GetInfo()._isClick = false;
 			}
 			break;
 		case eObjectType::eFBX:
 			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetFbxModel().at(itr.index)->GetCollider(), ray);
 			if (result){
 				WorldObjectManager::GetFbxModel().at(itr.index)->GetInfo()->_isClick = true;
-				m_gamelight.GetInfo()->_isClick = false;
-				m_gameCamera.GetInfo()._isClick = false;
 			}
 			break;
 		case eObjectType::eSprite:
 			result = HitSprite(WorldObjectManager::GetSprite().at(itr.index)->GetInfo()->_sprite.get());
 			if (result){
 				WorldObjectManager::GetSprite().at(itr.index)->GetInfo()->_isClick = true;
-				m_gamelight.GetInfo()->_isClick = false;
-				m_gameCamera.GetInfo()._isClick = false;
 			}
 			break;
 		case eObjectType::eLight:
 			result = aetherFunction::RaySphereIntersect(*m_gamelight.GetCollider(), ray);
 			if (result){
-				m_gamelight.GetInfo()->_isClick = true;
-				m_gameCamera.GetInfo()._isClick = false;
+				WorldObjectManager::GetLightValue()._isClick = true;
 			}
 			break;
 		case eObjectType::eCamera:
 			result = aetherFunction::RaySphereIntersect(*m_gameCamera.GetInfo()._collider.get(), ray);
 			if (result){
-				m_gameCamera.GetInfo()._isClick = true;
-				m_gamelight.GetInfo()->_isClick = false;
+				WorldObjectManager::GetCameraValue()._isClick = true;
 			}
 			break;
 		default:
@@ -566,10 +558,10 @@ void SceneWindowView::RegistWorldObjectValue(){
 
 	cameraValue._position = m_gameCamera.GetTranslation();
 	cameraValue._rotation = m_gameCamera.GetRotation();
-	cameraValue._isClick = m_gameCamera.GetInfo()._isClick;
+	cameraValue._isClick = WorldObjectManager::GetCameraValue()._isClick;
 
 	lightValue._position = m_gamelight.GetInfo()->_light.property._translation;
-	lightValue._isClick = m_gamelight.GetInfo()->_isClick;
+	lightValue._isClick = WorldObjectManager::GetLightValue()._isClick;
 
 	WorldObjectManager::RegisterLightValue(lightValue);
 	WorldObjectManager::RegisterCameraValue(cameraValue);

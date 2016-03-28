@@ -5,7 +5,7 @@
 #define _GAMEWINDOWVIEW_H
 #include <GameScene.h>
 #include<memory>
-#include"PixelShader.h"
+#include"LightShader.h"
 class GameWindowView :
 	public aetherClass::GameScene
 {
@@ -22,6 +22,7 @@ private:
 	std::unique_ptr<aetherClass::ShaderBase>m_colorShader;
 	bool m_IsPlay;
 	std::shared_ptr<aetherClass::ViewCamera>m_gameCamera;
+	std::shared_ptr<aetherClass::Light>m_gameLight;
 };
 
 #endif

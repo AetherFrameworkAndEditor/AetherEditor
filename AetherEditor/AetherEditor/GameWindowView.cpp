@@ -17,15 +17,16 @@ GameWindowView::~GameWindowView()
 bool GameWindowView::Initialize(){
 	ShaderDesc desc;
 	desc._pixel._entryName = "ps_main";
-	desc._pixel._srcFile = L"Shader/ColorTexture.hlsl";
+	desc._pixel._srcFile = L"Shader/DiffuseLightPS.hlsl";
 	desc._vertex._entryName = "vs_main";
-	desc._vertex._srcFile = L"Shader/VertexShaderBase.hlsl";
+	desc._vertex._srcFile = L"Shader/DiffuseLightVS.hlsl";
 
-	m_colorShader = std::make_unique<PixelShader>();
+	m_colorShader = std::make_unique<LightShader>();
 	m_colorShader->Initialize(desc, eVertex | ePixel);
 	m_IsPlay = false;
 
 	m_gameCamera = std::make_shared<ViewCamera>();
+	m_gameLight = std::make_shared<Light>();
 	return true;
 }
 
@@ -75,6 +76,9 @@ bool GameWindowView::Updater(){
 			SetWindowText(hWnd,L"Game (Play)");
 			m_gameCamera->property._translation = WorldObjectManager::GetCameraValue()._position;
 			m_gameCamera->property._rotation = WorldObjectManager::GetCameraValue()._rotation;
+			m_gameLight->property._translation = WorldObjectManager::GetLightValue()._position;
+
+			static_cast<LightShader*>(m_colorShader.get())->SetLight(m_gameLight.get());
 		}
 	}
 	else{

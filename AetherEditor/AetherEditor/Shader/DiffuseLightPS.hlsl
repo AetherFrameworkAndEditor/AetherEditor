@@ -18,7 +18,7 @@ float4 ps_main(PixelInputType input) : SV_Target
 {
 	float4 output;
 
-	output = saturate(input.col2) * txDiffuse.Sample(samLinear, input.tex);
+	output = saturate(input.col2) * Color;
 
 	return output;
 }
