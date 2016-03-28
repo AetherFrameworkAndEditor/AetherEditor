@@ -200,6 +200,10 @@ void SceneWindowView::UpdateViewObject(){
 		m_sceneObjectList.push_back(appendObj);
 	}
 
+	appendObj.type = eObjectType::eCamera;
+	appendObj.distance = 0.0f;
+	m_sceneObjectList.push_back(appendObj);
+
 	if (!m_sceneObjectList.size() > 0)return;
 	std::sort(m_sceneObjectList.begin(), m_sceneObjectList.end());
 	auto itr = m_sceneObjectList.begin();
@@ -238,7 +242,10 @@ CurrentSelectObject SceneWindowView::SelectObject(RayVector ray){
 			//			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
 			break;
 		case eObjectType::eCamera:
-			//			result = aetherFunction::RaySphereIntersect(*WorldObjectManager::GetPrimitive().at(itr.index)->GetCollider(), ray);
+				result = aetherFunction::RaySphereIntersect(*m_gameCamera.GetInfo()._collider.get(), ray);
+				if (result){
+					m_gameCamera.GetInfo()._isClick = true;
+				}
 			break;
 		default:
 			break;

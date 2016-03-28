@@ -2,7 +2,7 @@
 #define _CAMERAOBJECT_H
 #include <memory>
 #include <Cube.h>
-#include <Cylinder.h>
+#include "Cone.h"
 #include <Sphere.h>
 #include "Pivot.h"
 class CameraObject
@@ -18,7 +18,7 @@ private:
 		}
 
 		std::unique_ptr<aetherClass::Cube> _base;
-		std::unique_ptr<aetherClass::Cylinder> _lense;
+		std::unique_ptr<Cone> _lense;
 		std::unique_ptr<aetherClass::Sphere> _collider;
 		std::unique_ptr<Pivot> _pivot;
 		bool _isClick;
