@@ -24,7 +24,6 @@ bool WorldReader::Load(std::string filePath){
 	std::ifstream reader;
 	reader.open(filePath,std::ios::in);
 	
-	// ‹ó”’‚ð”ò‚Î‚³‚È‚¢‚æ‚¤‚É‚·‚é
 	reader.unsetf(std::ios::skipws);
 	while (!reader.eof())
 	{

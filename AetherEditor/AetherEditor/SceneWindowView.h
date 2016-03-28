@@ -9,9 +9,9 @@
 #include "Pivot.h"
 #include "PrimitiveObject.h"
 #include"Line.h"
-#include"Light.h"
+#include"LightObject.h"
+#include"CameraObject.h"
 #include"WorldObjectManager.h"
-#include "CameraObject.h"
 class SceneWindowView :
 	public aetherClass::GameScene
 {
@@ -42,16 +42,19 @@ private:
 	void UpdateViewObject();
 	bool HitSprite(aetherClass::SpriteBase*);
 	void DragCurrentObject();
+	void GetWorldObjectValue();
+	void RegistWorldObjectValue();
+
 private:
 	static aetherClass::ViewCamera m_viewCamera;
 	CameraObject m_gameCamera;
-	aetherClass::Light m_gamelight;
+	LightObject m_gamelight;
 	aetherClass::DirectXEntity m_directX;
 
 	bool m_IsPlay;
 	bool m_controllCamera;
 	int m_cursorShowFlg;
-	
+
 	aetherClass::Transform m_objectTransform;
 
 	struct SceneObject{

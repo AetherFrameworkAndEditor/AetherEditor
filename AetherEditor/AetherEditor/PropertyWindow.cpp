@@ -377,7 +377,7 @@ void PropertyWindow::CheckWorldObject(){
 		SetWindowText(m_inputMaterialEdit, L"00");
 		auto light = WorldObjectManager::GetLightValue();
 		
-		float positionArray[kMaxSize] = { light._x, light._y, light._z };
+		float positionArray[kMaxSize] = { light._position._x, light._position._y, light._position._z };
 		for (int i = 0; i < 3; ++i)
 		{
 			std::wstring position;
@@ -490,8 +490,11 @@ void PropertyWindow::SetPosition(){
 		WorldObjectManager::RegisterCameraValue(camera);
 		break;
 
-	case eObjectType::eLight:
-		WorldObjectManager::RegisterLightValue(Vector3(positionArrray[0], positionArrray[1], positionArrray[2]));
+	case eObjectType::eLight:{
+		auto lightValue = WorldObjectManager::GetLightValue();
+		lightValue._position = Vector3(positionArrray[0], positionArrray[1], positionArrray[2]);
+		WorldObjectManager::RegisterLightValue(lightValue);
+	}
 		break;
 	default:
 		break;

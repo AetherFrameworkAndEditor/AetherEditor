@@ -8,12 +8,22 @@
 
 struct CameraValue{
 	CameraValue(){
-		_position = NULL;
-		_rotation = NULL;
+		_position = 0;
+		_rotation = 0;
 		_isClick = false;
 	}
 	aetherClass::Vector3 _position;
 	aetherClass::Vector3 _rotation;
+	bool _isClick;
+};
+
+struct LightValue{
+	LightValue(){
+		_position = 0;
+		_isClick = false;
+	}
+
+	aetherClass::Vector3 _position;
 	bool _isClick;
 };
 

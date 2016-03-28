@@ -34,13 +34,13 @@ public:
 	static void AddSprite(SpriteObject*);
 	static void AddFbxModel(FbxModelObject*);
 	static void RegisterCameraValue(CameraValue);
-	static void RegisterLightValue(aetherClass::Vector3);
+	static void RegisterLightValue(LightValue);
 
 	static std::vector<PrimitiveObject*>& GetPrimitive();
 	static std::vector<SpriteObject*>& GetSprite();
 	static std::vector<FbxModelObject*>& GetFbxModel();
 	static CameraValue& GetCameraValue();
-	static aetherClass::Vector3& GetLightValue();
+	static LightValue& GetLightValue();
 
 	static bool Import(std::string);
 	static bool Export(std::wstring);
@@ -64,7 +64,7 @@ private:
 	static std::vector<aetherClass::Material*> m_material;
 	static std::vector<aetherClass::Texture*> m_texture;
 
-	static aetherClass::Vector3 m_lightValue;
+	static LightValue m_lightValue;
 	static CameraValue m_cameraValue;
 
 	static std::string m_modelType;

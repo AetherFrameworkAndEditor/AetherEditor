@@ -74,7 +74,6 @@ bool GameWindowView::Updater(){
 
 			SetWindowText(hWnd,L"Game (Play)");
 			m_gameCamera->property._translation = WorldObjectManager::GetCameraValue()._position;
-			m_gameCamera->property._translation._z = -10;
 			m_gameCamera->property._rotation = WorldObjectManager::GetCameraValue()._rotation;
 		}
 	}

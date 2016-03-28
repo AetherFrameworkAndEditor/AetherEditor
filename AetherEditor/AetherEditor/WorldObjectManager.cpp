@@ -24,7 +24,7 @@ std::vector<FbxModelObject*>  WorldObjectManager::m_fbx;
 std::vector<Material*> WorldObjectManager::m_material;
 std::vector<Texture*> WorldObjectManager::m_texture;
 
-Vector3 WorldObjectManager::m_lightValue = Vector3(NULL,NULL,NULL);
+LightValue WorldObjectManager::m_lightValue;
 
 CameraValue WorldObjectManager::m_cameraValue;
 
@@ -114,7 +114,10 @@ bool WorldObjectManager::Import(std::string path){
 	RegisterCameraValue(reader->GetInputWorldInfo()._camera);
 
 	// ライト
-	RegisterLightValue(reader->GetInputWorldInfo()._lightPosition);
+	LightValue readLightValue;
+	readLightValue._position = reader->GetInputWorldInfo()._lightPosition;
+	readLightValue._isClick = false;
+	RegisterLightValue(readLightValue);
 
 	for (auto object : reader->GetInputWorldInfo()._object)
 	{
@@ -201,7 +204,7 @@ bool WorldObjectManager::Export(std::wstring fileName){
 
 	// Lightタグの設定と書き出し
 	exportObject << "[Light]" << std::endl;
-	writer.WriteLight(exportObject, m_lightValue);
+	writer.WriteLight(exportObject, m_lightValue._position);
 
 	exportObject.close();
 	return true;
@@ -222,9 +225,10 @@ void WorldObjectManager::Reset(){
 	//
 	m_cameraValue._position = NULL;
 	m_cameraValue._rotation = NULL;
-
+	m_cameraValue._isClick = NULL;
 	//
-	m_lightValue = NULL;
+	m_lightValue._position = NULL;
+	m_lightValue._isClick = NULL;
 
 	//
 	m_currnetSelectObject._objectType = eObjectType::eNull;
@@ -256,7 +260,7 @@ void WorldObjectManager::RegisterCameraValue(CameraValue camera){
 }
 
 //
-void WorldObjectManager::RegisterLightValue(Vector3 lightValue){
+void WorldObjectManager::RegisterLightValue(LightValue lightValue){
 	m_lightValue = lightValue;
 
 	return;
@@ -284,7 +288,7 @@ CameraValue& WorldObjectManager::GetCameraValue(){
 
 
 //
-Vector3& WorldObjectManager::GetLightValue(){
+LightValue& WorldObjectManager::GetLightValue(){
 	return m_lightValue;
 }
 
@@ -389,9 +393,11 @@ void WorldObjectManager::SelectOff(){
 	{
 	case eObjectType::eCamera:
 		//カメラのフラグオフ
+		m_cameraValue._isClick = false;
 		break;
 	case eObjectType::eLight:
 		// ライトのフラグをオフ
+		m_lightValue._isClick = false;
 		break;
 
 	case eObjectType::eFBX:

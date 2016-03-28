@@ -45,7 +45,7 @@ bool CameraObject::Initialize(aetherClass::ViewCamera* camera){
 		return false;
 	}
 	m_objectInfo._collider->Initialize();
-	m_objectInfo._collider->property._color = Color(1.0f, 1.0f, 1.0f, 0.3f);
+	m_objectInfo._collider->property._color = Color(1.0f, 0.0f, 0.0f, 0.4f);
 	m_objectInfo._collider->property._transform._scale = 1.5f;
 	m_objectInfo._collider->SetCamera(camera);
 
