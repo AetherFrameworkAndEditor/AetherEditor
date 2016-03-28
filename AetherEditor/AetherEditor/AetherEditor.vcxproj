@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="FbxModelObject.cpp" />
     <ClCompile Include="GameWindowView.cpp" />
@@ -101,6 +102,7 @@
     <ClCompile Include="WorldWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraObject.h" />
     <ClInclude Include="FbxModelObject.h" />
     <ClInclude Include="Pivot.h" />
     <ClInclude Include="Pivot2D.h" />

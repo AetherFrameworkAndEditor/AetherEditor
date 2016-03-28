@@ -49,6 +49,7 @@ bool SceneWindowView::Initialize(){
 	m_objectTransform._rotation = 0;
 	m_objectTransform._scale= 0;
 	m_cursorShowFlg = 0;
+
 	return true;
 }
 
