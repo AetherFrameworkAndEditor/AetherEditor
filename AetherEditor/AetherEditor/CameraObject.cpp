@@ -34,7 +34,6 @@ bool CameraObject::Initialize(aetherClass::ViewCamera* camera){
 	m_objectInfo._lense->Initialize();
 	m_objectInfo._lense->property._color = Color(0.0f, 1.0f, 1.0f, 1.0f);
 	m_objectInfo._lense->property._transform._scale = 0.5f;
-	m_objectInfo._lense->property._transform._rotation._x = -90;
 	m_objectInfo._lense->SetCamera(camera);
 	
 
@@ -76,8 +75,15 @@ void CameraObject::Render(aetherClass::ShaderBase* shader){
 //
 void CameraObject::Update(){
 	auto translation = m_objectInfo._base->property._transform._translation;
-	
-	m_objectInfo._lense->property._transform._translation = translation+Vector3(0,0,1.5f);
+	auto rotation = m_objectInfo._base->property._transform._rotation;
+	Matrix4x4 roteMat;
+
+	m_objectInfo._lense->property._transform._rotation = rotation + Vector3(-90.0f, 0, 0);
+	roteMat.PitchYawRoll(rotation*kAetherRadian);
+	Vector3 position(0, 0, 1.5f);
+	position = position.TransformCoordNormal(roteMat);
+
+	m_objectInfo._lense->property._transform._translation = translation + position;
 	m_objectInfo._collider->property._transform._translation = translation;
 	m_objectInfo._pivot->MoveDirection(translation);
 	return;
@@ -86,6 +92,9 @@ void CameraObject::Update(){
 //
 void CameraObject::SetTranslation(aetherClass::Vector3 translation){
 	m_objectInfo._base->property._transform._translation = translation;
+}
+void CameraObject::SetRotation(aetherClass::Vector3 rotation){
+	m_objectInfo._base->property._transform._rotation = rotation;
 }
 
 //

@@ -32,7 +32,7 @@ bool SceneWindowView::Initialize(){
 	
 	ShaderDesc desc;
 	desc._pixel._entryName = "ps_main";
-	desc._pixel._srcFile = L"Shader/Transparent.hlsl";
+	desc._pixel._srcFile = L"Shader/BasicColor.hlsl";
 	desc._vertex._entryName = "vs_main";
 	desc._vertex._srcFile = L"Shader/VertexShaderBase.hlsl";
 
@@ -84,11 +84,11 @@ void SceneWindowView::TransformInitialize(Transform &transform){
 		transform = WorldObjectManager::GetSprite().at(obj->_number)->GetInfo()->_sprite->property._transform;
 		break;
 	case eObjectType::eCamera:
-		transform._translation = m_gameCamera.GetTranslation();
-		transform._rotation = m_gameCamera.GetRotation();
+		transform._translation = WorldObjectManager::GetCameraValue()._position;
+		transform._rotation = WorldObjectManager::GetCameraValue()._rotation;
 		break;
 	case eObjectType::eLight:
-		transform._translation = m_gamelight.GetInfo()->_light.property._translation;
+		transform._translation = WorldObjectManager::GetLightValue()._position;
 		break;
 	default:
 		SecureZeroMemory(&transform, sizeof(Transform));
@@ -139,13 +139,14 @@ bool SceneWindowView::NotPlayingProcess(){
 	UpdateViewObject();
 
 	if (!m_controllCamera){
+		//画面外じゃないことを判定
+		if (InnerWindowMousePos())return true;
 		//マウス移動
 		if (GameController::GetMouse().IsLeftButtonDown()){
 			DragCurrentObject();
 		}
 		//オブジェクトセレクト
 		if (GameController::GetMouse().IsLeftButtonTrigger()){
-			//画面外
 			RayVector ray = GameController::GetMouse().Intersection(m_viewCamera);
 			ray._scaler = 100;
 			CurrentSelectObject currentSelected = SelectObject(ray);
@@ -318,11 +319,11 @@ void SceneWindowView::DragCurrentObject(){
 		objTransform = WorldObjectManager::GetSprite().at(obj->_number)->GetInfo()->_sprite->property._transform;
 		break;
 	case eObjectType::eCamera:
-		objTransform._translation = m_gameCamera.GetTranslation();
-		objTransform._rotation = m_gameCamera.GetRotation();
+		objTransform._translation = WorldObjectManager::GetCameraValue()._position;
+		objTransform._rotation = WorldObjectManager::GetCameraValue()._rotation;
 		break;
 	case eObjectType::eLight:
-		objTransform._translation = m_gamelight.GetInfo()->_light.property._translation;
+		objTransform._translation = WorldObjectManager::GetLightValue()._position;
 		break;
 	default:
 		return;
@@ -465,13 +466,11 @@ void SceneWindowView::UpdateCurrentObject(){
 		WorldObjectManager::GetSprite()[obj->_number]->Update();
 		break;
 	case eObjectType::eCamera:
-		m_gameCamera.SetTranslation(m_objectTransform._translation);
-		//m_gameCamera.SetTranslation(m_objectTransform._translation);
-		m_gameCamera.Update();
+		WorldObjectManager::GetCameraValue()._position = m_objectTransform._translation;
+		WorldObjectManager::GetCameraValue()._rotation = m_objectTransform._rotation;
 		break;
 	case eObjectType::eLight:
-		m_gamelight.GetInfo()->_light.property._translation = m_objectTransform._translation;
-		m_gamelight.Update();
+		WorldObjectManager::GetLightValue()._position = m_objectTransform._translation;
 		break;
 	}
 
@@ -539,30 +538,44 @@ bool SceneWindowView::HitSprite(SpriteBase* sprite){
 	return false;
 }
 
+//データの取得　更新
 void SceneWindowView::GetWorldObjectValue(){
 	auto cameraValue = WorldObjectManager::GetCameraValue();
 	auto lightValue = WorldObjectManager::GetLightValue();
 
 	m_gameCamera.SetTranslation(cameraValue._position);
-//	m_gameCamera.property._rotation = cameraValue._rotation;
+	m_gameCamera.SetRotation(cameraValue._rotation);
 	m_gameCamera.GetInfo()._isClick = cameraValue._isClick;
 
 	m_gamelight.GetInfo()->_light.property._translation = lightValue._position;
 	m_gamelight.GetInfo()->_isClick = lightValue._isClick;
 
+	m_gameCamera.Update();
+	m_gamelight.Update();
 }
 
+//カメラ等の登録
 void SceneWindowView::RegistWorldObjectValue(){
-	CameraValue cameraValue;
-	LightValue lightValue;
+	//CameraValue cameraValue;
+	//LightValue lightValue;
 
-	cameraValue._position = m_gameCamera.GetTranslation();
-	cameraValue._rotation = m_gameCamera.GetRotation();
-	cameraValue._isClick = WorldObjectManager::GetCameraValue()._isClick;
+	//cameraValue._position = m_gameCamera.GetTranslation();
+	//cameraValue._rotation = m_gameCamera.GetRotation();
+	//cameraValue._isClick = WorldObjectManager::GetCameraValue()._isClick;
 
-	lightValue._position = m_gamelight.GetInfo()->_light.property._translation;
-	lightValue._isClick = WorldObjectManager::GetLightValue()._isClick;
+	//lightValue._position = m_gamelight.GetInfo()->_light.property._translation;
+	//lightValue._isClick = WorldObjectManager::GetLightValue()._isClick;
 
-	WorldObjectManager::RegisterLightValue(lightValue);
-	WorldObjectManager::RegisterCameraValue(cameraValue);
+	//WorldObjectManager::RegisterLightValue(lightValue);
+	//WorldObjectManager::RegisterCameraValue(cameraValue);
+}
+
+bool SceneWindowView::InnerWindowMousePos(){
+	//画面外かどうか
+	Vector2 mousePos = GameController::GetMouse().GetMousePosition();
+	Vector2 screen = aetherFunction::GetWindowSize(m_directX.GetWindowHandle(L"Scene"));
+	mousePos._x = (mousePos._x / (screen._x - GetSystemMetrics(SM_CXDLGFRAME) * 2))* screen._x;
+	mousePos._y = (mousePos._y / (screen._y - GetSystemMetrics(SM_CYCAPTION) - GetSystemMetrics(SM_CYMENUSIZE) - GetSystemMetrics(SM_CXDLGFRAME)))* screen._y;
+	if (mousePos._x < 0 || mousePos._y < 0 || mousePos._x > screen._x || mousePos._y > screen._y)return true;
+	return false;
 }

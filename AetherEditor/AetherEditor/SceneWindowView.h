@@ -44,6 +44,7 @@ private:
 	void DragCurrentObject();
 	void GetWorldObjectValue();
 	void RegistWorldObjectValue();
+	bool InnerWindowMousePos();
 
 private:
 	static aetherClass::ViewCamera m_viewCamera;

@@ -68,10 +68,11 @@ public:
 	void Render(aetherClass::ShaderBase*);
 	CameraObjectInfo& GetInfo();
 	void SetTranslation(aetherClass::Vector3);
+	void SetRotation(aetherClass::Vector3);
+
 	aetherClass::Vector3 GetTranslation();
 	aetherClass::Vector3 GetRotation();
 private:
-
 	CameraObjectInfo m_objectInfo;
 
 };

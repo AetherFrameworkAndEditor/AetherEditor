@@ -7,7 +7,6 @@
 #include <windows.h>
 
 // 独自フレームワーク
-#include <GameEntry.h>
 #include <GameFrame.h>
 #include <ConsoleWindow.h>
 #include <WindowBase.h>
