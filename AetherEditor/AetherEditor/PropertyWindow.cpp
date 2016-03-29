@@ -470,7 +470,7 @@ void PropertyWindow::SetPosition(){
 
 		positionArrray[i] = std::atof(objectPosition.c_str());
 	}
-	CameraValue camera;
+	
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -484,10 +484,11 @@ void PropertyWindow::SetPosition(){
 	case eObjectType::eFBX:
 		WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_fbx->property._transform._translation = Vector3(positionArrray[0], positionArrray[1], positionArrray[2]);
 		break;
-	case eObjectType::eCamera:
-		camera._rotation = WorldObjectManager::GetCameraValue()._rotation;
+	case eObjectType::eCamera:{
+		auto camera = WorldObjectManager::GetCameraValue();
 		camera._position = Vector3(positionArrray[0], positionArrray[1], positionArrray[2]);
 		WorldObjectManager::RegisterCameraValue(camera);
+	}
 		break;
 
 	case eObjectType::eLight:{
@@ -529,7 +530,7 @@ void PropertyWindow::SetRotation(){
 
 		rotationArrray[i] = std::atof(objectRotation.c_str());
 	}
-	CameraValue camera;
+	
 	switch (current._objectType)
 	{
 	case eObjectType::ePrimitive:
@@ -543,10 +544,11 @@ void PropertyWindow::SetRotation(){
 	case eObjectType::eFBX:
 		WorldObjectManager::GetFbxModel()[current._number]->GetInfo()->_fbx->property._transform._rotation = Vector3(rotationArrray[0], rotationArrray[1], rotationArrray[2]);
 		break;
-	case eObjectType::eCamera:
-		camera._position= WorldObjectManager::GetCameraValue()._position;
+	case eObjectType::eCamera:{
+		auto camera = WorldObjectManager::GetCameraValue();
 		camera._rotation = Vector3(rotationArrray[0], rotationArrray[1], rotationArrray[2]);
 		WorldObjectManager::RegisterCameraValue(camera);
+	}
 		break;
 	default:
 		break;
