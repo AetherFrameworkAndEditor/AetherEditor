@@ -64,7 +64,7 @@ void GameWindowView::UIRender(){
 
 bool GameWindowView::Updater(){
 	if (m_IsPlay == false){
-		if (GameController::GetKey().IsKeyDown(DIK_F5)){
+		if (GameController::GetKey().IsKeyDown(VK_F5)){
 			m_IsPlay = true;
 			DirectXEntity entity;
 			HWND hWnd = entity.GetWindowHandle(L"Game");
@@ -82,7 +82,7 @@ bool GameWindowView::Updater(){
 		}
 	}
 	else{
-		if (GameController::GetKey().IsKeyDown(DIK_F5)){
+		if (GameController::GetKey().IsKeyDown(VK_F5)){
 			m_IsPlay = false;
 			DirectXEntity entity;
 			HWND hWnd = entity.GetWindowHandle(L"Game");

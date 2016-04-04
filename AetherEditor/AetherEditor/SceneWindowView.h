@@ -57,6 +57,8 @@ private:
 	int m_cursorShowFlg;
 
 	aetherClass::Transform m_objectTransform;
+	aetherClass::Vector2 m_prevMouseOffset;
+	bool m_clickFlg;
 
 	struct SceneObject{
 		float distance;
@@ -68,6 +70,7 @@ private:
 		bool operator >(SceneObject input){ return this->distance > input.distance; }
 	};
 	std::vector<SceneObject>m_sceneObjectList;
+
 };
 
 #endif

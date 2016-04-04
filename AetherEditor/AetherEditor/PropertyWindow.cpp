@@ -639,7 +639,7 @@ void PropertyWindow::SetColor(){
 		break;
 	
 	case eObjectType::eSprite:
-		//WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
+		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._color = Color(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
 		break;
 	default:
 		break;

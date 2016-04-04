@@ -45,7 +45,8 @@ bool SceneWindowView::Initialize(){
 	m_viewCamera.property._rotation._x = 30;
 
 	m_IsPlay = false;
-	m_controllCamera= false;
+	m_controllCamera = false;
+	m_clickFlg = false;
 
 	m_objectTransform._translation = 0;
 	m_objectTransform._rotation = 0;
@@ -111,7 +112,7 @@ bool SceneWindowView::Updater(){
 }
 //プレイ中の処理
 bool SceneWindowView::PlayingProcess(){
-	if (GameController::GetKey().IsKeyDown(DIK_F5)){
+	if (GameController::GetKey().IsKeyDown(VK_F5)){
 		m_IsPlay = false;
 	}
 	return true;
@@ -129,7 +130,7 @@ bool SceneWindowView::NotPlayingProcess(){
 	if (m_cursorShowFlg < 0){
 		m_cursorShowFlg = ShowCursor(true);
 	}
-	if (GameController::GetKey().IsKeyDown(DIK_F5)){
+	if (GameController::GetKey().IsKeyDown(VK_F5)){
 		m_IsPlay = true;
 		return true;
 	}
@@ -152,6 +153,7 @@ bool SceneWindowView::NotPlayingProcess(){
 			CurrentSelectObject currentSelected = SelectObject(ray);
 			WorldObjectManager::SetCurrentSelectObject(currentSelected);
 			if (currentSelected._objectType != eObjectType::eNull){
+				m_clickFlg = false;
 				return true;
 			}
 		}
@@ -329,11 +331,12 @@ void SceneWindowView::DragCurrentObject(){
 		return;
 	}
 	
-
 	Vector2 mousePos = GameController::GetMouse().GetMousePosition();
 	Vector2 screen = aetherFunction::GetWindowSize(m_directX.GetWindowHandle(L"Scene"));
 	mousePos._x = (mousePos._x / (screen._x - GetSystemMetrics(SM_CXDLGFRAME) * 2))* screen._x;
 	mousePos._y = (mousePos._y / (screen._y - GetSystemMetrics(SM_CYCAPTION) - GetSystemMetrics(SM_CYMENUSIZE) - GetSystemMetrics(SM_CXDLGFRAME)))* screen._y;
+
+	
 
 	if (obj->_objectType != eObjectType::eSprite){
 		Matrix4x4 roteMat, viewMat;
@@ -349,16 +352,32 @@ void SceneWindowView::DragCurrentObject(){
 
 		//	printf("%.2f,%.2f,%.2f\n", vec1._x, vec1._y, vec1._z);
 
+
+
 		mousePos._x = ((2.0f*mousePos._x) / screen._x) - 1.0f;
 		mousePos._y = (((2.0f*mousePos._y) / screen._y) - 1.0f)*-1.0f;
 
-		mousePos._x = (length / 2)* mousePos._x;
-		mousePos._y = (length / 2)* mousePos._y;
+
+		if (!m_clickFlg){
+			Vector3 viewObjPos = objTransform._translation;
+			viewObjPos = viewObjPos.TransformCoord(viewMat);
+			viewObjPos = viewObjPos.TransformCoord(m_directX.GetDirect3DManager()->GetProjectionMatrix());
+			m_prevMouseOffset = Vector2(viewObjPos._x, viewObjPos._y);
+			m_prevMouseOffset = Vector2(mousePos._x - viewObjPos._x, mousePos._y - viewObjPos._y);
+			printf("%f,%f\n", viewObjPos._x, viewObjPos._y);
+			m_clickFlg = true;
+		}
+
+		mousePos = mousePos - m_prevMouseOffset;
 
 
+		//画面比率に比例するのでなんとかしたい
+		mousePos._x = (length / 1.8)* mousePos._x;
+		mousePos._y = (length / 2.4)* mousePos._y;
 
 		Vector3 translation(mousePos._x, mousePos._y, 0);
 		translation = translation.TransformCoordNormal(roteMat);
+
 		Vector3 cameraZoffset(0, 0, length);
 		cameraZoffset = cameraZoffset.TransformCoordNormal(roteMat);
 		cameraTrans += cameraZoffset;
@@ -367,6 +386,16 @@ void SceneWindowView::DragCurrentObject(){
 		m_objectTransform = objTransform;
 	}
 	else{	//スプライトの時
+		if (!m_clickFlg){
+			Vector3 viewObjPos = objTransform._translation;
+
+			m_prevMouseOffset = Vector2(mousePos._x - viewObjPos._x, mousePos._y - viewObjPos._y);
+			//printf("%f,%f\n", viewObjPos._x, viewObjPos._y);
+			m_clickFlg = true;
+		}
+		mousePos = mousePos - m_prevMouseOffset;
+
+
 		Vector3 translate = Vector3(mousePos._x, mousePos._y, objTransform._translation._z);
 		objTransform._translation = translate;
 		m_objectTransform = objTransform;
