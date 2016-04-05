@@ -261,8 +261,8 @@ void PropertyWindow::CheckWorldObject(){
 
 		auto value = WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform;
 
-		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, NULL };
-		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, NULL };
+		float positionArray[kMaxSize] = { value._translation._x, value._translation._y, value._translation._z };
+		float rotationArray[kMaxSize] = { value._rotation._x, value._rotation._y, value._rotation._z};
 		float scaleArray[kMaxSize] = { value._scale._x, value._scale._y, NULL };
 		for (int i = 0; i < kMaxSize; ++i)
 		{
@@ -478,7 +478,7 @@ void PropertyWindow::SetPosition(){
 		break;
 
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform._translation = Vector3(positionArrray[0], positionArrray[1], 0);
+		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform._translation = Vector3(positionArrray[0], positionArrray[1], positionArrray[2]);
 		break;
 
 	case eObjectType::eFBX:
@@ -538,7 +538,7 @@ void PropertyWindow::SetRotation(){
 		break;
 
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform._rotation = Vector3(rotationArrray[0], rotationArrray[1], 0);
+		WorldObjectManager::GetSprite()[current._number]->GetInfo()->_sprite->property._transform._rotation = Vector3(rotationArrray[0], rotationArrray[1], rotationArrray[2]);
 		break;
 
 	case eObjectType::eFBX:

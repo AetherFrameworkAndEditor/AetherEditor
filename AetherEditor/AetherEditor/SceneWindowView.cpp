@@ -69,6 +69,19 @@ void SceneWindowView::Finalize(){
 
 	return;
 }
+//全オブジェクトのアップデート
+void SceneWindowView::InitialUpdate(){
+	for (auto itr : WorldObjectManager::GetPrimitive()){
+		itr->Update();
+	}
+	for (auto itr : WorldObjectManager::GetFbxModel()){
+		itr->Update();
+	}
+	for (auto itr : WorldObjectManager::GetSprite()){
+		itr->Update();
+	}
+}
+
 //トランスフォーム初期化
 void SceneWindowView::TransformInitialize(Transform &transform){
 	CurrentSelectObject *obj = &WorldObjectManager::GetCurrentSelectObject();
@@ -126,6 +139,9 @@ bool SceneWindowView::NotPlayingProcess(){
 	//ライトとカメラの情報を取得更新
 	GetWorldObjectValue();
 
+	//全オブジェクトのアップデートを呼ぶ
+	InitialUpdate();
+
 	m_controllCamera = false;
 	m_viewCamera.Render();
 
@@ -158,7 +174,7 @@ bool SceneWindowView::NotPlayingProcess(){
 		}
 	}
 
-	//移動対象オブジェクトアップデート(位置更新とか)
+	//移動対象の位置更新
 	UpdateCurrentObject();
 
 	//ライトとカメラの情報を更新登録
@@ -482,16 +498,16 @@ void SceneWindowView::UpdateCurrentObject(){
 	if (!obj)return;
 	switch (obj->_objectType){
 	case eObjectType::ePrimitive:
-		WorldObjectManager::GetPrimitive()[obj->_number]->GetInfo()->_primitive->property._transform = m_objectTransform;
-		WorldObjectManager::GetPrimitive()[obj->_number]->Update();
+		WorldObjectManager::GetPrimitive().at(obj->_number)->GetInfo()->_primitive->property._transform = m_objectTransform;
+		WorldObjectManager::GetPrimitive().at(obj->_number)->Update();
 		break;
 	case eObjectType::eFBX:
-		WorldObjectManager::GetFbxModel()[obj->_number]->GetInfo()->_fbx->property._transform = m_objectTransform;
-		WorldObjectManager::GetFbxModel()[obj->_number]->Update();
+		WorldObjectManager::GetFbxModel().at(obj->_number)->GetInfo()->_fbx->property._transform = m_objectTransform;
+		WorldObjectManager::GetFbxModel().at(obj->_number)->Update();
 		break;
 	case eObjectType::eSprite:
-		WorldObjectManager::GetSprite()[obj->_number]->GetInfo()->_sprite->property._transform = m_objectTransform;
-		WorldObjectManager::GetSprite()[obj->_number]->Update();
+		WorldObjectManager::GetSprite().at(obj->_number)->GetInfo()->_sprite->property._transform = m_objectTransform;
+		WorldObjectManager::GetSprite().at(obj->_number)->Update();
 		break;
 	case eObjectType::eCamera:
 		WorldObjectManager::GetCameraValue()._position = m_objectTransform._translation;
@@ -539,8 +555,17 @@ void SceneWindowView::Render(){
 
 void SceneWindowView::UIRender(){
 	if (WorldObjectManager::IsPlay())return;
-	for (auto itr : WorldObjectManager::GetSprite()){
-		itr->Render(m_colorShader.get());
+	auto inverseVec = m_sceneObjectList;
+	std::reverse(inverseVec.begin(), inverseVec.end());
+	for (auto itr : inverseVec){
+		switch (itr.type)
+		{
+		case eObjectType::eSprite:
+			WorldObjectManager::GetSprite().at(itr.index)->Render(m_colorShader.get());
+			break;
+		default:
+			break;
+		}
 	}
 
 	return;
