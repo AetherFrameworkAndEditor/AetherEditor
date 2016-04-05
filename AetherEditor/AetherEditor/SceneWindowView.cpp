@@ -197,9 +197,7 @@ void SceneWindowView::UpdateViewObject(){
 	for (auto itr : WorldObjectManager::GetPrimitive()){
 		Transform transform = itr->GetInfo()->_primitive->property._transform;
 		Vector3 pos = transform._translation.TransformCoord(viewMatrix);
-		
-		//ƒJƒƒ‰‚Ì— ‘¤‚É‚ ‚é‚â‚Â	‚š-
-		if (pos._z < 0)continue;
+
 		appendObj.distance = (pos._x * pos._x) + (pos._y * pos._y) + (pos._z * pos._z);
 		appendObj.index = index++;
 
@@ -212,8 +210,6 @@ void SceneWindowView::UpdateViewObject(){
 		Transform transform = itr->GetInfo()->_fbx->property._transform;
 		Vector3 pos = transform._translation.TransformCoord(viewMatrix);
 
-		//ƒJƒƒ‰‚Ì— ‘¤‚É‚ ‚é‚â‚Â	‚š-
-		if (pos._z < 0)continue;
 		appendObj.distance = (pos._x * pos._x) + (pos._y * pos._y) + (pos._z * pos._z);
 		appendObj.index = index++;
 
