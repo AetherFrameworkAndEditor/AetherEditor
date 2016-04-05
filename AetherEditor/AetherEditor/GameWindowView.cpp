@@ -39,6 +39,7 @@ void GameWindowView::Finalize(){
 
 void GameWindowView::Render(){
 	if (!m_IsPlay)return;
+
 	m_gameCamera->Render();
 	for (auto itr : WorldObjectManager::GetPrimitive()){
 		itr->SetCamera(m_gameCamera.get());
@@ -64,7 +65,7 @@ void GameWindowView::UIRender(){
 
 bool GameWindowView::Updater(){
 	if (m_IsPlay == false){
-		if (GameController::GetKey().IsKeyDown(VK_F5)){
+		if (GameController::GetKey().KeyDownTrigger(VK_F5)){
 			m_IsPlay = true;
 			DirectXEntity entity;
 			HWND hWnd = entity.GetWindowHandle(L"Game");
@@ -82,7 +83,7 @@ bool GameWindowView::Updater(){
 		}
 	}
 	else{
-		if (GameController::GetKey().IsKeyDown(VK_F5)){
+		if (GameController::GetKey().KeyDownTrigger(VK_F5)){
 			m_IsPlay = false;
 			DirectXEntity entity;
 			HWND hWnd = entity.GetWindowHandle(L"Game");
