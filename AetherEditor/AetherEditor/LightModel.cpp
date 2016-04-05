@@ -27,7 +27,7 @@ bool LightModel::Initialize(){
 
 	m_sphere->property._transform._scale = 0.3;
 	m_cone->property._transform._scale = 0.7;
-	m_sphere->property._transform._position._y = m_spherePosition._y = m_cone->property._transform._scale._y;
+	m_spherePosition._y = m_cone->property._transform._scale._y;
 	
 	return true;
 }
@@ -44,7 +44,7 @@ void LightModel::Finalize(){
 	}
 }
 void LightModel::Update(){
-	m_sphere->property._transform._translation = _property._transform._translation;
+	m_sphere->property._transform._translation = _property._transform._translation + m_spherePosition;
 	m_cone->property._transform._translation = _property._transform._translation;
 }
 void LightModel::Render(aetherClass::ShaderBase *shader){
