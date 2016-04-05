@@ -26,7 +26,7 @@ MainLoopScene::~MainLoopScene()
 
 bool MainLoopScene::Initialize(){
 	Finalize();
-	
+	WorldObjectManager::IsPlay(false);
 	// scene
 	auto sceneWindowView = new SceneWindowView();
 	if (!sceneWindowView)

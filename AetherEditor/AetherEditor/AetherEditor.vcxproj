@@ -61,7 +61,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Aether\Lib;C:\FBX\FBX SDK\2015.1\lib\vs2013\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Aether\Lib\Debug;C:\Aether\FBX\FBX SDK\2015.1\lib\vs2013\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,7 +80,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Aether\Lib;C:\FBX\FBX SDK\2015.1\lib\vs2013\x86\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Aether\Lib\Release;C:\Aether\FBX\FBX SDK\2015.1\lib\vs2013\x86\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -89,6 +89,8 @@
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="FbxModelObject.cpp" />
     <ClCompile Include="GameWindowView.cpp" />
+    <ClCompile Include="LightModel.cpp" />
+    <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="MainLoopScene.cpp" />
     <ClCompile Include="ObjectWindow.cpp" />
     <ClCompile Include="Pivot2D.cpp" />
@@ -106,6 +108,8 @@
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="FbxModelObject.h" />
+    <ClInclude Include="LightModel.h" />
+    <ClInclude Include="LightObject.h" />
     <ClInclude Include="Pivot.h" />
     <ClInclude Include="Pivot2D.h" />
     <ClInclude Include="PrimitiveObject.h" />

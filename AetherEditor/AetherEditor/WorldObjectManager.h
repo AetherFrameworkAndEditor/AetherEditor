@@ -48,6 +48,9 @@ public:
 
 	static void SetCurrentSelectObject(CurrentSelectObject);
 	static CurrentSelectObject GetCurrentSelectObject();
+	static bool IsPlay();
+	static void IsPlay(bool);
+	
 private:
 	WorldObjectManager();
 	~WorldObjectManager();
@@ -69,6 +72,7 @@ private:
 
 	static std::string m_modelType;
 	static CurrentSelectObject m_currnetSelectObject;
+	static bool m_play;
 
 };
 

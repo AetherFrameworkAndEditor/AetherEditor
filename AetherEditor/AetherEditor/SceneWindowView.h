@@ -52,7 +52,6 @@ private:
 	LightObject m_gamelight;
 	aetherClass::DirectXEntity m_directX;
 
-	bool m_IsPlay;
 	bool m_controllCamera;
 	int m_cursorShowFlg;
 

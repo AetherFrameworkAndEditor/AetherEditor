@@ -44,7 +44,6 @@ bool SceneWindowView::Initialize(){
 
 	m_viewCamera.property._rotation._x = 30;
 
-	m_IsPlay = false;
 	m_controllCamera = false;
 	m_clickFlg = false;
 
@@ -101,7 +100,12 @@ void SceneWindowView::TransformInitialize(Transform &transform){
 //更新振り分け
 bool SceneWindowView::Updater(){
 	bool result;
-	if (!m_IsPlay){
+	if (GameController::GetKey().KeyDownTrigger(VK_F5)){
+		const bool play = !WorldObjectManager::IsPlay();
+		WorldObjectManager::IsPlay(play);
+	}
+
+	if (!WorldObjectManager::IsPlay()){
 		result = NotPlayingProcess();
 	}
 	else{
@@ -112,9 +116,7 @@ bool SceneWindowView::Updater(){
 }
 //プレイ中の処理
 bool SceneWindowView::PlayingProcess(){
-	if (GameController::GetKey().IsKeyDown(VK_F5)){
-		m_IsPlay = false;
-	}
+	
 	return true;
 }
 
@@ -130,10 +132,7 @@ bool SceneWindowView::NotPlayingProcess(){
 	if (m_cursorShowFlg < 0){
 		m_cursorShowFlg = ShowCursor(true);
 	}
-	if (GameController::GetKey().IsKeyDown(VK_F5)){
-		m_IsPlay = true;
-		return true;
-	}
+
 
 	//シーンカメラ更新
 	UpdateCamera();
@@ -510,7 +509,7 @@ void SceneWindowView::UpdateCurrentObject(){
 
 //以下描画
 void SceneWindowView::Render(){
-	if (m_IsPlay)return;
+	if (WorldObjectManager::IsPlay())return;
 	auto inverseVec = m_sceneObjectList;
 	std::reverse(inverseVec.begin(),inverseVec.end());
 	for (auto itr : inverseVec){
@@ -539,7 +538,7 @@ void SceneWindowView::Render(){
 }
 
 void SceneWindowView::UIRender(){
-	if (m_IsPlay)return;
+	if (WorldObjectManager::IsPlay())return;
 	for (auto itr : WorldObjectManager::GetSprite()){
 		itr->Render(m_colorShader.get());
 	}

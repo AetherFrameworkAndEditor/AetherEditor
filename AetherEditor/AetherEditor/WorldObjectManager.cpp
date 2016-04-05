@@ -30,7 +30,7 @@ CameraValue WorldObjectManager::m_cameraValue;
 
 std::string WorldObjectManager::m_modelType = "none";
 CurrentSelectObject WorldObjectManager::m_currnetSelectObject;
-
+bool WorldObjectManager::m_play = false;
 // リセット時に呼び出す
 template<typename Type>
 static void ResetVector(std::vector<Type>& vector)
@@ -88,6 +88,14 @@ WorldObjectManager::WorldObjectManager()
 
 WorldObjectManager::~WorldObjectManager()
 {
+}
+
+bool WorldObjectManager::IsPlay(){
+	return m_play;
+}
+
+void WorldObjectManager::IsPlay(bool flg){
+	m_play = flg;
 }
 
 //
