@@ -30,7 +30,7 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 	WindowBase::WindowStyleDesc desc;
 
 	bool result;
-	Vector2 screenSize(800, 600);
+	Vector2 screenSize(1280, 720);
 	float screenCenterPos = (GetSystemMetrics(SM_CYSCREEN) - screenSize._y) / 2;
 	WindowBase*window[3] = { new SceneWindow(), new ObjectWindow(), new PropertyWindow() };
 
