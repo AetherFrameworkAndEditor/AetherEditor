@@ -383,8 +383,14 @@ void SceneWindowView::DragCurrentObject(){
 
 
 		//‰æ–Ê”ä—¦‚É”ä—á‚·‚é‚Ì‚Å‚È‚ñ‚Æ‚©‚µ‚½‚¢
-		mousePos._x = (length / 1.8)* mousePos._x;
-		mousePos._y = (length / 2.4)* mousePos._y;
+		//1280x720
+		mousePos._x = (length / 1.358)* mousePos._x;
+		mousePos._y = (length / 2.4148)* mousePos._y;
+	
+		//800x600
+		//mousePos._x = (length / 1.8)* mousePos._x;
+		//mousePos._y = (length / 2.4)* mousePos._y;
+
 
 		Vector3 translation(mousePos._x, mousePos._y, 0);
 		translation = translation.TransformCoordNormal(roteMat);
