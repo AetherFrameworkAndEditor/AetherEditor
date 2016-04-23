@@ -312,7 +312,7 @@ void WorldObjectManager::CreateFBX(ObjectInfo* object){
 		MessageBox(NULL, L"Do not Load fbx", L"Error", MB_OK);
 		return;
 	}
-
+	fbx->GetInfo()->_name = object->_name;
 	fbx->GetInfo()->_fbx->property._transform = object->_transform;
 	// “o˜^
 	AddFbxModel(fbx);

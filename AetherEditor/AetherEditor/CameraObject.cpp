@@ -79,11 +79,12 @@ void CameraObject::Update(){
 	Matrix4x4 roteMat;
 
 	m_objectInfo._lense->property._transform._rotation = rotation + Vector3(-90.0f, 0, 0);
-	roteMat.PitchYawRoll(rotation*kAetherRadian);
-	Vector3 position(0, 0, 1.5f);
-	position = position.TransformCoordNormal(roteMat);
 
-	m_objectInfo._lense->property._transform._translation = translation + position;
+	roteMat.PitchYawRoll(rotation*kAetherRadian);
+	Vector3 position;
+	position = position.TransformCoordNormal(roteMat);
+		
+	m_objectInfo._lense->property._transform._translation = translation + position+Vector3(0,0,1.5);
 	m_objectInfo._collider->property._transform._translation = translation;
 	m_objectInfo._pivot->MoveDirection(translation);
 	return;
